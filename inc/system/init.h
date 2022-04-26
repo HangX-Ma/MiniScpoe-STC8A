@@ -1,3 +1,13 @@
+/**
+ * @file init.h
+ * @author (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-04-26
+ * 
+ * @copyright Apache License Version 2.0 Copyright (c) 2022
+ * 
+ */
 #ifndef __INIT__H__
 #define __INIT__H__
 
@@ -5,10 +15,8 @@
 #include <STDIO.H>
 #include <STDLIB.H>
 
-/**
- * @brief alias for IRC clock selection
- * 
- */
+
+//! alias for IRC clock selection
 typedef enum {
     IRC24M_CLK = 0,
     IRC32K_CLK,
@@ -16,20 +24,17 @@ typedef enum {
 
 /**
  * @brief Change system clock
- * @details \verbatim Usage guidance:
- *   - invoke this in the beginning of code
- *   - don't invoke this if the target frequency is already set by STC-ISP 
- * \endverbatim
- * 
- * @verbatim 
- * 
+ * @details Usage guidance: \n
+ * - invoke this in the beginning of code \n
+ * - don't invoke this if the target frequency is already set by STC-ISP \n
+ * \verbatim
  * STC8H Clock: 
  *  MCKSEL                     ||===> MCLKODIV ==> MCLKO_S(1,0) => P1.6/P5.4
  *  00 Internal IRC    |       ||
  *  01 External OSC    |==> CLKDIV ==> SYSCLK
  *  10 External 32KHz  |
  *  11 Internal 32KHz  |
- * @endverbatim
+ * \endverbatim
  * 
  */
 void SYS_SetClock(IRC_ClkType type);
