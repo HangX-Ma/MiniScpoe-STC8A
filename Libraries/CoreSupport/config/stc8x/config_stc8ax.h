@@ -45,25 +45,25 @@
 
 
 //! kernel special function register setting 
-sfr ACC         =   0xe0;
-sfr B           =   0xf0;
-sfr PSW         =   0xd0;
-sfr SP          =   0x81;
-sfr DPL         =   0x82;
-sfr DPH         =   0x83;
-sfr TA          =   0xae;
-sfr DPS         =   0xe3;
-sfr DPL1        =   0xe4;
-sfr DPH1        =   0xe5;
+sfr ACC         =   (uint8_t)0xe0;
+sfr B           =   (uint8_t)0xf0;
+sfr PSW         =   (uint8_t)0xd0;                               /*!< program state register */
+sfr SP          =   (uint8_t)0x81;
+sfr DPL         =   (uint8_t)0x82;
+sfr DPH         =   (uint8_t)0x83;
+sfr TA          =   (uint8_t)0xae;
+sfr DPS         =   (uint8_t)0xe3;
+sfr DPL1        =   (uint8_t)0xe4;
+sfr DPH1        =   (uint8_t)0xe5;
 
-sbit CY         =   PSW^7;
-sbit AC         =   PSW^6;
-sbit F0         =   PSW^5;
-sbit RS1        =   PSW^4;
-sbit RS0        =   PSW^3;
-sbit OV         =   PSW^2;
-sbit F1         =   PSW^1;
-sbit P          =   PSW^0;
+sbit CY         =   PSW^7;                              /*!< carry/borrow flag bit */
+sbit AC         =   PSW^6;                              /*!< auxiliary carry/borrow flag bit */
+sbit F0         =   PSW^5;                              /*!< user flag bit 0 */
+sbit RS1        =   PSW^4;                              /*!< working state selection bit RS1 */
+sbit RS0        =   PSW^3;                              /*!< working state selection bit RS0 */
+sbit OV         =   PSW^2;                              /*!< overflow flag bit */
+sbit F1         =   PSW^1;                              /*!< user flag bit 1 */
+sbit P          =   PSW^0;                              /*!< party check flag bit */
 
 /** @defgroup Peripheral_memory_map
  * @{
@@ -73,8 +73,8 @@ sbit P          =   PSW^0;
 /* bus speed control register setting */
 #define     BUS_SPEED_ADDR              ((uint8_t)0xA1)
 
-/* Bit definition for BUS_SPEED registor */
-//! RW_S configuration
+/* Bit definition for BUS_SPEED register */
+// * RW_S configuration
 #define     BUS_SPEED_RW_S              ((uint8_t)0xC0) /*!< RW_S[1:0] bits (control line selection) */
 #define     BUS_SPEED_RW_S_0            ((uint8_t)0x40) /*!< Bit 0 */
 #define     BUS_SPEED_RW_S_1            ((uint8_t)0x80) /*!< Bit 1 */
@@ -83,7 +83,7 @@ sbit P          =   PSW^0;
 #define     BUS_SPEED_RW_S_GROUP2       ((uint8_t)0x40) /*!< select P3.7 pin as RD and P3.6 as WR */
 #define     BUS_SPEED_RW_S_GROUP3       ((uint8_t)0x80) /*!< select P4.2 pin as RD and P4.0 as WR */
 
-//! SPEED configuration
+// * SPEED configuration
 #define     BUS_SPEED_SPEED             ((uint8_t)0x03) /*!< SPEED[1:0] bits (bus read/write speed control) */
 #define     BUS_SPEED_SPEED_0           ((uint8_t)0x01) /*!< Bit 0 */
 #define     BUS_SPEED_SPEED_1           ((uint8_t)0x02) /*!< Bit 1 */
@@ -98,14 +98,19 @@ sfr BUS_SPEED   =   BUS_SPEED_ADDR; //! bus speed control register
 
 /*  auxiliary register setting */
 #define     AUXR_ADDR                   ((uint8_t)0x8E)
+
+/* Bit definition for AUXR register */
+// * EXTRAM configuration
+#define     AUXR_EXTRAM                 ((uint8_t)0x02) /*!< external RAM access control */
+
 sfr AUXR        =   AUXR_ADDR;      //! auxiliary register
 
 /* peripheral port switch register setting */
 #define     PERIPHERAL_PORT_SW1_ADDR    ((uint8_t)0xA2)
 #define     PERIPHERAL_PORT_SW2_ADDR    ((uint8_t)0xBA)
 
-/* Bit definition for P_SW1 registor */
-//! S1_S configuration
+/* Bit definition for P_SW1 register */
+// * S1_S configuration
 #define     P_SW1_S1_S                  ((uint8_t)0xC0) /*!< S1_S[1:0] bits (serial port 1 function pins selection) */
 #define     P_SW1_S1_S_0                ((uint8_t)0x40) /*!< Bit 0 TxD */
 #define     P_SW1_S1_S_1                ((uint8_t)0x80) /*!< Bit 1 RxD */
@@ -115,7 +120,7 @@ sfr AUXR        =   AUXR_ADDR;      //! auxiliary register
 #define     P_SW1_S1_S_GROUP3           ((uint8_t)0x80) /*!< select P1.6 pin as RxD and P1.7 as TxD */
 #define     P_SW1_S1_S_GROUP4           ((uint8_t)0xC0) /*!< select P4.3 pin as RxD and P4.4 as TxD */
 
-//! CCP_S configuration
+// * CCP_S configuration
 #define     P_SW1_CCP_S                 ((uint8_t)0x30) /*!< CCP_S[1:0] bits (PCA function pins selection) */
 #define     P_SW1_CCP_S_0               ((uint8_t)0x10) /*!< Bit 0 */
 #define     P_SW1_CCP_S_1               ((uint8_t)0x20) /*!< Bit 1 */
@@ -123,9 +128,9 @@ sfr AUXR        =   AUXR_ADDR;      //! auxiliary register
 #define     P_SW1_CCP_S_GROUP1          ((uint8_t)0x00) /*!< select P1.2 pin as ECI, P1.7 as CPP0, P1.6 as CPP1, P1.5 as CPP2, P1.4 as CPP3 */
 #define     P_SW1_CCP_S_GROUP2          ((uint8_t)0x10) /*!< select P2.2 pin as ECI, P2.3 as CPP0, P2.4 as CPP1, P2.5 as CPP2, P2.6 as CPP3 */
 #define     P_SW1_CCP_S_GROUP3          ((uint8_t)0x20) /*!< select P7.4 pin as ECI, P7.0 as CPP0, P7.1 as CPP1, P7.2 as CPP2, P7.3 as CPP3 */
-#define     P_SW1_CCP_S_GROUP4           ((uint8_t)0x30) /*!< select P3.5 pin as ECI, P3.3 as CPP0, P3.2 as CPP1, P3.1 as CPP2, P3.0 as CPP3 */
+#define     P_SW1_CCP_S_GROUP4          ((uint8_t)0x30) /*!< select P3.5 pin as ECI, P3.3 as CPP0, P3.2 as CPP1, P3.1 as CPP2, P3.0 as CPP3 */
 
-//! SPI_S configuration
+// * SPI_S configuration
 #define     P_SW1_SPI_S                 ((uint8_t)0x0C) /*!< SPI_S[1:0] bits (SPI function pins selection) */
 #define     P_SW1_SPI_S_0               ((uint8_t)0x04) /*!< Bit 0 */
 #define     P_SW1_SPI_S_1               ((uint8_t)0x08) /*!< Bit 1 */
@@ -135,28 +140,31 @@ sfr AUXR        =   AUXR_ADDR;      //! auxiliary register
 #define     P_SW1_SPI_S_GROUP3          ((uint8_t)0x08) /*!< select P7.4 pin as SS, P7.5 as MOSI, P7.6 as MISO, P7.7 as SCLK */
 #define     P_SW1_SPI_S_GROUP4          ((uint8_t)0x0C) /*!< select P3.5 pin as SS, P3.4 as MOSI, P3.3 as MISO, P3.2 as SCLK */
 
-/* Bit definition for P_SW1 registor */
-//! EAXFR configuration
+/* Bit definition for P_SW1 register */
+// * EAXFR configuration
 #define     P_SW2_EAXFR                 ((uint8_t)0x80) /*!< XFR control register */
 
-//! I2C_S configuration
+// * I2C_S configuration
 #define     P_SW2_I2C_S                 ((uint8_t)0x30) /*!< I2C_S[1:0] bits (I2C function pins selection) */
 #define     P_SW2_I2C_S_0               ((uint8_t)0x10) /*!< Bit 0 SDA */
 #define     P_SW2_I2C_S_1               ((uint8_t)0x20) /*!< Bit 1 SCL */
 
+#define     P_SW2_I2C_S_GROUP1          ((uint8_t)0x00) /*!< select P1.5 pin as SCL, P1.4 as SDA */
+#define     P_SW2_I2C_S_GROUP2          ((uint8_t)0x10) /*!< select P2.5 pin as SCL, P2.4 as SDA */
+#define     P_SW2_I2C_S_GROUP3          ((uint8_t)0x20) /*!< select P7.7 pin as SCL, P7.6 as SDA */
+#define     P_SW2_I2C_S_GROUP4          ((uint8_t)0x30) /*!< select P3.2 pin as SCL, P3.3 as SDA */
 
+// * CMPO_S configuration
+#define     P_SW2_CMPO_S                ((uint8_t)0x08) /*!< CMPO selection: [0] P3.4; [1] P4.1 */
 
-//! CMPO_S configuration
-#define     P_SW2_CMPO_S                ((uint8_t)0x08) /*!< CMPO selection */
+// * S4_S configuration
+#define     P_SW2_S4_S                  ((uint8_t)0x04) /*!< serial port 4 function pins selection: [0] RxD4=P0.2, TxD4=P0.3; [1] RxD4=P5.2, TxD4=P5.3 */
 
-//! S4_S configuration
-#define     P_SW2_S4_S                  ((uint8_t)0x04) /*!< serial port 4 function pins selection */
+// * S3_S configuration
+#define     P_SW2_S3_S                  ((uint8_t)0x02) /*!< serial port 3 function pins selection: [0] RxD3=P0.0, TxD3=P0.1; [1] RxD3=P5.0, TxD3=P5.1  */
 
-//! S3_S configuration
-#define     P_SW2_S3_S                  ((uint8_t)0x02) /*!< serial port 3 function pins selection */
-
-//! S2_S configuration
-#define     P_SW2_S2_S                  ((uint8_t)0x01) /*!< serial port 2 function pins selection */
+// * S2_S configuration
+#define     P_SW2_S2_S                  ((uint8_t)0x01) /*!< serial port 2 function pins selection: [0] RxD2=P1.0, TxD2=P1.1; [1] RxD2=P4.0, TxD2=P4.2  */
 
 sfr P_SW1       =   PERIPHERAL_PORT_SW1_ADDR;
 sfr P_SW2       =   PERIPHERAL_PORT_SW2_ADDR;
@@ -174,30 +182,39 @@ typedef struct
     __IO uint8_t RCC_IRC32KCR;
 } SYSCLK_TypeDef;
 
-//! system clock special function register setting in internal expansion RAM 
+// * system clock special function register setting in internal expansion RAM 
 /* internel oscillator frequency control and adjustment registers*/
 #define     IRTRIM_ADDR                 ((uint8_t)0x9F)
 #define     LIRTRIM_ADDR                ((uint8_t)0x9E)
 
-/* Bit definition for LIRTRIM registor */
+/* Bit definition for IRTRIM register */
+// user define the value from 0~255 for this register
+
+/* Bit definition for LIRTRIM register */
 #define     LIRTRIM_BITS                ((uint8_t)0x03)
 #define     LIRTRIM_BITS_0              ((uint8_t)0x01)
 #define     LIRTRIM_BITS_1              ((uint8_t)0x02)
+
+#define     LIRTRIM_BITS_FT000          ((uint8_t)0x00) /*!< on fine-turning */
+#define     LIRTRIM_BITS_FT001          ((uint8_t)0x01) /*!< Internal high accurate IRC fine-turning 0.01% */
+#define     LIRTRIM_BITS_FT004          ((uint8_t)0x02) /*!< Internal high accurate IRC fine-turning 0.04% */
+#define     LIRTRIM_BITS_FT010          ((uint8_t)0x03) /*!< Internal high accurate IRC fine-turning 0.10% */
+
 
 sfr IRTRIM      =   IRTRIM_ADDR;    //! internal IRC frequency adjustment register
 sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment register
 
 /* system clock base address */
-#define     SYSCLK_BASE     ((uint16_t)0xFE00)
+#define     SYSCLK_BASE                 ((uint16_t)0xFE00)
 
-#define     CKSEL_ADDR      (SYSCLK_BASE + 0x0000)
-#define     CLKDIV_ADDR     (SYSCLK_BASE + 0x0001)
-#define     IRC24MCR_ADDR   (SYSCLK_BASE + 0x0002)
-#define     XOSCCR_ADDR     (SYSCLK_BASE + 0x0003)
-#define     IRC32KCR_ADDR   (SYSCLK_BASE + 0x0004)
+#define     CKSEL_ADDR                  (SYSCLK_BASE + 0x0000)
+#define     CLKDIV_ADDR                 (SYSCLK_BASE + 0x0001)
+#define     IRC24MCR_ADDR               (SYSCLK_BASE + 0x0002)
+#define     XOSCCR_ADDR                 (SYSCLK_BASE + 0x0003)
+#define     IRC32KCR_ADDR               (SYSCLK_BASE + 0x0004)
 
-/* Bit definition for CKSEL registor */
-//! MCLKODIV configuration
+/* Bit definition for CKSEL register */
+// * MCLKODIV configuration
 #define     CKSEL_MCLKODIV              ((uint8_t)0xF0) /*!< MCLKODIV[3:0] bits (main clock output division coefficient) */
 #define     CKSEL_MCLKODIV_0            ((uint8_t)0x10) /*!< Bit 0 */
 #define     CKSEL_MCLKODIV_1            ((uint8_t)0x20) /*!< Bit 1 */
@@ -214,39 +231,45 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 #define     CKSEL_MCLKODIV_DIV64        ((uint8_t)0xC0) /*!< MCLK input clock divided by 64 */
 #define     CKSEL_MCLKODIV_DIV128       ((uint8_t)0xE0) /*!< MCLK input clock divided by 128 */
 
-//! MCLKO_S configuration
-#define     CKSEL_MCLKO_S               ((uint8_t)0x08) /*!< divided MCLK output pin */
+// * MCLKO_S configuration
+#define     CKSEL_MCLKO_S               ((uint8_t)0x08) /*!< divided MCLK output pin: [0] P5.4; [1] P1.6 */
 
-//! MCKSEL configuration
+// * MCKSEL configuration
 #define     CKSEL_MCKSEL                ((uint8_t)0x03) /*!< MCLKODIV[1:0] bits (system clock output division coefficient) */
 #define     CKSEL_MCKSEL_0              ((uint8_t)0x01) /*!< Bit 0 */
 #define     CKSEL_MCKSEL_1              ((uint8_t)0x02) /*!< Bit 1 */
 
-/* Bit definition for CLKDIV registor */
+#define     CKSEL_MCKSEL_IRC24MCR       ((uint8_t)0x00) /*!< select internal 24MHz High accurate IRC */
+#define     CKSEL_MCKSEL_XOSCCR_O       ((uint8_t)0x01) /*!< select outer clock input */
+#define     CKSEL_MCKSEL_XOSCCR_C       ((uint8_t)0x02) /*!< select outer clock input */
+#define     CKSEL_MCKSEL_IRC32KST       ((uint8_t)0x03) /*!< select internal 32kHz low speed IRC */
 
-/* Bit definition for IRC24MCR registor */
-//! ENIRC24M configuration
+/* Bit definition for CLKDIV register */
+// user define the value from 0~255 for this register. Maximum 0.55% per bit, minium 0.02% per bit, average 0.24% per bit
+
+/* Bit definition for IRC24MCR register */
+// * ENIRC24M configuration
 #define     IRC24MCR_ENIRC24M           ((uint8_t)0x80) /*!< IRC24MCR enabling control */
 
-//! IRC24MST configuration
-#define     IRC24MCR_IRC24MST           ((uint8_t)0x01) /*!< IRC24MCR stable state sign */
+// * IRC24MST configuration
+#define     IRC24MCR_IRC24MST           ((uint8_t)0x01) /*!< IRC24MCR stable state flag */
 
-/* Bit definition for XOSCCR registor */
-//! ENXOSC configuration
+/* Bit definition for XOSCCR register */
+// * ENXOSC configuration
 #define     XOSCCR_ENXOSC               ((uint8_t)0x80) /*!< external oscillator enabling control */
 
-//! XITYPE configuration
+// * XITYPE configuration
 #define     XOSCCR_XITYPE               ((uint8_t)0x40) /*!< external oscillator type selection */
 
-//! XOSCST configuration
-#define     XOSCCR_XOSCST               ((uint8_t)0x01) /*!< external oscillator stable state sign */
+// * XOSCST configuration
+#define     XOSCCR_XOSCST               ((uint8_t)0x01) /*!< external oscillator stable state flag */
 
-/* Bit definition for IRC32KCR registor */
-//! ENIRC32K configuration
+/* Bit definition for IRC32KCR register */
+// * ENIRC32K configuration
 #define     IRC24MCR_ENIRC32K           ((uint8_t)0x80) /*!< IRC32KCR enabling control */
 
-//! IRC32KST configuration
-#define     IRC24MCR_IRC32KST           ((uint8_t)0x01) /*!< IRC32KCR stable state sign */
+// * IRC32KST configuration
+#define     IRC24MCR_IRC32KST           ((uint8_t)0x01) /*!< IRC32KCR stable state flag */
 
 /**
  * @brief define the SYSCLK type
@@ -263,31 +286,91 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 
 //! system power special function register setting
 /* power control base address */
-#define     PCON_ADDR       0x87
-#define     VOCTRL_ADDR     0xBB
+#define     PCON_ADDR                   ((uint8_t)0x87)
+#define     VOCTRL_ADDR                 ((uint8_t)0xBB)
+
+/* Bit definition for PCON register */
+// * LVDF configuration
+#define     PCON_LVDF                   ((uint8_t)0x20)     /*!< low voltage check flag bit */
+
+// * POF configuration
+#define     PCON_POF                    ((uint8_t)0x10)     /*!< Power-on reset flag bit */
+
+// * PD configuration
+#define     PCON_PD                     ((uint8_t)0x02)     /*!< peripherals stopping mode control bit */
+
+// * IDL configuration
+#define     PCON_IDL                    ((uint8_t)0x01)     /*!< peripherals IDLE mode control bit */
+
+/* Bit definition for VOCTRL register */
+// * SCC configuration
+#define     VOCTRL_SCC                   ((uint8_t)0x80)     /*!< static current control bit: [0] internal circuit 1.5uA; [1] external circuit lower than 0.15uA */
+
 sfr PCON        =   PCON_ADDR;
 sfr VOCTRL      =   VOCTRL_ADDR;
 
 //! system reset special function register control
 /* reset control base address */
-#define     WDT_ADDR         0xC1u
+#define     WDT_CONTR_ADDR              ((uint8_t)0xC1u)
 // #define     IAP_ADDR      0xC7u
-#define     RSTCFG_ADDR      0xFFu
+#define     RSTCFG_ADDR                 ((uint8_t)0xFFu)
 
-/* Bit definition for WDT_CONTR registor */
-#define     WDT_FLAG         0x80
-#define     EN_WDT           0x20
-#define     CLR_WDT          0x10
-#define     IDL_WDT          0x08
+/* Bit definition for WDT_CONTR register */
+// * WDT_FLAG configuration
+#define     WDT_CONTR_WDT_FLAG          ((uint8_t)0x80)     /*!< Watch dog overflow flag */
 
-sfr WDT_CONTR   =   WDT_ADDR;
+// * EN_WDT configuration
+#define     WDT_CONTR_EN_WDT            ((uint8_t)0x20)     /*!< Watch dog enabling bit£º[0] off; [1] on */
+
+// * CLR_WDT configuration
+#define     WDT_CONTR_CLR_WDT           ((uint8_t)0x10)     /*!< Watch dog timer auto clearance by firmware£º[0] off; [1] on */
+
+// * IDL_WDT configuration
+#define     WDT_CONTR_IDL_WDT           ((uint8_t)0x08)     /*!< Watch dog counting function control on IDLE model [0] stop; [1] resume */
+
+// * WDT_PS configuration
+#define     WDT_CONTR_WDT_PS            ((uint8_t)0x07)     /*!< WDT_PS[2:0] bits (watch dog timer clock division coefficient) */
+#define     WDT_CONTR_WDT_PS0           ((uint8_t)0x01)     /*!< Bit 0 */
+#define     WDT_CONTR_WDT_PS1           ((uint8_t)0x02)     /*!< Bit 1 */
+#define     WDT_CONTR_WDT_PS2           ((uint8_t)0x04)     /*!< Bit 2 */
+
+/**
+ * @note  watch dog overflow time = (12x32768x2^(WDT_PS+1))/SYSCLK
+ */
+#define     WDT_CONTR_WDT_PS_DIV2       ((uint8_t)0x00)     /*!< Watch dog input clock divided by 2 */
+#define     WDT_CONTR_WDT_PS_DIV4       ((uint8_t)0x01)     /*!< Watch dog input clock divided by 4 */
+#define     WDT_CONTR_WDT_PS_DIV8       ((uint8_t)0x02)     /*!< Watch dog input clock divided by 8 */
+#define     WDT_CONTR_WDT_PS_DIV16      ((uint8_t)0x03)     /*!< Watch dog input clock divided by 16 */
+#define     WDT_CONTR_WDT_PS_DIV32      ((uint8_t)0x04)     /*!< Watch dog input clock divided by 32 */
+#define     WDT_CONTR_WDT_PS_DIV64      ((uint8_t)0x05)     /*!< Watch dog input clock divided by 64 */
+#define     WDT_CONTR_WDT_PS_DIV128     ((uint8_t)0x06)     /*!< Watch dog input clock divided by 128 */
+#define     WDT_CONTR_WDT_PS_DIV256     ((uint8_t)0x07)     /*!< Watch dog input clock divided by 256 */
+
+/* Bit definition for RSTCFG register */
+// * ENLVR configuration
+#define     RSTCFG_ENLVR                ((uint8_t)0x40)     /*!< low voltage reset control bit */
+
+// * P54RST configuration
+#define     RSTCFG_P54RST               ((uint8_t)0x10)     /*!< RST pin selection: [0] regard P5.4 as normal pin; [1]: regard P5.4 as RST */
+
+// * LVDS configuration
+#define     RSTCFG_LVDS                 ((uint8_t)0x03)     /*!< WDT_PS[1:0] bits£¨low voltage threshold selection£© */
+#define     RSTCFG_LVDS_0               ((uint8_t)0x01)     /*!< Bit 0 */
+#define     RSTCFG_LVDS_1               ((uint8_t)0x02)     /*!< Bit 1 */
+
+#define     RSTCFG_LVDS_2V2             ((uint8_t)0x00)     /*!< low voltage threshold 2.2V */
+#define     RSTCFG_LVDS_2V4             ((uint8_t)0x01)     /*!< low voltage threshold 2.4V */
+#define     RSTCFG_LVDS_2V7             ((uint8_t)0x02)     /*!< low voltage threshold 2.7V */
+#define     RSTCFG_LVDS_3V0             ((uint8_t)0x03)     /*!< low voltage threshold 3.0V */
+
+sfr WDT_CONTR   =   WDT_CONTR_ADDR;
 // sfr IAP_CONTR   =   IAP_ADDR;
 sfr RSTCFG      =   RSTCFG_ADDR;
 
 /* wake up timer base address */
-#define     WKT_BASE        0xAAu
-#define     WKTCL_ADDR      (WKT_BASE + 0x0000u)
-#define     WKTCH_ADDR      (WKT_BASE + 0x0001u)
+#define     WKT_BASE                    ((uint8_t)0xAA)
+#define     WKTCL_ADDR                  (WKT_BASE + 0x0000u)
+#define     WKTCH_ADDR                  (WKT_BASE + 0x0001u)
 
 /* WKTCH offset */
 #define WKTEN       0x80
@@ -296,11 +379,11 @@ sfr WKTCL       =   WKTCL_ADDR;
 sfr WKTCH       =   WKTCH_ADDR;
 
 //! GPIO peripherals
-#define     GPIO_BASE       0x80u
-#define     PxM0_BASE       0x94u
-#define     PxM1_BASE       0x93u
-#define     PxPU_BASE       0xFE10u
-#define     PxNCS_BASE      0xFE18u
+#define     GPIO_BASE       ((uint8_t)0x80)
+#define     PxM0_BASE       ((uint8_t)0x94)
+#define     PxM1_BASE       ((uint8_t)0x93)
+#define     PxPU_BASE       ((uint16_t)0xFE10)
+#define     PxNCS_BASE      ((uint16_t)0xFE18)
 
 /* GPIO address definition */
 #define     P0_ADDR         (GPIO_BASE + 0x00u) 
@@ -314,23 +397,23 @@ sfr WKTCH       =   WKTCH_ADDR;
 
 /* PxM0: GPIO configuration registers 0 address definition */
 #define     P0M0_ADDR       PxM0_BASE 
-#define     P1M0_ADDR       0x92u
-#define     P2M0_ADDR       0x96u
-#define     P3M0_ADDR       0xB2u
-#define     P4M0_ADDR       0xB4u
-#define     P5M0_ADDR       0xCAu
-#define     P6M0_ADDR       0xCCu
-#define     P7M0_ADDR       0xE2u
+#define     P1M0_ADDR       ((uint8_t)0x92)
+#define     P2M0_ADDR       ((uint8_t)0x96)
+#define     P3M0_ADDR       ((uint8_t)0xB2)
+#define     P4M0_ADDR       ((uint8_t)0xB4)
+#define     P5M0_ADDR       ((uint8_t)0xCA)
+#define     P6M0_ADDR       ((uint8_t)0xCC)
+#define     P7M0_ADDR       ((uint8_t)0xE2)
 
 /* PxM1: GPIO configuration registers 1 address definition */
 #define     P0M1_ADDR       PxM1_BASE 
-#define     P1M1_ADDR       0x91u
-#define     P2M1_ADDR       0x95u
-#define     P3M1_ADDR       0xB1u
-#define     P4M1_ADDR       0xB3u
-#define     P5M1_ADDR       0xC9u
-#define     P6M1_ADDR       0xCBu
-#define     P7M1_ADDR       0xE1u
+#define     P1M1_ADDR       ((uint8_t)0x91)
+#define     P2M1_ADDR       ((uint8_t)0x95)
+#define     P3M1_ADDR       ((uint8_t)0xB1)
+#define     P4M1_ADDR       ((uint8_t)0xB3)
+#define     P5M1_ADDR       ((uint8_t)0xC9)
+#define     P6M1_ADDR       ((uint8_t)0xCB)
+#define     P7M1_ADDR       ((uint8_t)0xE1)
 
 /* GPIO pull up resistor control register address definition */
 #define     P0PU_ADDR        (PxPU_BASE + 0x00u)
@@ -363,6 +446,17 @@ sfr P4          =   P4_ADDR;
 sfr P5          =   P5_ADDR;
 sfr P6          =   P6_ADDR;
 sfr P7          =   P7_ADDR;
+
+/**
+ * @note GPIO mode selection
+ * \verbatim 
+ * | PnM1.x | PnM0.x |         Pn.x Mode         |
+ * |   0    |   0    | quasi- bidirectional port | ([weak pull up] up to 20mA constant-current; pull current between 150~270uA)
+ * |   0    |   1    |      push-pul output      | ([strong pull up] up to 20mA contant-current; current-limited resistor is needed)
+ * |   1    |   0    |   high impedance output   | (no current)
+ * |   1    |   1    |     open drain output     | (internal pull up resistor disconnected; external pull up resistor is needed)
+ * \endverbatim
+ */
 
 /* GPIO configuration registers 0 */
 sfr P0M0        =   P0M0_ADDR;
@@ -451,88 +545,89 @@ sbit P76        =   P7^6;
 sbit P77        =   P7^7;
 
 /* GPIO control register */
-#define     P0PU        (*(__IO uint8_t xdata *) P0PU_ADDR)             // Extended SFR
-#define     P1PU        (*(__IO uint8_t xdata *) P1PU_ADDR)             // Extended SFR
-#define     P2PU        (*(__IO uint8_t xdata *) P2PU_ADDR)             // Extended SFR
-#define     P3PU        (*(__IO uint8_t xdata *) P3PU_ADDR)             // Extended SFR
-#define     P4PU        (*(__IO uint8_t xdata *) P4PU_ADDR)             // Extended SFR
-#define     P5PU        (*(__IO uint8_t xdata *) P5PU_ADDR)             // Extended SFR
-#define     P6PU        (*(__IO uint8_t xdata *) P6PU_ADDR)             // Extended SFR
-#define     P7PU        (*(__IO uint8_t xdata *) P7PU_ADDR)             // Extended SFR
+// * GPIO pull up resistor control registers: [0] off; [1] on*/
+#define     P0PU        ((__IO uint8_t xdata *) P0PU_ADDR)             // Extended SFR
+#define     P1PU        ((__IO uint8_t xdata *) P1PU_ADDR)             // Extended SFR
+#define     P2PU        ((__IO uint8_t xdata *) P2PU_ADDR)             // Extended SFR
+#define     P3PU        ((__IO uint8_t xdata *) P3PU_ADDR)             // Extended SFR
+#define     P4PU        ((__IO uint8_t xdata *) P4PU_ADDR)             // Extended SFR
+#define     P5PU        ((__IO uint8_t xdata *) P5PU_ADDR)             // Extended SFR
+#define     P6PU        ((__IO uint8_t xdata *) P6PU_ADDR)             // Extended SFR
+#define     P7PU        ((__IO uint8_t xdata *) P7PU_ADDR)             // Extended SFR
 
-#define     P0NCS       (*(__IO uint8_t xdata *) P1NCS_ADDR)            // Extended SFR
-#define     P1NCS       (*(__IO uint8_t xdata *) P2NCS_ADDR)            // Extended SFR
-#define     P2NCS       (*(__IO uint8_t xdata *) P3NCS_ADDR)            // Extended SFR
-#define     P3NCS       (*(__IO uint8_t xdata *) P4NCS_ADDR)            // Extended SFR
-#define     P4NCS       (*(__IO uint8_t xdata *) P5NCS_ADDR)            // Extended SFR
-#define     P5NCS       (*(__IO uint8_t xdata *) P6NCS_ADDR)            // Extended SFR
-#define     P6NCS       (*(__IO uint8_t xdata *) P7NCS_ADDR)            // Extended SFR
-#define     P7NCS       (*(__IO uint8_t xdata *) P8NCS_ADDR)            // Extended SFR
-/** @} */
+// * GPIO Schmitt trigger control registers: [0] off; [1] on */
+#define     P0NCS       ((__IO uint8_t xdata *) P1NCS_ADDR)            // Extended SFR
+#define     P1NCS       ((__IO uint8_t xdata *) P2NCS_ADDR)            // Extended SFR
+#define     P2NCS       ((__IO uint8_t xdata *) P3NCS_ADDR)            // Extended SFR
+#define     P3NCS       ((__IO uint8_t xdata *) P4NCS_ADDR)            // Extended SFR
+#define     P4NCS       ((__IO uint8_t xdata *) P5NCS_ADDR)            // Extended SFR
+#define     P5NCS       ((__IO uint8_t xdata *) P6NCS_ADDR)            // Extended SFR
+#define     P6NCS       ((__IO uint8_t xdata *) P7NCS_ADDR)            // Extended SFR
+#define     P7NCS       ((__IO uint8_t xdata *) P8NCS_ADDR)            // Extended SFR
 
 //! ISR peripherals
 /* ISR base address */
-#define    IE_ADDR          0xA8u
-#define    IE2_ADDR         0xAFu
-#define    IP_ADDR          0xB8u
-#define    IP2_ADDR         0xB5u
-#define    IPH_ADDR         0xB7u
-#define    IP2H_ADDR        0xB6u
-#define    INTCLKO_ADDR     0x8Fu
-#define    AUXINTIF_ADDR    0xEFu
+#define    IE_ADDR          ((uint8_t)0xA8)
+#define    IE2_ADDR         ((uint8_t)0xAF)
+#define    IP_ADDR          ((uint8_t)0xB8)
+#define    IP2_ADDR         ((uint8_t)0xB5)
+#define    IPH_ADDR         ((uint8_t)0xB7)
+#define    IP2H_ADDR        ((uint8_t)0xB6)
+#define    INTCLKO_ADDR     ((uint8_t)0x8F)
+#define    AUXINTIF_ADDR    ((uint8_t)0xEF)
 
 /* IE2 offset */
-#define     ET4             0x40u
-#define     ET3             0x20u
-#define     ES4             0x10u
-#define     ES3             0x08u
-#define     ET2             0x04u
-#define     ESPI            0x02u
-#define     ES2             0x01u
+#define     ET4             ((uint8_t)0x40)
+#define     ET3             ((uint8_t)0x20)
+#define     ES4             ((uint8_t)0x10)
+#define     ES3             ((uint8_t)0x08)
+#define     ET2             ((uint8_t)0x04)
+#define     ESPI            ((uint8_t)0x02)
+#define     ES2             ((uint8_t)0x01)
 
 /* IP2 offset */
-#define     PI2C            0x40u
-#define     PCMP            0x20u
-#define     PX4             0x10u
-#define     PPWMFD          0x08u
-#define     PPWM            0x04u
-#define     PSPI            0x02u
-#define     PS2             0x01u
+#define     PI2C            ((uint8_t)0x40)
+#define     PCMP            ((uint8_t)0x20)
+#define     PX4             ((uint8_t)0x10)
+#define     PPWMFD          ((uint8_t)0x08)
+#define     PPWM            ((uint8_t)0x04)
+#define     PSPI            ((uint8_t)0x02)
+#define     PS2             ((uint8_t)0x01)
 
 /* IPH offset */
-#define     PPCAH           0x80u
-#define     PLVDH           0x40u
-#define     PADCH           0x20u
-#define     PSH             0x10u
-#define     PT1H            0x08u
-#define     PX1H            0x04u
-#define     PT0H            0x02u
-#define     PX0H            0x01u
+#define     PPCAH           ((uint8_t)0x80)
+#define     PLVDH           ((uint8_t)0x40)
+#define     PADCH           ((uint8_t)0x20)
+#define     PSH             ((uint8_t)0x10)
+#define     PT1H            ((uint8_t)0x08)
+#define     PX1H            ((uint8_t)0x04)
+#define     PT0H            ((uint8_t)0x02)
+#define     PX0H            ((uint8_t)0x01)
 
 /* IP2H offset */
-#define     PI2CH           0x40u
-#define     PCMPH           0x20u
-#define     PX4H            0x10u
-#define     PPWMFDH         0x08u
-#define     PPWMH           0x04u
-#define     PSPIH           0x02u
-#define     PS2H            0x01u
+#define     PI2CH           ((uint8_t)0x40)
+#define     PCMPH           ((uint8_t)0x20)
+#define     PX4H            ((uint8_t)0x10)
+#define     PPWMFDH         ((uint8_t)0x08)
+#define     PPWMH           ((uint8_t)0x04)
+#define     PSPIH           ((uint8_t)0x02)
+#define     PS2H            ((uint8_t)0x01)
 
 /* INTCLKO offset */
-#define     EX4             0x40u
-#define     EX3             0x20u
-#define     EX2             0x10u
-#define     T2CLKO          0x04u
-#define     T1CLKO          0x02u
-#define     T0CLKO          0x01u
+#define     EX4             ((uint8_t)0x40)
+#define     EX3             ((uint8_t)0x20)
+#define     EX2             ((uint8_t)0x10)
+#define     T2CLKO          ((uint8_t)0x04)
+#define     T1CLKO          ((uint8_t)0x02)
+#define     T0CLKO          ((uint8_t)0x01)
 
 /* AUXINTIF offset */
-#define     INT4IF          0x40u
-#define     INT3IF          0x20u
-#define     INT2IF          0x10u
-#define     T4IF            0x04u
-#define     T3IF            0x02u
-#define     T2IF            0x01u
+#define     INT4IF          ((uint8_t)0x40)
+#define     INT3IF          ((uint8_t)0x20)
+#define     INT2IF          ((uint8_t)0x10)
+#define     T4IF            ((uint8_t)0x04)
+#define     T3IF            ((uint8_t)0x02)
+#define     T2IF            ((uint8_t)0x01)
 
 /* ISR register */
 sfr IE          =   IE_ADDR;
@@ -567,8 +662,8 @@ sbit PX0        =   IP^0;
 
 //! Timer peripherals
 /* timer basic address definition */
-#define     Timer_BASE      0x88u
-#define     T2T3T4_BASE     0xD1u
+#define     Timer_BASE      ((uint8_t)0x88)
+#define     T2T3T4_BASE     ((uint8_t)0xD1)
 #define     TCON_ADDR       (Timer_BASE + 0x00u)
 #define     TMOD_ADDR       (Timer_BASE + 0x01u)
 #define     TL0_ADDR        (Timer_BASE + 0x02u)
@@ -584,24 +679,24 @@ sbit PX0        =   IP^0;
 #define     T2L_ADDR        (T2T3T4_BASE + 0x06u)
 
 /* TMOD offset */
-#define     T1_GATE         0x80
-#define     T1_CT           0x40
-#define     T1_M1           0x20
-#define     T1_M0           0x10
-#define     T0_GATE         0x08
-#define     T0_CT           0x04
-#define     T0_M1           0x02
-#define     T0_M0           0x01
+#define     T1_GATE         ((uint8_t)0x80)
+#define     T1_CT           ((uint8_t)0x40)
+#define     T1_M1           ((uint8_t)0x20)
+#define     T1_M0           ((uint8_t)0x10)
+#define     T0_GATE         ((uint8_t)0x08)
+#define     T0_CT           ((uint8_t)0x04)
+#define     T0_M1           ((uint8_t)0x02)
+#define     T0_M0           ((uint8_t)0x01)
 
 /* T4T3M offset */
-#define     T4R             0x80
-#define     T4_CT           0x40
-#define     T4x12           0x20
-#define     T4CLKO          0x10
-#define     T3R             0x08
-#define     T3_CT           0x04
-#define     T3x12           0x02
-#define     T3CLKO          0x01
+#define     T4R             ((uint8_t)0x80)
+#define     T4_CT           ((uint8_t)0x40)
+#define     T4x12           ((uint8_t)0x20)
+#define     T4CLKO          ((uint8_t)0x10)
+#define     T3R             ((uint8_t)0x08)
+#define     T3_CT           ((uint8_t)0x04)
+#define     T3x12           ((uint8_t)0x02)
+#define     T3CLKO          ((uint8_t)0x01)
 
 /* timer special function registers */
 sfr TCON        =   TCON_ADDR;
@@ -630,46 +725,46 @@ sbit IT0        =   TCON^0;
 
 //! UART peripherals
 /* UART basic address definition */
-#define     SCON_ADDR       0x98u
-#define     SBUF_ADDR       0x99u
-#define     S2CON_ADDR      0x9Au
-#define     S2BUF_ADDR      0x9Bu
-#define     S3CON_ADDR      0xACu
-#define     S3BUF_ADDR      0xADu
-#define     S4CON_ADDR      0x84u
-#define     S4BUF_ADDR      0x85u
-#define     SADDR_ADDR      0xA9u
-#define     SADEN_ADDR      0xB9u
+#define     SCON_ADDR       ((uint8_t)0x98)
+#define     SBUF_ADDR       ((uint8_t)0x99)
+#define     S2CON_ADDR      ((uint8_t)0x9A)
+#define     S2BUF_ADDR      ((uint8_t)0x9B)
+#define     S3CON_ADDR      ((uint8_t)0xAC)
+#define     S3BUF_ADDR      ((uint8_t)0xAD)
+#define     S4CON_ADDR      ((uint8_t)0x84)
+#define     S4BUF_ADDR      ((uint8_t)0x85)
+#define     SADDR_ADDR      ((uint8_t)0xA9)
+#define     SADEN_ADDR      ((uint8_t)0xB9)
 
 /* S2CON offset */
-#define     S2SM0           0x80u
-#define     S2ST4           0x40u
-#define     S2SM2           0x20u
-#define     S2REN           0x10u
-#define     S2TB8           0x08u
-#define     S2RB8           0x04u
-#define     S2TI            0x02u
-#define     S2RI            0x01u
+#define     S2SM0           ((uint8_t)0x80)
+#define     S2ST4           ((uint8_t)0x40)
+#define     S2SM2           ((uint8_t)0x20)
+#define     S2REN           ((uint8_t)0x10)
+#define     S2TB8           ((uint8_t)0x08)
+#define     S2RB8           ((uint8_t)0x04)
+#define     S2TI            ((uint8_t)0x02)
+#define     S2RI            ((uint8_t)0x01)
 
 /* S3CON offset */
-#define     S3SM0           0x80u
-#define     S3ST4           0x40u
-#define     S3SM2           0x20u
-#define     S3REN           0x10u
-#define     S3TB8           0x08u
-#define     S3RB8           0x04u
-#define     S3TI            0x02u
-#define     S3RI            0x01u
+#define     S3SM0           ((uint8_t)0x80)
+#define     S3ST4           ((uint8_t)0x40)
+#define     S3SM2           ((uint8_t)0x20)
+#define     S3REN           ((uint8_t)0x10)
+#define     S3TB8           ((uint8_t)0x08)
+#define     S3RB8           ((uint8_t)0x04)
+#define     S3TI            ((uint8_t)0x02)
+#define     S3RI            ((uint8_t)0x01)
 
 /* S4CON offset */
-#define     S4SM0           0x80u
-#define     S4ST4           0x40u
-#define     S4SM2           0x20u
-#define     S4REN           0x10u
-#define     S4TB8           0x08u
-#define     S4RB8           0x04u
-#define     S4TI            0x02u
-#define     S4RI            0x01u
+#define     S4SM0           ((uint8_t)0x80)
+#define     S4ST4           ((uint8_t)0x40)
+#define     S4SM2           ((uint8_t)0x20)
+#define     S4REN           ((uint8_t)0x10)
+#define     S4TB8           ((uint8_t)0x08)
+#define     S4RB8           ((uint8_t)0x04)
+#define     S4TI            ((uint8_t)0x02)
+#define     S4RI            ((uint8_t)0x01)
 
 /* UART special function registers */
 sfr SCON        =   SCON_ADDR;
@@ -695,40 +790,40 @@ sbit RI         =   SCON^0;
 
 //! COMP peripherals
 /* COMP basic address definition */
-#define     CMPCR1_ADDR     0xE6u
-#define     CMPCR2_ADDR     0xE7u
+#define     CMPCR1_ADDR     ((uint8_t)0xE6)
+#define     CMPCR2_ADDR     ((uint8_t)0xE7)
 
 /* CMPCR1 offset */
-#define     CMPEN           0x80u
-#define     CMPIF           0x40u
-#define     PIE             0x20u
-#define     NIE             0x10u
-#define     PIS             0x08u
-#define     NIS             0x04u
-#define     CMPOE           0x02u
-#define     CMPRES          0x01u
+#define     CMPEN           ((uint8_t)0x80)
+#define     CMPIF           ((uint8_t)0x40)
+#define     PIE             ((uint8_t)0x20)
+#define     NIE             ((uint8_t)0x10)
+#define     PIS             ((uint8_t)0x08)
+#define     NIS             ((uint8_t)0x04)
+#define     CMPOE           ((uint8_t)0x02)
+#define     CMPRES          ((uint8_t)0x01)
 
 /* CMPAR2 offset */
-#define     INVCMPO         0x80
-#define     DISFLT          0x40
+#define     INVCMPO         ((uint8_t)0x80
+#define     DISFLT          ((uint8_t)0x40
 
 sfr CMPCR1      =   CMPCR1_ADDR;
 sfr CMPCR2      =   CMPCR2_ADDR;
 
 //! EEPROM peripherals
 /* EEPROM basic address definition */
-#define     IAP_DATA_ADDR   0xC2u
-#define     IAP_ADDRH_ADDR  0xC3u
-#define     IAP_ADDRL_ADDR  0xC4u
-#define     IAP_CMD_ADDR    0xC5u
-#define     IAP_TRIG_ADDR   0xC6u
-#define     IAP_CONTR_ADDR  0xC7u
+#define     IAP_DATA_ADDR   ((uint8_t)0xC2)
+#define     IAP_ADDRH_ADDR  ((uint8_t)0xC3)
+#define     IAP_ADDRL_ADDR  ((uint8_t)0xC4)
+#define     IAP_CMD_ADDR    ((uint8_t)0xC5)
+#define     IAP_TRIG_ADDR   ((uint8_t)0xC6)
+#define     IAP_CONTR_ADDR  ((uint8_t)0xC7)
 
 /* IAP_CONTR offset */
-#define     IAPEN           0x80u
-#define     SWBS            0x40u
-#define     SWRST           0x20u
-#define     CMD_FAIL        0x10u
+#define     IAPEN           ((uint8_t)0x80)
+#define     SWBS            ((uint8_t)0x40)
+#define     SWRST           ((uint8_t)0x20)
+#define     CMD_FAIL        ((uint8_t)0x10)
 
 /* IAP special function registers */
 sfr IAP_DATA    =   IAP_DATA_ADDR;
@@ -740,18 +835,18 @@ sfr IAP_CONTR   =   IAP_CONTR_ADDR;
 
 //! ADC peripherals
 /* ADC basic address definition */
-#define     ADC_CONTR_ADDR  0xBCu
-#define     ADC_RESH_ADDR   0xBDu
-#define     ADC_RESL_ADDR   0xBEu
-#define     ADCCFG_ADDR     0xDEu
+#define     ADC_CONTR_ADDR  ((uint8_t)0xBC)
+#define     ADC_RESH_ADDR   ((uint8_t)0xBD)
+#define     ADC_RESL_ADDR   ((uint8_t)0xBE)
+#define     ADCCFG_ADDR     ((uint8_t)0xDE)
 
 /* ADC_CONTR offset */
-#define     ADC_POWER       0x80u
-#define     ADC_START       0x40u
-#define     ADC_FLAG        0x20u
+#define     ADC_POWER       ((uint8_t)0x80)
+#define     ADC_START       ((uint8_t)0x40)
+#define     ADC_FLAG        ((uint8_t)0x20)
 
 /* ADCCFG offset */
-#define     ADC_RESFMT      0x20u
+#define     ADC_RESFMT      ((uint8_t)0x20)
 
 /* ADC special function registers */
 sfr ADC_CONTR   =   ADC_CONTR_ADDR;
@@ -761,66 +856,66 @@ sfr ADCCFG      =   ADCCFG_ADDR;
 
 //! PCA peripherals
 /* PCA basic address definition */
-#define     CCON_ADDR       0xD8u
-#define     CMOD_ADDR       0xD9u
-#define     CL_ADDR         0xE9u
-#define     CH_ADDR         0xF9u
-#define     CCAPM0_ADDR     0xDAu
-#define     CCAPM1_ADDR     0xDBu
-#define     CCAPM2_ADDR     0xDCu
-#define     CCAPM3_ADDR     0xDDu
-#define     CCAP0L_ADDR     0xEAu
-#define     CCAP1L_ADDR     0xEBu
-#define     CCAP2L_ADDR     0xECu
-#define     CCAP3L_ADDR     0xEDu
-#define     CCAP0H_ADDR     0xFAu
-#define     CCAP1H_ADDR     0xFBu
-#define     CCAP2H_ADDR     0xFCu
-#define     CCAP3H_ADDR     0xFDu
-#define     PCA_PWM0_ADDR   0xF2u
-#define     PCA_PWM1_ADDR   0xF3u
-#define     PCA_PWM2_ADDR   0xF4u
-#define     PCA_PWM3_ADDR   0xF5u
+#define     CCON_ADDR       ((uint8_t)0xD8)
+#define     CMOD_ADDR       ((uint8_t)0xD9)
+#define     CL_ADDR         ((uint8_t)0xE9)
+#define     CH_ADDR         ((uint8_t)0xF9)
+#define     CCAPM0_ADDR     ((uint8_t)0xDA)
+#define     CCAPM1_ADDR     ((uint8_t)0xDB)
+#define     CCAPM2_ADDR     ((uint8_t)0xDC)
+#define     CCAPM3_ADDR     ((uint8_t)0xDD)
+#define     CCAP0L_ADDR     ((uint8_t)0xEA)
+#define     CCAP1L_ADDR     ((uint8_t)0xEB)
+#define     CCAP2L_ADDR     ((uint8_t)0xEC)
+#define     CCAP3L_ADDR     ((uint8_t)0xED)
+#define     CCAP0H_ADDR     ((uint8_t)0xFA)
+#define     CCAP1H_ADDR     ((uint8_t)0xFB)
+#define     CCAP2H_ADDR     ((uint8_t)0xFC)
+#define     CCAP3H_ADDR     ((uint8_t)0xFD)
+#define     PCA_PWM0_ADDR   ((uint8_t)0xF2)
+#define     PCA_PWM1_ADDR   ((uint8_t)0xF3)
+#define     PCA_PWM2_ADDR   ((uint8_t)0xF4)
+#define     PCA_PWM3_ADDR   ((uint8_t)0xF5)
 
 /* CMOD offset */
-#define     CIDL            0x80u
-#define     ECF             0x01u
+#define     CIDL            ((uint8_t)0x80)
+#define     ECF             ((uint8_t)0x01)
 
 /* CCAPM0 offset */
-#define     ECOM0           0x40u
-#define     CCAPP0          0x20u
-#define     CCAPN0          0x10u
-#define     MAT0            0x08u
-#define     TOG0            0x04u
-#define     PWM0            0x02u
-#define     ECCF0           0x01u
+#define     ECOM0           ((uint8_t)0x40)
+#define     CCAPP0          ((uint8_t)0x20)
+#define     CCAPN0          ((uint8_t)0x10)
+#define     MAT0            ((uint8_t)0x08)
+#define     TOG0            ((uint8_t)0x04)
+#define     PWM0            ((uint8_t)0x02)
+#define     ECCF0           ((uint8_t)0x01)
 
 /* CCAPM1 offset */
-#define     ECOM1           0x40u
-#define     CCAPP1          0x20u
-#define     CCAPN1          0x10u
-#define     MAT1            0x08u
-#define     TOG1            0x04u
-#define     PWM1            0x02u
-#define     ECCF1           0x01u
+#define     ECOM1           ((uint8_t)0x40)
+#define     CCAPP1          ((uint8_t)0x20)
+#define     CCAPN1          ((uint8_t)0x10)
+#define     MAT1            ((uint8_t)0x08)
+#define     TOG1            ((uint8_t)0x04)
+#define     PWM1            ((uint8_t)0x02)
+#define     ECCF1           ((uint8_t)0x01)
 
 /* CCAMP2 offset */
-#define     ECOM2           0x40u
-#define     CCAPP2          0x20u
-#define     CCAPN2          0x10u
-#define     MAT2            0x08u
-#define     TOG2            0x04u
-#define     PWM2            0x02u
-#define     ECCF2           0x01u
+#define     ECOM2           ((uint8_t)0x40)
+#define     CCAPP2          ((uint8_t)0x20)
+#define     CCAPN2          ((uint8_t)0x10)
+#define     MAT2            ((uint8_t)0x08)
+#define     TOG2            ((uint8_t)0x04)
+#define     PWM2            ((uint8_t)0x02)
+#define     ECCF2           ((uint8_t)0x01)
 
 /* CCAPM3 offset */
-#define     ECOM3           0x40u
-#define     CCAPP3          0x20u
-#define     CCAPN3          0x10u
-#define     MAT3            0x08u
-#define     TOG3            0x04u
-#define     PWM3            0x02u
-#define     ECCF3           0x01u
+#define     ECOM3           ((uint8_t)0x40)
+#define     CCAPP3          ((uint8_t)0x20)
+#define     CCAPN3          ((uint8_t)0x10)
+#define     MAT3            ((uint8_t)0x08)
+#define     TOG3            ((uint8_t)0x04)
+#define     PWM3            ((uint8_t)0x02)
+#define     ECCF3           ((uint8_t)0x01)
 
 /* PCA special function registers */
 sfr CCON        =   CCON_ADDR;
@@ -854,129 +949,129 @@ sbit CCF0       =   CCON^0;
 
 //! PWM peripherals
 /* PWM basic address definition */
-#define     PWMCFG_ADDR     0xF1u
-#define     PWMIF_ADDR      0xF6u
-#define     PWMFDCR_ADDR    0xF7u
-#define     PWMCR_ADDR      0xFEu
+#define     PWMCFG_ADDR     ((uint8_t)0xF1)
+#define     PWMIF_ADDR      ((uint8_t)0xF6)
+#define     PWMFDCR_ADDR    ((uint8_t)0xF7)
+#define     PWMCR_ADDR      ((uint8_t)0xFE)
 
-#define     PWM_BASE        0xFFF0u
-#define     PWM0_BASE       0xFF00u
-#define     PWM1_BASE       0xFF10u
-#define     PWM2_BASE       0xFF20u
-#define     PWM3_BASE       0xFF30u
-#define     PWM4_BASE       0xFF40u
-#define     PWM5_BASE       0xFF50u
-#define     PWM6_BASE       0xFF60u
-#define     PWM7_BASE       0xFF70u
+#define     PWM_BASE        ((uint16_t)0xFFF0)
+#define     PWM0_BASE       ((uint16_t)0xFF00)
+#define     PWM1_BASE       ((uint16_t)0xFF10)
+#define     PWM2_BASE       ((uint16_t)0xFF20)
+#define     PWM3_BASE       ((uint16_t)0xFF30)
+#define     PWM4_BASE       ((uint16_t)0xFF40)
+#define     PWM5_BASE       ((uint16_t)0xFF50)
+#define     PWM6_BASE       ((uint16_t)0xFF60)
+#define     PWM7_BASE       ((uint16_t)0xFF70)
 
-#define     PWMC_ADDR       (PWM_BASE + 0x00u)
-#define     PWMCH_ADDR      (PWMC_ADDR +  0x00u)
-#define     PWMCL_ADDR      (PWMCH_ADDR + 0x01u)
-#define     PWMCKS_ADDR     (PWMCL_ADDR + 0x01u)
+#define     PWMC_ADDR       (PWM_BASE + 0x00)
+#define     PWMCH_ADDR      (PWMC_ADDR +  0x00)
+#define     PWMCL_ADDR      (PWMCH_ADDR + 0x01)
+#define     PWMCKS_ADDR     (PWMCL_ADDR + 0x01)
 
-#define     TADCP_ADDR      (PWMCKS_ADDR + 0x01u)
-#define     TADCPH_ADDR     (TADCP_ADDR +  0x00u)
-#define     TADCPL_ADDR     (TADCPH_ADDR + 0x01u)
+#define     TADCP_ADDR      (PWMCKS_ADDR + 0x01)
+#define     TADCPH_ADDR     (TADCP_ADDR +  0x00)
+#define     TADCPL_ADDR     (TADCPH_ADDR + 0x01)
 
-#define     PWM0T1_ADDR     (PWM0_BASE + 0x00u)
-#define     PWM0T1H_ADDR    (PWM0T1_ADDR +  0x00u)
-#define     PWM0T1L_ADDR    (PWM0T1H_ADDR + 0x01u)
-#define     PWM0T2_ADDR     (PWM0T1L_ADDR + 0x01u)
-#define     PWM0T2H_ADDR    (PWM0T2_ADDR +  0x00u)
-#define     PWM0T2L_ADDR    (PWM0T2H_ADDR + 0x01u)
-#define     PWM0CR_ADDR     (PWM0T2L_ADDR + 0x01u)
-#define     PWM0HLD_ADDR    (PWM0CR_ADDR +  0x01u)
+#define     PWM0T1_ADDR     (PWM0_BASE + 0x00)
+#define     PWM0T1H_ADDR    (PWM0T1_ADDR +  0x00)
+#define     PWM0T1L_ADDR    (PWM0T1H_ADDR + 0x01)
+#define     PWM0T2_ADDR     (PWM0T1L_ADDR + 0x01)
+#define     PWM0T2H_ADDR    (PWM0T2_ADDR +  0x00)
+#define     PWM0T2L_ADDR    (PWM0T2H_ADDR + 0x01)
+#define     PWM0CR_ADDR     (PWM0T2L_ADDR + 0x01)
+#define     PWM0HLD_ADDR    (PWM0CR_ADDR +  0x01)
 
-#define     PWM1T1_ADDR     (PWM1_BASE + 0x00u)
-#define     PWM1T1H_ADDR    (PWM1T1_ADDR +  0x00u)
-#define     PWM1T1L_ADDR    (PWM1T1H_ADDR + 0x01u)
-#define     PWM1T2_ADDR     (PWM1T1L_ADDR + 0x01u)
-#define     PWM1T2H_ADDR    (PWM1T2_ADDR +  0x00u)
-#define     PWM1T2L_ADDR    (PWM1T2H_ADDR + 0x01u)
-#define     PWM1CR_ADDR     (PWM1T2L_ADDR + 0x01u)
-#define     PWM1HLD_ADDR    (PWM1CR_ADDR +  0x01u)
+#define     PWM1T1_ADDR     (PWM1_BASE + 0x00)
+#define     PWM1T1H_ADDR    (PWM1T1_ADDR +  0x00)
+#define     PWM1T1L_ADDR    (PWM1T1H_ADDR + 0x01)
+#define     PWM1T2_ADDR     (PWM1T1L_ADDR + 0x01)
+#define     PWM1T2H_ADDR    (PWM1T2_ADDR +  0x00)
+#define     PWM1T2L_ADDR    (PWM1T2H_ADDR + 0x01)
+#define     PWM1CR_ADDR     (PWM1T2L_ADDR + 0x01)
+#define     PWM1HLD_ADDR    (PWM1CR_ADDR +  0x01)
 
-#define     PWM2T1_ADDR     (PWM2_BASE + 0x00u)
-#define     PWM2T1H_ADDR    (PWM2T1_ADDR +  0x00u)
-#define     PWM2T1L_ADDR    (PWM2T1H_ADDR + 0x01u)
-#define     PWM2T2_ADDR     (PWM2T1L_ADDR + 0x01u)
-#define     PWM2T2H_ADDR    (PWM2T2_ADDR +  0x00u)
-#define     PWM2T2L_ADDR    (PWM2T2H_ADDR + 0x01u)
-#define     PWM2CR_ADDR     (PWM2T2L_ADDR + 0x01u)
-#define     PWM2HLD_ADDR    (PWM2CR_ADDR +  0x01u)
+#define     PWM2T1_ADDR     (PWM2_BASE + 0x00)
+#define     PWM2T1H_ADDR    (PWM2T1_ADDR +  0x00)
+#define     PWM2T1L_ADDR    (PWM2T1H_ADDR + 0x01)
+#define     PWM2T2_ADDR     (PWM2T1L_ADDR + 0x01)
+#define     PWM2T2H_ADDR    (PWM2T2_ADDR +  0x00)
+#define     PWM2T2L_ADDR    (PWM2T2H_ADDR + 0x01)
+#define     PWM2CR_ADDR     (PWM2T2L_ADDR + 0x01)
+#define     PWM2HLD_ADDR    (PWM2CR_ADDR +  0x01)
 
-#define     PWM3T1_ADDR     (PWM3_BASE + 0x00u)
-#define     PWM3T1H_ADDR    (PWM3T1_ADDR +  0x00u)
-#define     PWM3T1L_ADDR    (PWM3T1H_ADDR + 0x01u)
-#define     PWM3T2_ADDR     (PWM3T1L_ADDR + 0x01u)
-#define     PWM3T2H_ADDR    (PWM3T2_ADDR +  0x00u)
-#define     PWM3T2L_ADDR    (PWM3T2H_ADDR + 0x01u)
-#define     PWM3CR_ADDR     (PWM3T2L_ADDR + 0x01u)
-#define     PWM3HLD_ADDR    (PWM3CR_ADDR +  0x01u)
+#define     PWM3T1_ADDR     (PWM3_BASE + 0x00)
+#define     PWM3T1H_ADDR    (PWM3T1_ADDR +  0x00)
+#define     PWM3T1L_ADDR    (PWM3T1H_ADDR + 0x01)
+#define     PWM3T2_ADDR     (PWM3T1L_ADDR + 0x01)
+#define     PWM3T2H_ADDR    (PWM3T2_ADDR +  0x00)
+#define     PWM3T2L_ADDR    (PWM3T2H_ADDR + 0x01)
+#define     PWM3CR_ADDR     (PWM3T2L_ADDR + 0x01)
+#define     PWM3HLD_ADDR    (PWM3CR_ADDR +  0x01)
 
-#define     PWM4T1_ADDR     (PWM4_BASE + 0x00u)
-#define     PWM4T1H_ADDR    (PWM4T1_ADDR +  0x00u)
-#define     PWM4T1L_ADDR    (PWM4T1H_ADDR + 0x01u)
-#define     PWM4T2_ADDR     (PWM4T1L_ADDR + 0x01u)
-#define     PWM4T2H_ADDR    (PWM4T2_ADDR +  0x00u)
-#define     PWM4T2L_ADDR    (PWM4T2H_ADDR + 0x01u)
-#define     PWM4CR_ADDR     (PWM4T2L_ADDR + 0x01u)
-#define     PWM4HLD_ADDR    (PWM4CR_ADDR +  0x01u)
+#define     PWM4T1_ADDR     (PWM4_BASE + 0x00)
+#define     PWM4T1H_ADDR    (PWM4T1_ADDR +  0x00)
+#define     PWM4T1L_ADDR    (PWM4T1H_ADDR + 0x01)
+#define     PWM4T2_ADDR     (PWM4T1L_ADDR + 0x01)
+#define     PWM4T2H_ADDR    (PWM4T2_ADDR +  0x00)
+#define     PWM4T2L_ADDR    (PWM4T2H_ADDR + 0x01)
+#define     PWM4CR_ADDR     (PWM4T2L_ADDR + 0x01)
+#define     PWM4HLD_ADDR    (PWM4CR_ADDR +  0x01)
 
-#define     PWM5T1_ADDR     (PWM5_BASE + 0x00u)
-#define     PWM5T1H_ADDR    (PWM5T1_ADDR +  0x00u)
-#define     PWM5T1L_ADDR    (PWM5T1H_ADDR + 0x01u)
-#define     PWM5T2_ADDR     (PWM5T1L_ADDR + 0x01u)
-#define     PWM5T2H_ADDR    (PWM5T2_ADDR +  0x00u)
-#define     PWM5T2L_ADDR    (PWM5T2H_ADDR + 0x01u)
-#define     PWM5CR_ADDR     (PWM5T2L_ADDR + 0x01u)
-#define     PWM5HLD_ADDR    (PWM5CR_ADDR +  0x01u)
+#define     PWM5T1_ADDR     (PWM5_BASE + 0x00)
+#define     PWM5T1H_ADDR    (PWM5T1_ADDR +  0x00)
+#define     PWM5T1L_ADDR    (PWM5T1H_ADDR + 0x01)
+#define     PWM5T2_ADDR     (PWM5T1L_ADDR + 0x01)
+#define     PWM5T2H_ADDR    (PWM5T2_ADDR +  0x00)
+#define     PWM5T2L_ADDR    (PWM5T2H_ADDR + 0x01)
+#define     PWM5CR_ADDR     (PWM5T2L_ADDR + 0x01)
+#define     PWM5HLD_ADDR    (PWM5CR_ADDR +  0x01)
 
-#define     PWM6T1_ADDR     (PWM6_BASE + 0x00u)
-#define     PWM6T1H_ADDR    (PWM6T1_ADDR +  0x00u)
-#define     PWM6T1L_ADDR    (PWM6T1H_ADDR + 0x01u)
-#define     PWM6T2_ADDR     (PWM6T1L_ADDR + 0x01u)
-#define     PWM6T2H_ADDR    (PWM6T2_ADDR +  0x00u)
-#define     PWM6T2L_ADDR    (PWM6T2H_ADDR + 0x01u)
-#define     PWM6CR_ADDR     (PWM6T2L_ADDR + 0x01u)
-#define     PWM6HLD_ADDR    (PWM6CR_ADDR +  0x01u)
+#define     PWM6T1_ADDR     (PWM6_BASE + 0x00)
+#define     PWM6T1H_ADDR    (PWM6T1_ADDR +  0x00)
+#define     PWM6T1L_ADDR    (PWM6T1H_ADDR + 0x01)
+#define     PWM6T2_ADDR     (PWM6T1L_ADDR + 0x01)
+#define     PWM6T2H_ADDR    (PWM6T2_ADDR +  0x00)
+#define     PWM6T2L_ADDR    (PWM6T2H_ADDR + 0x01)
+#define     PWM6CR_ADDR     (PWM6T2L_ADDR + 0x01)
+#define     PWM6HLD_ADDR    (PWM6CR_ADDR +  0x01)
 
-#define     PWM7T1_ADDR     (PWM7_BASE + 0x00u)
-#define     PWM7T1H_ADDR    (PWM7T1_ADDR +  0x00u)
-#define     PWM7T1L_ADDR    (PWM7T1H_ADDR + 0x01u)
-#define     PWM7T2_ADDR     (PWM7T1L_ADDR + 0x01u)
-#define     PWM7T2H_ADDR    (PWM7T2_ADDR +  0x00u)
-#define     PWM7T2L_ADDR    (PWM7T2H_ADDR + 0x01u)
-#define     PWM7CR_ADDR     (PWM7T2L_ADDR + 0x01u)
-#define     PWM7HLD_ADDR    (PWM7CR_ADDR +  0x01u)
+#define     PWM7T1_ADDR     (PWM7_BASE + 0x00)
+#define     PWM7T1H_ADDR    (PWM7T1_ADDR +  0x00)
+#define     PWM7T1L_ADDR    (PWM7T1H_ADDR + 0x01)
+#define     PWM7T2_ADDR     (PWM7T1L_ADDR + 0x01)
+#define     PWM7T2H_ADDR    (PWM7T2_ADDR +  0x00)
+#define     PWM7T2L_ADDR    (PWM7T2H_ADDR + 0x01)
+#define     PWM7CR_ADDR     (PWM7T2L_ADDR + 0x01)
+#define     PWM7HLD_ADDR    (PWM7CR_ADDR +  0x01)
 
 /* PWMCFG offset */
-#define     CBIF            0x80u
-#define     ETADC           0x40u
+#define     CBIF            ((uint8_t)0x80)
+#define     ETADC           ((uint8_t)0x40)
 
 /* PWMIF offset */
-#define     C7IF            0x80u
-#define     C6IF            0x40u
-#define     C5IF            0x20u
-#define     C4IF            0x10u
-#define     C3IF            0x08u
-#define     C2IF            0x04u
-#define     C1IF            0x02u
-#define     C0IF            0x01u
+#define     C7IF            ((uint8_t)0x80)
+#define     C6IF            ((uint8_t)0x40)
+#define     C5IF            ((uint8_t)0x20)
+#define     C4IF            ((uint8_t)0x10)
+#define     C3IF            ((uint8_t)0x08)
+#define     C2IF            ((uint8_t)0x04)
+#define     C1IF            ((uint8_t)0x02)
+#define     C0IF            ((uint8_t)0x01)
 
 /* PWMFDCR offset */
-#define     INVCMP          0x80u
-#define     INVIO           0x40u
-#define     ENFD            0x20u
-#define     FLTFLIO         0x10u
-#define     EFDI            0x08u
-#define     FDCMP           0x04u
-#define     FDIO            0x02u
-#define     FDIF            0x01u
+#define     INVCMP          ((uint8_t)0x80)
+#define     INVIO           ((uint8_t)0x40)
+#define     ENFD            ((uint8_t)0x20)
+#define     FLTFLIO         ((uint8_t)0x10)
+#define     EFDI            ((uint8_t)0x08)
+#define     FDCMP           ((uint8_t)0x04)
+#define     FDIO            ((uint8_t)0x02)
+#define     FDIF            ((uint8_t)0x01)
 
 /* PWMCR offset */
-#define     ENPWM           0x80u
-#define     ECBI            0x40u
+#define     ENPWM           ((uint8_t)0x80)
+#define     ECBI            ((uint8_t)0x40)
 
 /* PWM special function registers */
 sfr PWMCFG      =   PWMCFG_ADDR;
@@ -984,108 +1079,108 @@ sfr PWMIF       =   PWMIF_ADDR;
 sfr PWMFDCR     =   PWMFDCR_ADDR;
 sfr PWMCR       =   PWMCR_ADDR;
 
-#define     PWMC            (*(__IO uint16_t xdata *) PWMC_ADDR)
-#define     PWMCH           (*(__IO uint8_t xdata *)  PWMCH_ADDR)
-#define     PWMCL           (*(__IO uint8_t xdata *)  PWMCL_ADDR)
-#define     PWMCKS          (*(__IO uint8_t xdata *)  PWMCKS_ADDR)
-#define     TADCP           (*(__IO uint8_t xdata *)  TADCP_ADDR)
-#define     TADCPH          (*(__IO uint8_t xdata *)  TADCPH_ADDR)
-#define     TADCPL          (*(__IO uint8_t xdata *)  TADCPL_ADDR)
+#define     PWMC            ((__IO uint16_t xdata *) PWMC_ADDR)
+#define     PWMCH           ((__IO uint8_t xdata *)  PWMCH_ADDR)
+#define     PWMCL           ((__IO uint8_t xdata *)  PWMCL_ADDR)
+#define     PWMCKS          ((__IO uint8_t xdata *)  PWMCKS_ADDR)
+#define     TADCP           ((__IO uint8_t xdata *)  TADCP_ADDR)
+#define     TADCPH          ((__IO uint8_t xdata *)  TADCPH_ADDR)
+#define     TADCPL          ((__IO uint8_t xdata *)  TADCPL_ADDR)
 
 #define     PWMxT1(PWMxT1_ADDR)      ( *(__IO uint16_t xdata *) PWMxT1_ADDR)
 #define     PWMxT2(PWMxT2_ADDR)      ( *(__IO uint16_t xdata *) PWMxT2_ADDR)
 #define     PWMxCR(PWMxCR_ADDR)      ( *(__IO uint8_t  xdata *) PWMxCR_ADDR)
 #define     PWMxHLD(PWMxHLD_ADDR)    ( *(__IO uint8_t  xdata *)PWMxHLD_ADDR)
 
-#define     PWM0T1          (*(__IO uint16_t xdata *) PWM0T1_ADDR)
-#define     PWM0T1H         (*(__IO uint8_t  xdata *) PWM0T1H_ADDR)
-#define     PWM0T1L         (*(__IO uint8_t  xdata *) PWM0T1L_ADDR)
-#define     PWM0T2          (*(__IO uint16_t xdata *) PWM0T2_ADDR)
-#define     PWM0T2H         (*(__IO uint8_t  xdata *) PWM0T2H_ADDR)
-#define     PWM0T2L         (*(__IO uint8_t  xdata *) PWM0T2L_ADDR)
-#define     PWM0CR          (*(__IO uint8_t  xdata *) PWM0CR_ADDR)
-#define     PWM0HLD         (*(__IO uint8_t  xdata *) PWM0HLD_ADDR)
+#define     PWM0T1          ((__IO uint16_t xdata *) PWM0T1_ADDR)
+#define     PWM0T1H         ((__IO uint8_t xdata *) PWM0T1H_ADDR)
+#define     PWM0T1L         ((__IO uint8_t xdata *) PWM0T1L_ADDR)
+#define     PWM0T2          ((__IO uint16_t xdata *) PWM0T2_ADDR)
+#define     PWM0T2H         ((__IO uint8_t xdata *) PWM0T2H_ADDR)
+#define     PWM0T2L         ((__IO uint8_t xdata *) PWM0T2L_ADDR)
+#define     PWM0CR          ((__IO uint8_t xdata *) PWM0CR_ADDR)
+#define     PWM0HLD         ((__IO uint8_t xdata *) PWM0HLD_ADDR)
 
-#define     PWM1T1          (*(__IO uint16_t xdata *) PWM1T1_ADDR)
-#define     PWM1T1H         (*(__IO uint8_t  xdata *) PWM1T1H_ADDR)
-#define     PWM1T1L         (*(__IO uint8_t  xdata *) PWM1T1L_ADDR)
-#define     PWM1T2          (*(__IO uint16_t xdata *) PWM1T2_ADDR)
-#define     PWM1T2H         (*(__IO uint8_t  xdata *) PWM1T2H_ADDR)
-#define     PWM1T2L         (*(__IO uint8_t  xdata *) PWM1T2L_ADDR)
-#define     PWM1CR          (*(__IO uint8_t  xdata *) PWM1CR_ADDR)
-#define     PWM1HLD         (*(__IO uint8_t  xdata *) PWM1HLD_ADDR)
+#define     PWM1T1          ((__IO uint16_t xdata *) PWM1T1_ADDR)
+#define     PWM1T1H         ((__IO uint8_t xdata *) PWM1T1H_ADDR)
+#define     PWM1T1L         ((__IO uint8_t xdata *) PWM1T1L_ADDR)
+#define     PWM1T2          ((__IO uint16_t xdata *) PWM1T2_ADDR)
+#define     PWM1T2H         ((__IO uint8_t xdata *) PWM1T2H_ADDR)
+#define     PWM1T2L         ((__IO uint8_t xdata *) PWM1T2L_ADDR)
+#define     PWM1CR          ((__IO uint8_t xdata *) PWM1CR_ADDR)
+#define     PWM1HLD         ((__IO uint8_t xdata *) PWM1HLD_ADDR)
 
-#define     PWM2T1          (*(__IO uint16_t xdata *) PWM2T1_ADDR)
-#define     PWM2T1H         (*(__IO uint8_t  xdata *) PWM2T1H_ADDR)
-#define     PWM2T1L         (*(__IO uint8_t  xdata *) PWM2T1L_ADDR)
-#define     PWM2T2          (*(__IO uint16_t xdata *) PWM2T2_ADDR)
-#define     PWM2T2H         (*(__IO uint8_t  xdata *) PWM2T2H_ADDR)
-#define     PWM2T2L         (*(__IO uint8_t  xdata *) PWM2T2L_ADDR)
-#define     PWM2CR          (*(__IO uint8_t  xdata *) PWM2CR_ADDR)
-#define     PWM2HLD         (*(__IO uint8_t  xdata *) PWM2HLD_ADDR)
+#define     PWM2T1          ((__IO uint16_t xdata *) PWM2T1_ADDR)
+#define     PWM2T1H         ((__IO uint8_t xdata *) PWM2T1H_ADDR)
+#define     PWM2T1L         ((__IO uint8_t xdata *) PWM2T1L_ADDR)
+#define     PWM2T2          ((__IO uint16_t xdata *) PWM2T2_ADDR)
+#define     PWM2T2H         ((__IO uint8_t xdata *) PWM2T2H_ADDR)
+#define     PWM2T2L         ((__IO uint8_t xdata *) PWM2T2L_ADDR)
+#define     PWM2CR          ((__IO uint8_t xdata *) PWM2CR_ADDR)
+#define     PWM2HLD         ((__IO uint8_t xdata *) PWM2HLD_ADDR)
 
-#define     PWM3T1          (*(__IO uint16_t xdata *) PWM3T1_ADDR)
-#define     PWM3T1H         (*(__IO uint8_t  xdata *) PWM3T1H_ADDR)
-#define     PWM3T1L         (*(__IO uint8_t  xdata *) PWM3T1L_ADDR)
-#define     PWM3T2          (*(__IO uint16_t xdata *) PWM3T2_ADDR)
-#define     PWM3T2H         (*(__IO uint8_t  xdata *) PWM3T2H_ADDR)
-#define     PWM3T2L         (*(__IO uint8_t  xdata *) PWM3T2L_ADDR)
-#define     PWM3CR          (*(__IO uint8_t  xdata *) PWM3CR_ADDR)
-#define     PWM3HLD         (*(__IO uint8_t  xdata *) PWM3HLD_ADDR)
+#define     PWM3T1          ((__IO uint16_t xdata *) PWM3T1_ADDR)
+#define     PWM3T1H         ((__IO uint8_t xdata *) PWM3T1H_ADDR)
+#define     PWM3T1L         ((__IO uint8_t xdata *) PWM3T1L_ADDR)
+#define     PWM3T2          ((__IO uint16_t xdata *) PWM3T2_ADDR)
+#define     PWM3T2H         ((__IO uint8_t xdata *) PWM3T2H_ADDR)
+#define     PWM3T2L         ((__IO uint8_t xdata *) PWM3T2L_ADDR)
+#define     PWM3CR          ((__IO uint8_t xdata *) PWM3CR_ADDR)
+#define     PWM3HLD         ((__IO uint8_t xdata *) PWM3HLD_ADDR)
 
-#define     PWM4T1          (*(__IO uint16_t xdata *) PWM4T1_ADDR)
-#define     PWM4T1H         (*(__IO uint8_t  xdata *) PWM4T1H_ADDR)
-#define     PWM4T1L         (*(__IO uint8_t  xdata *) PWM4T1L_ADDR)
-#define     PWM4T2          (*(__IO uint16_t xdata *) PWM4T2_ADDR)
-#define     PWM4T2H         (*(__IO uint8_t  xdata *) PWM4T2H_ADDR)
-#define     PWM4T2L         (*(__IO uint8_t  xdata *) PWM4T2L_ADDR)
-#define     PWM4CR          (*(__IO uint8_t  xdata *) PWM4CR_ADDR)
-#define     PWM4HLD         (*(__IO uint8_t  xdata *) PWM4HLD_ADDR)
+#define     PWM4T1          ((__IO uint16_t xdata *) PWM4T1_ADDR)
+#define     PWM4T1H         ((__IO uint8_t xdata *) PWM4T1H_ADDR)
+#define     PWM4T1L         ((__IO uint8_t xdata *) PWM4T1L_ADDR)
+#define     PWM4T2          ((__IO uint16_t xdata *) PWM4T2_ADDR)
+#define     PWM4T2H         ((__IO uint8_t xdata *) PWM4T2H_ADDR)
+#define     PWM4T2L         ((__IO uint8_t xdata *) PWM4T2L_ADDR)
+#define     PWM4CR          ((__IO uint8_t xdata *) PWM4CR_ADDR)
+#define     PWM4HLD         ((__IO uint8_t xdata *) PWM4HLD_ADDR)
 
-#define     PWM5T1          (*(__IO uint16_t xdata *) PWM5T1_ADDR)
-#define     PWM5T1H         (*(__IO uint8_t  xdata *) PWM5T1H_ADDR)
-#define     PWM5T1L         (*(__IO uint8_t  xdata *) PWM5T1L_ADDR)
-#define     PWM5T2          (*(__IO uint16_t xdata *) PWM5T2_ADDR)
-#define     PWM5T2H         (*(__IO uint8_t  xdata *) PWM5T2H_ADDR)
-#define     PWM5T2L         (*(__IO uint8_t  xdata *) PWM5T2L_ADDR)
-#define     PWM5CR          (*(__IO uint8_t  xdata *) PWM5CR_ADDR)
-#define     PWM5HLD         (*(__IO uint8_t  xdata *) PWM5HLD_ADDR)
+#define     PWM5T1          ((__IO uint16_t xdata *) PWM5T1_ADDR)
+#define     PWM5T1H         ((__IO uint8_t xdata *) PWM5T1H_ADDR)
+#define     PWM5T1L         ((__IO uint8_t xdata *) PWM5T1L_ADDR)
+#define     PWM5T2          ((__IO uint16_t xdata *) PWM5T2_ADDR)
+#define     PWM5T2H         ((__IO uint8_t xdata *) PWM5T2H_ADDR)
+#define     PWM5T2L         ((__IO uint8_t xdata *) PWM5T2L_ADDR)
+#define     PWM5CR          ((__IO uint8_t xdata *) PWM5CR_ADDR)
+#define     PWM5HLD         ((__IO uint8_t xdata *) PWM5HLD_ADDR)
 
-#define     PWM6T1          (*(__IO uint16_t xdata *) PWM6T1_ADDR)
-#define     PWM6T1H         (*(__IO uint8_t  xdata *) PWM6T1H_ADDR)
-#define     PWM6T1L         (*(__IO uint8_t  xdata *) PWM6T1L_ADDR)
-#define     PWM6T2          (*(__IO uint16_t xdata *) PWM6T2_ADDR)
-#define     PWM6T2H         (*(__IO uint8_t  xdata *) PWM6T2H_ADDR)
-#define     PWM6T2L         (*(__IO uint8_t  xdata *) PWM6T2L_ADDR)
-#define     PWM6CR          (*(__IO uint8_t  xdata *) PWM6CR_ADDR)
-#define     PWM6HLD         (*(__IO uint8_t  xdata *) PWM6HLD_ADDR)
+#define     PWM6T1          ((__IO uint16_t xdata *) PWM6T1_ADDR)
+#define     PWM6T1H         ((__IO uint8_t xdata *) PWM6T1H_ADDR)
+#define     PWM6T1L         ((__IO uint8_t xdata *) PWM6T1L_ADDR)
+#define     PWM6T2          ((__IO uint16_t xdata *) PWM6T2_ADDR)
+#define     PWM6T2H         ((__IO uint8_t xdata *) PWM6T2H_ADDR)
+#define     PWM6T2L         ((__IO uint8_t xdata *) PWM6T2L_ADDR)
+#define     PWM6CR          ((__IO uint8_t xdata *) PWM6CR_ADDR)
+#define     PWM6HLD         ((__IO uint8_t xdata *) PWM6HLD_ADDR)
 
-#define     PWM7T1          (*(__IO uint16_t xdata *) PWM7T1_ADDR)
-#define     PWM7T1H         (*(__IO uint8_t  xdata *) PWM7T1H_ADDR)
-#define     PWM7T1L         (*(__IO uint8_t  xdata *) PWM7T1L_ADDR)
-#define     PWM7T2          (*(__IO uint16_t xdata *) PWM7T2_ADDR)
-#define     PWM7T2H         (*(__IO uint8_t  xdata *) PWM7T2H_ADDR)
-#define     PWM7T2L         (*(__IO uint8_t  xdata *) PWM7T2L_ADDR)
-#define     PWM7CR          (*(__IO uint8_t  xdata *) PWM7CR_ADDR)
-#define     PWM7HLD         (*(__IO uint8_t  xdata *) PWM7HLD_ADDR)
+#define     PWM7T1          ((__IO uint16_t xdata *) PWM7T1_ADDR)
+#define     PWM7T1H         ((__IO uint8_t xdata *) PWM7T1H_ADDR)
+#define     PWM7T1L         ((__IO uint8_t xdata *) PWM7T1L_ADDR)
+#define     PWM7T2          ((__IO uint16_t xdata *) PWM7T2_ADDR)
+#define     PWM7T2H         ((__IO uint8_t xdata *) PWM7T2H_ADDR)
+#define     PWM7T2L         ((__IO uint8_t xdata *) PWM7T2L_ADDR)
+#define     PWM7CR          ((__IO uint8_t xdata *) PWM7CR_ADDR)
+#define     PWM7HLD         ((__IO uint8_t xdata *) PWM7HLD_ADDR)
 
 //! SPI peripherals
 /* SPI basic address definition */
-#define     SPSTAT_ADDR     0xCD
-#define     SPCTL_ADDR      0xCE
-#define     SPDAT_ADDR      0xCF
+#define     SPSTAT_ADDR     ((uint8_t)0xCD
+#define     SPCTL_ADDR      ((uint8_t)0xCE
+#define     SPDAT_ADDR      ((uint8_t)0xCF
 
 /* Bit definition for SPSTAT */
-#define     SPIF            0x80
-#define     WCOL            0x40
+#define     SPIF            ((uint8_t)0x80
+#define     WCOL            ((uint8_t)0x40
 
 /* SPCTL offset */
-#define     SSIG            0x80
-#define     SPEN            0x40
-#define     DORD            0x20
-#define     MSTR            0x10
-#define     CPOL            0x08
-#define     CPHA            0x04
+#define     SSIG            ((uint8_t)0x80
+#define     SPEN            ((uint8_t)0x40
+#define     DORD            ((uint8_t)0x20
+#define     MSTR            ((uint8_t)0x10
+#define     CPOL            ((uint8_t)0x08
+#define     CPHA            ((uint8_t)0x04
 
 /* SPI special function registers */
 sfr SPSTAT      =   SPSTAT_ADDR;
@@ -1096,7 +1191,7 @@ sfr SPDAT       =   SPDAT_ADDR;
 //! I2C peripherals
 
 /* Base address */
-#define     I2C_BASE         0xFE80u
+#define     I2C_BASE         ((uint8_t)0xFE80)
 #define     I2CCFG_ADDR   (I2C_BASE + 0x00U)
 #define     I2CMSCR_ADDR  (I2C_BASE + 0x01U)
 #define     I2CMSST_ADDR  (I2C_BASE + 0x02U)
@@ -1107,44 +1202,44 @@ sfr SPDAT       =   SPDAT_ADDR;
 #define     I2CRXD_ADDR   (I2C_BASE + 0x07U)
 
 /* I2CCFG */
-#define     ENI2C           0x80u
-#define     MSSL            0x40u
+#define     ENI2C           ((uint8_t)0x80)
+#define     MSSL            ((uint8_t)0x40)
 
 /* I2CMSCR offset */
-#define     EMSI            0x80u
+#define     EMSI            ((uint8_t)0x80)
 
 /* I2CMSST offset */
-#define     MSBUSY          0x80u
-#define     MSIF            0x40u
-#define     MSACKI          0x02u
-#define     MSACKO          0x01u
+#define     MSBUSY          ((uint8_t)0x80)
+#define     MSIF            ((uint8_t)0x40)
+#define     MSACKI          ((uint8_t)0x02)
+#define     MSACKO          ((uint8_t)0x01)
 
 /* I2CSLCR offset */
-#define     ESTAI           0x40u
-#define     ERXI            0x20u
-#define     ETXI            0x10u
-#define     ESTOI           0x08u
-#define     SLRST           0x01u
+#define     ESTAI           ((uint8_t)0x40)
+#define     ERXI            ((uint8_t)0x20)
+#define     ETXI            ((uint8_t)0x10)
+#define     ESTOI           ((uint8_t)0x08)
+#define     SLRST           ((uint8_t)0x01)
 
 /* I2CSLST offset */
-#define     SLBUSY          0x80u
-#define     STAIF           0x40u
-#define     RXIF            0x20u
-#define     TXIF            0x10u
-#define     STOIF           0x08u
-#define     TXING           0x04u
-#define     SLACKI          0x02u
-#define     SLACKO          0x01u
+#define     SLBUSY          ((uint8_t)0x80)
+#define     STAIF           ((uint8_t)0x40)
+#define     RXIF            ((uint8_t)0x20)
+#define     TXIF            ((uint8_t)0x10)
+#define     STOIF           ((uint8_t)0x08)
+#define     TXING           ((uint8_t)0x04)
+#define     SLACKI          ((uint8_t)0x02)
+#define     SLACKO          ((uint8_t)0x01)
 
 /* I2C special function registers */
-#define     I2CCFG          (*(__IO uint8_t xdata *) I2CCFG_ADDR)
-#define     I2CMSCR         (*(__IO uint8_t xdata *) I2CMSCR_ADDR)
-#define     I2CMSST         (*(__IO uint8_t xdata *) I2CMSST_ADDR)
-#define     I2CSLCR         (*(__IO uint8_t xdata *) I2CSLCR_ADDR)
-#define     I2CSLST         (*(__IO uint8_t xdata *) I2CSLST_ADDR)
-#define     I2CSLADR        (*(__IO uint8_t xdata *) I2CSLADR_ADDR)
-#define     I2CTXD          (*(__IO uint8_t xdata *) I2CTXD_ADDR)
-#define     I2CRXD          (*(__IO uint8_t xdata *) I2CRXD_ADDR)
+#define     I2CCFG          ((__IO uint8_t xdata *) I2CCFG_ADDR)
+#define     I2CMSCR         ((__IO uint8_t xdata *) I2CMSCR_ADDR)
+#define     I2CMSST         ((__IO uint8_t xdata *) I2CMSST_ADDR)
+#define     I2CSLCR         ((__IO uint8_t xdata *) I2CSLCR_ADDR)
+#define     I2CSLST         ((__IO uint8_t xdata *) I2CSLST_ADDR)
+#define     I2CSLADR        ((__IO uint8_t xdata *) I2CSLADR_ADDR)
+#define     I2CTXD          ((__IO uint8_t xdata *) I2CTXD_ADDR)
+#define     I2CRXD          ((__IO uint8_t xdata *) I2CRXD_ADDR)
 
 
 /** @} */
