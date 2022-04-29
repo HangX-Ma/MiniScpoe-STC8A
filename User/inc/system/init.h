@@ -1,7 +1,7 @@
 /**
  * @file init.h
  * @author (you@domain.com)
- * @brief 
+ * @brief MContour
  * @version 0.1
  * @date 2022-04-26
  * 
