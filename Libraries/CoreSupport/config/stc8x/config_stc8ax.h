@@ -74,13 +74,25 @@ sbit P          =   PSW^0;
 #define     BUS_SPEED_ADDR              ((uint8_t)0xA1)
 
 /* Bit definition for BUS_SPEED registor */
+//! RW_S configuration
 #define     BUS_SPEED_RW_S              ((uint8_t)0xC0) /*!< RW_S[1:0] bits (control line selection) */
 #define     BUS_SPEED_RW_S_0            ((uint8_t)0x40) /*!< Bit 0 */
 #define     BUS_SPEED_RW_S_1            ((uint8_t)0x80) /*!< Bit 1 */
 
+#define     BUS_SPEED_RW_S_GROUP1       ((uint8_t)0x00) /*!< select P4.4 pin as RD and P4.3 as WR */
+#define     BUS_SPEED_RW_S_GROUP2       ((uint8_t)0x40) /*!< select P3.7 pin as RD and P3.6 as WR */
+#define     BUS_SPEED_RW_S_GROUP3       ((uint8_t)0x80) /*!< select P4.2 pin as RD and P4.0 as WR */
+
+//! SPEED configuration
 #define     BUS_SPEED_SPEED             ((uint8_t)0x03) /*!< SPEED[1:0] bits (bus read/write speed control) */
 #define     BUS_SPEED_SPEED_0           ((uint8_t)0x01) /*!< Bit 0 */
 #define     BUS_SPEED_SPEED_1           ((uint8_t)0x02) /*!< Bit 1 */
+
+#define     BUS_SPEED_SPEED_VAL0        ((uint8_t)0x00) /*!< speed numeric value 0 */
+#define     BUS_SPEED_SPEED_VAL1        ((uint8_t)0x01) /*!< speed numeric value 1 */
+#define     BUS_SPEED_SPEED_VAL2        ((uint8_t)0x02) /*!< speed numeric value 2 */
+#define     BUS_SPEED_SPEED_VAL3        ((uint8_t)0x03) /*!< speed numeric value 3 */
+
 
 sfr BUS_SPEED   =   BUS_SPEED_ADDR; //! bus speed control register
 
@@ -93,30 +105,57 @@ sfr AUXR        =   AUXR_ADDR;      //! auxiliary register
 #define     PERIPHERAL_PORT_SW2_ADDR    ((uint8_t)0xBA)
 
 /* Bit definition for P_SW1 registor */
+//! S1_S configuration
 #define     P_SW1_S1_S                  ((uint8_t)0xC0) /*!< S1_S[1:0] bits (serial port 1 function pins selection) */
 #define     P_SW1_S1_S_0                ((uint8_t)0x40) /*!< Bit 0 TxD */
 #define     P_SW1_S1_S_1                ((uint8_t)0x80) /*!< Bit 1 RxD */
 
+#define     P_SW1_S1_S_GROUP1           ((uint8_t)0x00) /*!< select P3.0 pin as RxD and P3.1 as TxD */
+#define     P_SW1_S1_S_GROUP2           ((uint8_t)0x40) /*!< select P3.6 pin as RxD and P3.7 as TxD */
+#define     P_SW1_S1_S_GROUP3           ((uint8_t)0x80) /*!< select P1.6 pin as RxD and P1.7 as TxD */
+#define     P_SW1_S1_S_GROUP4           ((uint8_t)0xC0) /*!< select P4.3 pin as RxD and P4.4 as TxD */
+
+//! CCP_S configuration
 #define     P_SW1_CCP_S                 ((uint8_t)0x30) /*!< CCP_S[1:0] bits (PCA function pins selection) */
 #define     P_SW1_CCP_S_0               ((uint8_t)0x10) /*!< Bit 0 */
 #define     P_SW1_CCP_S_1               ((uint8_t)0x20) /*!< Bit 1 */
 
+#define     P_SW1_CCP_S_GROUP1          ((uint8_t)0x00) /*!< select P1.2 pin as ECI, P1.7 as CPP0, P1.6 as CPP1, P1.5 as CPP2, P1.4 as CPP3 */
+#define     P_SW1_CCP_S_GROUP2          ((uint8_t)0x10) /*!< select P2.2 pin as ECI, P2.3 as CPP0, P2.4 as CPP1, P2.5 as CPP2, P2.6 as CPP3 */
+#define     P_SW1_CCP_S_GROUP3          ((uint8_t)0x20) /*!< select P7.4 pin as ECI, P7.0 as CPP0, P7.1 as CPP1, P7.2 as CPP2, P7.3 as CPP3 */
+#define     P_SW1_CCP_S_GROUP4           ((uint8_t)0x30) /*!< select P3.5 pin as ECI, P3.3 as CPP0, P3.2 as CPP1, P3.1 as CPP2, P3.0 as CPP3 */
+
+//! SPI_S configuration
 #define     P_SW1_SPI_S                 ((uint8_t)0x0C) /*!< SPI_S[1:0] bits (SPI function pins selection) */
 #define     P_SW1_SPI_S_0               ((uint8_t)0x04) /*!< Bit 0 */
 #define     P_SW1_SPI_S_1               ((uint8_t)0x08) /*!< Bit 1 */
 
+#define     P_SW1_SPI_S_GROUP1          ((uint8_t)0x00) /*!< select P1.2 pin as SS, P1.3 as MOSI, P1.4 as MISO, P1.5 as SCLK */
+#define     P_SW1_SPI_S_GROUP2          ((uint8_t)0x04) /*!< select P2.2 pin as SS, P2.3 as MOSI, P2.4 as MISO, P2.5 as SCLK */
+#define     P_SW1_SPI_S_GROUP3          ((uint8_t)0x08) /*!< select P7.4 pin as SS, P7.5 as MOSI, P7.6 as MISO, P7.7 as SCLK */
+#define     P_SW1_SPI_S_GROUP4          ((uint8_t)0x0C) /*!< select P3.5 pin as SS, P3.4 as MOSI, P3.3 as MISO, P3.2 as SCLK */
+
+/* Bit definition for P_SW1 registor */
+//! EAXFR configuration
 #define     P_SW2_EAXFR                 ((uint8_t)0x80) /*!< XFR control register */
 
+//! I2C_S configuration
 #define     P_SW2_I2C_S                 ((uint8_t)0x30) /*!< I2C_S[1:0] bits (I2C function pins selection) */
 #define     P_SW2_I2C_S_0               ((uint8_t)0x10) /*!< Bit 0 SDA */
 #define     P_SW2_I2C_S_1               ((uint8_t)0x20) /*!< Bit 1 SCL */
 
+
+
+//! CMPO_S configuration
 #define     P_SW2_CMPO_S                ((uint8_t)0x08) /*!< CMPO selection */
 
+//! S4_S configuration
 #define     P_SW2_S4_S                  ((uint8_t)0x04) /*!< serial port 4 function pins selection */
 
+//! S3_S configuration
 #define     P_SW2_S3_S                  ((uint8_t)0x02) /*!< serial port 3 function pins selection */
 
+//! S2_S configuration
 #define     P_SW2_S2_S                  ((uint8_t)0x01) /*!< serial port 2 function pins selection */
 
 sfr P_SW1       =   PERIPHERAL_PORT_SW1_ADDR;
@@ -150,13 +189,64 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 
 /* system clock base address */
 #define     SYSCLK_BASE     ((uint16_t)0xFE00)
+
 #define     CKSEL_ADDR      (SYSCLK_BASE + 0x0000)
 #define     CLKDIV_ADDR     (SYSCLK_BASE + 0x0001)
 #define     IRC24MCR_ADDR   (SYSCLK_BASE + 0x0002)
 #define     XOSCCR_ADDR     (SYSCLK_BASE + 0x0003)
 #define     IRC32KCR_ADDR   (SYSCLK_BASE + 0x0004)
 
-#define     CKSEL_MCLKODIV_0            ((uint16_t)0x0000)
+/* Bit definition for CKSEL registor */
+//! MCLKODIV configuration
+#define     CKSEL_MCLKODIV              ((uint8_t)0xF0) /*!< MCLKODIV[3:0] bits (main clock output division coefficient) */
+#define     CKSEL_MCLKODIV_0            ((uint8_t)0x10) /*!< Bit 0 */
+#define     CKSEL_MCLKODIV_1            ((uint8_t)0x20) /*!< Bit 1 */
+#define     CKSEL_MCLKODIV_2            ((uint8_t)0x40) /*!< Bit 2 */
+#define     CKSEL_MCLKODIV_3            ((uint8_t)0x80) /*!< Bit 3 */
+
+#define     CKSEL_MCLKODIV_DIV0         ((uint8_t)0x00) /*!< no MCLK output */
+#define     CKSEL_MCLKODIV_DIV1         ((uint8_t)0x10) /*!< MCLK input clock not divided */
+#define     CKSEL_MCLKODIV_DIV2         ((uint8_t)0x20) /*!< MCLK input clock divided by 2 */
+#define     CKSEL_MCLKODIV_DIV4         ((uint8_t)0x40) /*!< MCLK input clock divided by 4 */
+#define     CKSEL_MCLKODIV_DIV8         ((uint8_t)0x60) /*!< MCLK input clock divided by 8 */
+#define     CKSEL_MCLKODIV_DIV16        ((uint8_t)0x80) /*!< MCLK input clock divided by 16 */
+#define     CKSEL_MCLKODIV_DIV32        ((uint8_t)0xA0) /*!< MCLK input clock divided by 32 */
+#define     CKSEL_MCLKODIV_DIV64        ((uint8_t)0xC0) /*!< MCLK input clock divided by 64 */
+#define     CKSEL_MCLKODIV_DIV128       ((uint8_t)0xE0) /*!< MCLK input clock divided by 128 */
+
+//! MCLKO_S configuration
+#define     CKSEL_MCLKO_S               ((uint8_t)0x08) /*!< divided MCLK output pin */
+
+//! MCKSEL configuration
+#define     CKSEL_MCKSEL                ((uint8_t)0x03) /*!< MCLKODIV[1:0] bits (system clock output division coefficient) */
+#define     CKSEL_MCKSEL_0              ((uint8_t)0x01) /*!< Bit 0 */
+#define     CKSEL_MCKSEL_1              ((uint8_t)0x02) /*!< Bit 1 */
+
+/* Bit definition for CLKDIV registor */
+
+/* Bit definition for IRC24MCR registor */
+//! ENIRC24M configuration
+#define     IRC24MCR_ENIRC24M           ((uint8_t)0x80) /*!< IRC24MCR enabling control */
+
+//! IRC24MST configuration
+#define     IRC24MCR_IRC24MST           ((uint8_t)0x01) /*!< IRC24MCR stable state sign */
+
+/* Bit definition for XOSCCR registor */
+//! ENXOSC configuration
+#define     XOSCCR_ENXOSC               ((uint8_t)0x80) /*!< external oscillator enabling control */
+
+//! XITYPE configuration
+#define     XOSCCR_XITYPE               ((uint8_t)0x40) /*!< external oscillator type selection */
+
+//! XOSCST configuration
+#define     XOSCCR_XOSCST               ((uint8_t)0x01) /*!< external oscillator stable state sign */
+
+/* Bit definition for IRC32KCR registor */
+//! ENIRC32K configuration
+#define     IRC24MCR_ENIRC32K           ((uint8_t)0x80) /*!< IRC32KCR enabling control */
+
+//! IRC32KST configuration
+#define     IRC24MCR_IRC32KST           ((uint8_t)0x01) /*!< IRC32KCR stable state sign */
 
 /**
  * @brief define the SYSCLK type
