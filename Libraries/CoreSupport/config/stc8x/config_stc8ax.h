@@ -273,7 +273,7 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 
 /**
  * @brief define the SYSCLK type
- * @note To access XDATA peripherals, use the `volatile` keyword to ensure 
+ * @note To access XDATA peripherals, use the \c volatile keyword to ensure 
  * that the C compiler does not optimize out necessary memory accesses.
  */
 #define     SYSCLK          ((SYSCLK_TypeDef xdata *) SYSCLK_BASE)
@@ -437,7 +437,7 @@ sfr WKTCH       =   WKTCH_ADDR;
 #define    P7NCS_ADDR       (PxNCS_BASE + 0x07u)
 
 
-/* GPIO registers */
+/* GPIO registers configuration */
 sfr P0          =   P0_ADDR;
 sfr P1          =   P1_ADDR;
 sfr P2          =   P2_ADDR;
@@ -458,6 +458,7 @@ sfr P7          =   P7_ADDR;
  * \endverbatim
  */
 
+/* Bit definition for GPIO control registers */
 /* GPIO configuration registers 0 */
 sfr P0M0        =   P0M0_ADDR;
 sfr P1M0        =   P1M0_ADDR;
@@ -478,7 +479,7 @@ sfr P5M1        =   P5M1_ADDR;
 sfr P6M1        =   P6M1_ADDR;
 sfr P7M1        =   P7M1_ADDR;
 
-/* specific pins of GPIO registers */
+/* Bit definition for GPIO pins */
 sbit P00        =   P0^0;
 sbit P01        =   P0^1;
 sbit P02        =   P0^2;
@@ -544,7 +545,6 @@ sbit P75        =   P7^5;
 sbit P76        =   P7^6;
 sbit P77        =   P7^7;
 
-/* GPIO control register */
 // * GPIO pull up resistor control registers: [0] off; [1] on*/
 #define     P0PU        ((__IO uint8_t xdata *) P0PU_ADDR)             // Extended SFR
 #define     P1PU        ((__IO uint8_t xdata *) P1PU_ADDR)             // Extended SFR
@@ -566,35 +566,59 @@ sbit P77        =   P7^7;
 #define     P7NCS       ((__IO uint8_t xdata *) P8NCS_ADDR)            // Extended SFR
 
 //! ISR peripherals
-/* ISR base address */
-#define    IE_ADDR          ((uint8_t)0xA8)
-#define    IE2_ADDR         ((uint8_t)0xAF)
-#define    IP_ADDR          ((uint8_t)0xB8)
-#define    IP2_ADDR         ((uint8_t)0xB5)
-#define    IPH_ADDR         ((uint8_t)0xB7)
-#define    IP2H_ADDR        ((uint8_t)0xB6)
-#define    INTCLKO_ADDR     ((uint8_t)0x8F)
-#define    AUXINTIF_ADDR    ((uint8_t)0xEF)
+typedef struct 
+{
+    __IO uint8_t IP2;
+    __IO uint8_t IP2H;
+    __IO uint8_t IPH;
+    __IO uint8_t IP;
+}ISR_Priority_TypeDef;
 
-/* IE2 offset */
-#define     ET4             ((uint8_t)0x40)
-#define     ET3             ((uint8_t)0x20)
-#define     ES4             ((uint8_t)0x10)
-#define     ES3             ((uint8_t)0x08)
-#define     ET2             ((uint8_t)0x04)
-#define     ESPI            ((uint8_t)0x02)
-#define     ES2             ((uint8_t)0x01)
+/* ISR basic address definition */
+#define    IE_ADDR                      ((uint8_t)0xA8)
+#define    IE2_ADDR                     ((uint8_t)0xAF)
+#define    ISR_PRIORITY_CONTR_BASE      ((uint8_t)0xB5)
+/**
+ * @brief define the ISR_PRIORITY pointer type
+ * @note To access XDATA peripherals, use the \c volatile keyword to ensure 
+ * that the C compiler does not optimize out necessary memory accesses. \n
+ * \code{.c} ((ISR_Priority_TypeDef idata * xdata *) ISR_PRIORITY_CONTR_BASE) \endcode 
+ * means \b ISR_Priority_TypeDef pointer is stored in \e xdata space but 
+ * points to \e idata space. If you want to use this struct type, prefix 
+ * \code{.c} (ISR_Priority_TypeDef idata *) \endcode is needed, such as 
+ * \code{.c} (ISR_Priority_TypeDef idata *) var \endcode, in witch the
+ * \c var is \b ISR_Priority_TypeDef .
+ */
+#define    ISR_PRIORITY                 ((ISR_Priority_TypeDef idata * xdata *) ISR_PRIORITY_CONTR_BASE)
 
-/* IP2 offset */
-#define     PI2C            ((uint8_t)0x40)
-#define     PCMP            ((uint8_t)0x20)
-#define     PX4             ((uint8_t)0x10)
-#define     PPWMFD          ((uint8_t)0x08)
-#define     PPWM            ((uint8_t)0x04)
-#define     PSPI            ((uint8_t)0x02)
-#define     PS2             ((uint8_t)0x01)
+#define    IP_ADDR                      (ISR_PRIORITY_CONTR_BASE + 0x03)
+#define    IPH_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x02)
+#define    IP2_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x00)
+#define    IP2H_ADDR                    (ISR_PRIORITY_CONTR_BASE + 0x01)
 
-/* IPH offset */
+#define    INTCLKO_ADDR                 ((uint8_t)0x8F)
+#define    AUXINTIF_ADDR                ((uint8_t)0xEF)
+
+/* Bit definition for IE2 registers [0] off; [1] on */
+#define     IE2_ET4         ((uint8_t)0x40)             /*!< Timer T4 overflow interupt enabling bit */
+#define     IE2_ET3         ((uint8_t)0x20)             /*!< Timer T3 overflow interupt enabling bit */
+#define     IE2_ES4         ((uint8_t)0x10)             /*!< serial port S4 interupt enabling bit */
+#define     IE2_ES3         ((uint8_t)0x08)             /*!< serial port S3 interupt enabling bit */
+#define     IE2_ET2         ((uint8_t)0x04)             /*!< Timer T2 overflow interupt enabling bit */
+#define     IE2_ESPI        ((uint8_t)0x02)             /*!< SPI interupt enabling bit */
+#define     IE2_ES2         ((uint8_t)0x01)             /*!< serial port S2 interupt enabling bit */
+
+/* Bit definition for IP registers */
+#define     IP_PPCA         ((uint8_t)0x80)
+#define     IP_PLVD         ((uint8_t)0x40)
+#define     IP_PADC         ((uint8_t)0x20)
+#define     IP_PS           ((uint8_t)0x10)
+#define     IP_PT1          ((uint8_t)0x08)
+#define     IP_PX1          ((uint8_t)0x04)
+#define     IP_PT0          ((uint8_t)0x02)
+#define     IP_PX0          ((uint8_t)0x01)
+
+/* Bit definition for IPH registers */
 #define     PPCAH           ((uint8_t)0x80)
 #define     PLVDH           ((uint8_t)0x40)
 #define     PADCH           ((uint8_t)0x20)
@@ -604,16 +628,25 @@ sbit P77        =   P7^7;
 #define     PT0H            ((uint8_t)0x02)
 #define     PX0H            ((uint8_t)0x01)
 
-/* IP2H offset */
-#define     PI2CH           ((uint8_t)0x40)
-#define     PCMPH           ((uint8_t)0x20)
-#define     PX4H            ((uint8_t)0x10)
-#define     PPWMFDH         ((uint8_t)0x08)
-#define     PPWMH           ((uint8_t)0x04)
-#define     PSPIH           ((uint8_t)0x02)
-#define     PS2H            ((uint8_t)0x01)
+/* Bit definition for IP2 registers */
+#define     IP2_PI2C        ((uint8_t)0x40)
+#define     IP2_PCMP        ((uint8_t)0x20)
+#define     IP2_PX4         ((uint8_t)0x10)
+#define     IP2_PPWMFD      ((uint8_t)0x08)
+#define     IP2_PPWM        ((uint8_t)0x04)
+#define     IP2_PSPI        ((uint8_t)0x02)
+#define     IP2_PS2         ((uint8_t)0x01)
 
-/* INTCLKO offset */
+/* Bit definition for IP2H registers */
+#define     IP2H_PI2CH      ((uint8_t)0x40)
+#define     IP2H_PCMPH      ((uint8_t)0x20)
+#define     IP2H_PX4H       ((uint8_t)0x10)
+#define     IP2H_PPWMFDH    ((uint8_t)0x08)
+#define     IP2H_PPWMH      ((uint8_t)0x04)
+#define     IP2H_PSPIH      ((uint8_t)0x02)
+#define     IP2H_PS2H       ((uint8_t)0x01)
+
+/* Bit definition for INTCLKO registers */
 #define     EX4             ((uint8_t)0x40)
 #define     EX3             ((uint8_t)0x20)
 #define     EX2             ((uint8_t)0x10)
@@ -621,7 +654,7 @@ sbit P77        =   P7^7;
 #define     T1CLKO          ((uint8_t)0x02)
 #define     T0CLKO          ((uint8_t)0x01)
 
-/* AUXINTIF offset */
+/* Bit definition for AUXINTIF registers */
 #define     INT4IF          ((uint8_t)0x40)
 #define     INT3IF          ((uint8_t)0x20)
 #define     INT2IF          ((uint8_t)0x10)
@@ -629,7 +662,7 @@ sbit P77        =   P7^7;
 #define     T3IF            ((uint8_t)0x02)
 #define     T2IF            ((uint8_t)0x01)
 
-/* ISR register */
+/* ISR special function register */
 sfr IE          =   IE_ADDR;
 sfr IE2         =   IE2_ADDR;
 sfr IP          =   IP_ADDR;
@@ -651,14 +684,14 @@ sbit ET0        =   IE^1;
 sbit EX0        =   IE^0;
 
 // IP BITs
-sbit PPCA       =   IP^7;
-sbit PLVD       =   IP^6;
-sbit PADC       =   IP^5;
-sbit PS         =   IP^4;
-sbit PT1        =   IP^3;
-sbit PX1        =   IP^2;
-sbit PT0        =   IP^1;
-sbit PX0        =   IP^0;
+// sbit PPCA       =   IP^7;
+// sbit PLVD       =   IP^6;
+// sbit PADC       =   IP^5;
+// sbit PS         =   IP^4;
+// sbit PT1        =   IP^3;
+// sbit PX1        =   IP^2;
+// sbit PT0        =   IP^1;
+// sbit PX0        =   IP^0;
 
 //! Timer peripherals
 /* timer basic address definition */
