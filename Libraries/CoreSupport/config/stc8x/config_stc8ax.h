@@ -45,16 +45,16 @@
 
 
 //! kernel special function register setting 
-sfr ACC         =   (uint8_t)0xe0;
-sfr B           =   (uint8_t)0xf0;
-sfr PSW         =   (uint8_t)0xd0;                               /*!< program state register */
-sfr SP          =   (uint8_t)0x81;
-sfr DPL         =   (uint8_t)0x82;
-sfr DPH         =   (uint8_t)0x83;
-sfr TA          =   (uint8_t)0xae;
-sfr DPS         =   (uint8_t)0xe3;
-sfr DPL1        =   (uint8_t)0xe4;
-sfr DPH1        =   (uint8_t)0xe5;
+sfr ACC         =   (uint8_t)0xE0;                      //!< accumulator
+sfr B           =   (uint8_t)0xF0;                      //!< B register
+sfr PSW         =   (uint8_t)0xD0;                      //!< program state register
+sfr SP          =   (uint8_t)0x81;                      //!< stack pointer
+sfr DPL         =   (uint8_t)0x82;                      //!< Data Pointer (low byte)
+sfr DPH         =   (uint8_t)0x83;                      //!< Data Pointer (high byte)
+sfr TA          =   (uint8_t)0xAE;                      //!< DPTR timing control register
+sfr DPS         =   (uint8_t)0xE3;                      //!< DPTR pointer selector
+sfr DPL1        =   (uint8_t)0xE4;                      //!< The second set of data pointers (low bytes)
+sfr DPH1        =   (uint8_t)0xE5;                      //!< The second set of data pointers (high bytes)
 
 sbit CY         =   PSW^7;                              /*!< carry/borrow flag bit */
 sbit AC         =   PSW^6;                              /*!< auxiliary carry/borrow flag bit */
@@ -166,8 +166,8 @@ sfr AUXR        =   AUXR_ADDR;      //! auxiliary register
 // * S2_S configuration
 #define     P_SW2_S2_S                  ((uint8_t)0x01) /*!< serial port 2 function pins selection: [0] RxD2=P1.0, TxD2=P1.1; [1] RxD2=P4.0, TxD2=P4.2  */
 
-sfr P_SW1       =   PERIPHERAL_PORT_SW1_ADDR;
-sfr P_SW2       =   PERIPHERAL_PORT_SW2_ADDR;
+sfr P_SW1       =   PERIPHERAL_PORT_SW1_ADDR;   //!< Peripheral Port Switch Register 1
+sfr P_SW2       =   PERIPHERAL_PORT_SW2_ADDR;   //!< Peripheral Port Switch Register 2
 
 /**
  * @brief system clock control interface
@@ -306,14 +306,14 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 // * SCC configuration
 #define     VOCTRL_SCC                   ((uint8_t)0x80)     /*!< static current control bit: [0] internal circuit 1.5uA; [1] external circuit lower than 0.15uA */
 
-sfr PCON        =   PCON_ADDR;
-sfr VOCTRL      =   VOCTRL_ADDR;
+sfr PCON        =   PCON_ADDR;          //! power source control register
+sfr VOCTRL      =   VOCTRL_ADDR;        //! voltage level control register
 
 //! system reset special function register control
 /* reset control base address */
-#define     WDT_CONTR_ADDR              ((uint8_t)0xC1u)
+#define     WDT_CONTR_ADDR              ((uint8_t)0xC1)
 // #define     IAP_ADDR      0xC7u
-#define     RSTCFG_ADDR                 ((uint8_t)0xFFu)
+#define     RSTCFG_ADDR                 ((uint8_t)0xFF)
 
 /* Bit definition for WDT_CONTR register */
 // * WDT_FLAG configuration
@@ -363,9 +363,9 @@ sfr VOCTRL      =   VOCTRL_ADDR;
 #define     RSTCFG_LVDS_2V7             ((uint8_t)0x02)     /*!< low voltage threshold 2.7V */
 #define     RSTCFG_LVDS_3V0             ((uint8_t)0x03)     /*!< low voltage threshold 3.0V */
 
-sfr WDT_CONTR   =   WDT_CONTR_ADDR;
+sfr WDT_CONTR   =   WDT_CONTR_ADDR;     //! Watch dog control register
 // sfr IAP_CONTR   =   IAP_ADDR;
-sfr RSTCFG      =   RSTCFG_ADDR;
+sfr RSTCFG      =   RSTCFG_ADDR;        //! Reset configuration register
 
 /* wake up timer base address */
 #define     WKT_BASE                    ((uint8_t)0xAA)
@@ -375,8 +375,8 @@ sfr RSTCFG      =   RSTCFG_ADDR;
 /* WKTCH offset */
 #define WKTEN       0x80
 
-sfr WKTCL       =   WKTCL_ADDR;
-sfr WKTCH       =   WKTCH_ADDR;
+sfr WKTCL       =   WKTCL_ADDR;         //! Power down wake up timer low bytes
+sfr WKTCH       =   WKTCH_ADDR;         //! Power down wake up timer high bytes
 
 //! GPIO peripherals
 #define     GPIO_BASE       ((uint8_t)0x80)
@@ -570,17 +570,7 @@ sbit P77        =   P7^7;
 #define    IE_ADDR                      ((uint8_t)0xA8)
 #define    IE2_ADDR                     ((uint8_t)0xAF)
 #define    ISR_PRIORITY_CONTR_BASE      ((uint8_t)0xB5)
-// /**
-//  * @brief define the ISR_PRIORITY pointer type
-//  * @note To access XDATA peripherals, use the \c volatile keyword to ensure 
-//  * that the C compiler does not optimize out necessary memory accesses. \n
-//  * \code{.c} ((ISR_Priority_TypeDef idata * xdata *) ISR_PRIORITY_CONTR_BASE) \endcode 
-//  * means \b ISR_Priority_TypeDef pointer is stored in \e xdata space but 
-//  * points to \e idata space. If you want to use this struct type, prefix 
-//  * \code{.c} (ISR_Priority_TypeDef idata *) \endcode is needed, such as 
-//  * \code{.c} (ISR_Priority_TypeDef idata *) var \endcode, in witch the
-//  * \c var is \b ISR_Priority_TypeDef .
-//  */
+
 #define    IP_ADDR                      (ISR_PRIORITY_CONTR_BASE + 0x03)
 #define    IPH_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x02)
 #define    IP2_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x00)
@@ -652,14 +642,14 @@ sbit P77        =   P7^7;
 #define     AUXINTIF_T2IF   ((uint8_t)0x01)             /*!< timer 2 overflow interrupt request flag */
 
 /* ISR special function register */
-sfr IE          =   IE_ADDR;                            /*!< interrupt enabling register */
-sfr IE2         =   IE2_ADDR;                           /*!< interrupt enabling register 2 */
-sfr IP          =   IP_ADDR;                            /*!< interrupt priority control register IP */
-sfr IP2         =   IP2_ADDR;                           /*!< interrupt priority control register IP2 */
-sfr IPH         =   IPH_ADDR;                           /*!< interrupt priority control register IPH */
-sfr IP2H        =   IP2H_ADDR;                          /*!< interrupt priority control register IP2H */
-sfr INTCLKO     =   INTCLKO_ADDR;                       /*!< external interrupt and clock output control registers */
-sfr AUXINTIF    =   AUXINTIF_ADDR;                      /*!< interrupt flag auxiliary register */
+sfr IE          =   IE_ADDR;                            //! interrupt enabling register
+sfr IE2         =   IE2_ADDR;                           //! interrupt enabling register 2
+sfr IP          =   IP_ADDR;                            //! interrupt priority control register IP
+sfr IP2         =   IP2_ADDR;                           //! interrupt priority control register IP2
+sfr IPH         =   IPH_ADDR;                           //! interrupt priority control register IPH
+sfr IP2H        =   IP2H_ADDR;                          //! interrupt priority control register IP2H
+sfr INTCLKO     =   INTCLKO_ADDR;                       //! external interrupt and clock output control registers
+sfr AUXINTIF    =   AUXINTIF_ADDR;                      //! interrupt flag auxiliary register
 
 
 /* Bit definition for IE register (interrupt enabling register) */ 
@@ -752,19 +742,19 @@ sbit IP_PX0        =   IP^0;
 #define     T4T3M_T3CLKO    ((uint8_t)0x01)        /*!< timer T3 output control ([0], timer output disabled; [1], T3 overflow, P0.7 revert its level)*/ 
 
 /* timer special function registers */
-sfr TCON        =   TCON_ADDR;
-sfr TMOD        =   TMOD_ADDR;
-sfr TL0         =   TL0_ADDR;
-sfr TL1         =   TL1_ADDR;
-sfr TH0         =   TH0_ADDR;
-sfr TH1         =   TH1_ADDR;
-sfr T4T3M       =   T4T3M_ADDR;
-sfr T4H         =   T4H_ADDR;
-sfr T4L         =   T4L_ADDR;
-sfr T3H         =   T3H_ADDR;
-sfr T3L         =   T3L_ADDR;
-sfr T2H         =   T2H_ADDR;
-sfr T2L         =   T2L_ADDR;
+sfr TCON        =   TCON_ADDR;                      //!< Timer control regiseter
+sfr TMOD        =   TMOD_ADDR;                      //!< Timer mode regiseter
+sfr TL0         =   TL0_ADDR;                       //!< Timer T0 low 8 bytes regiseter
+sfr TL1         =   TL1_ADDR;                       //!< Timer T1 low 8 bytes regiseter
+sfr TH0         =   TH0_ADDR;                       //!< Timer T0 high 8 bytes regiseter
+sfr TH1         =   TH1_ADDR;                       //!< Timer T1 high 8 bytes regiseter
+sfr T4T3M       =   T4T3M_ADDR;                     //!< Timer T3/T4 control regiseter
+sfr T4H         =   T4H_ADDR;                       //!< Timer T4 high 8 bytes regiseter
+sfr T4L         =   T4L_ADDR;                       //!< Timer T4 low 8 bytes regiseter
+sfr T3H         =   T3H_ADDR;                       //!< Timer T3 high 8 bytes regiseter
+sfr T3L         =   T3L_ADDR;                       //!< Timer T3 low 8 bytes regiseter
+sfr T2H         =   T2H_ADDR;                       //!< Timer T2 high 8 bytes regiseter
+sfr T2L         =   T2L_ADDR;                       //!< Timer T2 low 8 bytes regiseter
 
 /* Bit definition for TCON register */
 sbit TCON_TF1        =   TCON^7;                         /*!< timer T1 overflow interupt flag */
@@ -777,7 +767,21 @@ sbit TCON_IE0        =   TCON^1;                         /*!< external interupt 
 sbit TCON_IT0        =   TCON^0;                         /*!< external interupt 0 trigger ways selection bit */
 
 //! UART peripherals
+/**
+ * @brief UART generic I/O definition
+ */
+typedef struct {
+    __IO uint8_t SxCON;
+    __IO uint8_t SxBUF;
+}UARTx_TypeDef;
+
 /* UART basic address definition */
+#define     UART_BASE       ((uint8_t)0x98)
+#define     UART1_BASE      (UART_BASE + 0x00)
+#define     UART2_BASE      (UART_BASE + 0x02)
+#define     UART3_BASE      (UART_BASE + 0x04)
+#define     UART4_BASE      (UART_BASE + 0x06)
+
 #define     SCON_ADDR       ((uint8_t)0x98)
 #define     SBUF_ADDR       ((uint8_t)0x99)
 #define     S2CON_ADDR      ((uint8_t)0x9A)
@@ -828,16 +832,21 @@ sbit TCON_IT0        =   TCON^0;                         /*!< external interupt 
 #define     S4RI            ((uint8_t)0x01)
 
 /* UART special function registers */
-sfr SCON        =   SCON_ADDR;
-sfr SBUF        =   SBUF_ADDR; 
-sfr S2CON       =   S2CON_ADDR;
-sfr S2BUF       =   S2BUF_ADDR;
-sfr S3CON       =   S3CON_ADDR;
-sfr S3BUF       =   S3BUF_ADDR;
-sfr S4CON       =   S4CON_ADDR;
-sfr S4BUF       =   S4BUF_ADDR;
-sfr SADDR       =   SADDR_ADDR;
-sfr SADEN       =   SADEN_ADDR;
+sfr SCON        =   SCON_ADDR;          //!< serial 1 control register
+sfr SBUF        =   SBUF_ADDR;          //!< serial 1 data register
+sfr S2CON       =   S2CON_ADDR;         //!< serial 2 control register
+sfr S2BUF       =   S2BUF_ADDR;         //!< serial 2 data register
+sfr S3CON       =   S3CON_ADDR;         //!< serial 3 control register
+sfr S3BUF       =   S3BUF_ADDR;         //!< serial 3 data register
+sfr S4CON       =   S4CON_ADDR;         //!< serial 4 control register
+sfr S4BUF       =   S4BUF_ADDR;         //!< serial 4 data register
+sfr SADDR       =   SADDR_ADDR;         //!< serial 1 slave address register
+sfr SADEN       =   SADEN_ADDR;         //!< serial 1 slave shielded address register
+
+#define     UART1               ((UARTx_TypeDef idata* xdata *) UART1_BASE)
+#define     UART2               ((UARTx_TypeDef idata* xdata *) UART2_BASE)
+#define     UART3               ((UARTx_TypeDef idata* xdata *) UART3_BASE)
+#define     UART4               ((UARTx_TypeDef idata* xdata *) UART4_BASE)
 
 /* Bit definition for SCON register */
 sbit SCON_SM0        =   SCON^7;
@@ -941,11 +950,24 @@ sbit SCON_RI         =   SCON^0;
 #define     CMPAR2_LCDTY_VAL62      ((uint8_t)0x3E)      /*!< n=62 */
 #define     CMPAR2_LCDTY_VAL63      ((uint8_t)0x3F)      /*!< n=63 */
 
-sfr CMPCR1      =   CMPCR1_ADDR;
-sfr CMPCR2      =   CMPCR2_ADDR;
+sfr CMPCR1      =   CMPCR1_ADDR;    //!< comparator control register 1
+sfr CMPCR2      =   CMPCR2_ADDR;    //!< comparator control register 2
 
 //! EEPROM peripherals
+/**
+ * @brief EEPROM generic I/O definition
+ */
+typedef struct {
+    __IO uint8_t IAP_DATA;
+    __IO uint8_t IAP_ADDRH;
+    __IO uint8_t IAP_ADDRL;
+    __IO uint8_t IAP_CMD;
+    __IO uint8_t IAP_TRIG;
+    __IO uint8_t IAP_CONTR;
+}IAP_EEPROM_TypeDef;
+
 /* EEPROM basic address definition */
+#define     IAP_EEPROM_BASE         ((uint8_t)0xC2)
 #define     IAP_DATA_ADDR           ((uint8_t)0xC2)
 #define     IAP_ADDRH_ADDR          ((uint8_t)0xC3)
 #define     IAP_ADDRL_ADDR          ((uint8_t)0xC4)
@@ -983,16 +1005,30 @@ sfr CMPCR2      =   CMPCR2_ADDR;
 #define     IAP_CMD_CMD_VAL2        ((uint8_t)0x02)     /*!< write 1 byte to target address, converting 1 to 0 */
 #define     IAP_CMD_CMD_VAL3        ((uint8_t)0x03)     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
 
+#define     IAP_EEPROM              ((IAP_EEPROM_TypeDef idata* xdata *) IAP_EEPROM_BASE)
+
 /* IAP special function registers */
-sfr IAP_DATA    =   IAP_DATA_ADDR;
-sfr IAP_ADDRH   =   IAP_ADDRH_ADDR;
-sfr IAP_ADDRL   =   IAP_ADDRL_ADDR;
-sfr IAP_CMD     =   IAP_CMD_ADDR;
-sfr IAP_TRIG    =   IAP_TRIG_ADDR;
-sfr IAP_CONTR   =   IAP_CONTR_ADDR;
+sfr IAP_DATA    =   IAP_DATA_ADDR;                      //!< IAP data regiseter
+sfr IAP_ADDRH   =   IAP_ADDRH_ADDR;                     //!< IAP high address regiseter
+sfr IAP_ADDRL   =   IAP_ADDRL_ADDR;                     //!< IAP low address regiseter
+sfr IAP_CMD     =   IAP_CMD_ADDR;                       //!< IAP command regiseter
+sfr IAP_TRIG    =   IAP_TRIG_ADDR;                      //!< IAP trigger regiseter
+sfr IAP_CONTR   =   IAP_CONTR_ADDR;                     //!< IAP control regiseter
 
 //! ADC peripherals
+/**
+ * @brief ADC generic I/O definition
+ */
+typedef struct {
+    __IO uint8_t ADC_CONTR;
+    __IO uint8_t ADC_RESH;
+    __IO uint8_t ADC_RESL;
+    __IO uint8_t ADCCFG;
+}ADC_TypeDef;
+
 /* ADC basic address definition */
+#define     ADC_BASE        ((uint8_t)0xBC))
+
 #define     ADC_CONTR_ADDR  ((uint8_t)0xBC)
 #define     ADC_RESH_ADDR   ((uint8_t)0xBD)
 #define     ADC_RESL_ADDR   ((uint8_t)0xBE)
@@ -1053,15 +1089,35 @@ sfr IAP_CONTR   =   IAP_CONTR_ADDR;
 #define     ADCCFG_SPEED_VAL14        ((uint8_t)0x0E)          /*!< SYSCLK tick number: 480 ticks*/
 #define     ADCCFG_SPEED_VAL15        ((uint8_t)0x0F)          /*!< SYSCLK tick number: 512 ticks*/
 
+#define     ADC                       ((ADC_TypeDef idata* xdata *) ADC_BASE)
 
 /* ADC special function registers */
-sfr ADC_CONTR   =   ADC_CONTR_ADDR;
-sfr ADC_RESH    =   ADC_RESH_ADDR;
-sfr ADC_RESL    =   ADC_RESL_ADDR;
-sfr ADCCFG      =   ADCCFG_ADDR;
+sfr ADC_CONTR   =   ADC_CONTR_ADDR;                 //!< ADC control register
+sfr ADC_RESH    =   ADC_RESH_ADDR;                  //!< ADC conversion result high bytes register
+sfr ADC_RESL    =   ADC_RESL_ADDR;                  //!< ADC conversion result low bytes register
+sfr ADCCFG      =   ADCCFG_ADDR;                    //!< ADC configuration register
 
 //! PCA peripherals
+/**
+ * @brief PCA generic I/O definition
+ */
+typedef struct {
+    __IO uint8_t CCAPMx;
+    uint8_t RESERVED0[4];
+    __IO uint8_t CCAPxL;
+    uint8_t RESERVED1[3];
+    __IO uint8_t PCA_PWMx;
+    uint8_t RESERVED2[4];
+    __IO uint8_t CCAPxH;
+}PCAx_TypeDef;
+
 /* PCA basic address definition */
+#define     PCAx_BASE       ((uint8_t)0xDA)
+#define     PCA0_BASE       (PCAx_BASE + 0x00)
+#define     PCA1_BASE       (PCAx_BASE + 0x01)
+#define     PCA2_BASE       (PCAx_BASE + 0x02)
+#define     PCA3_BASE       (PCAx_BASE + 0x03)
+
 #define     CCON_ADDR       ((uint8_t)0xD8)
 #define     CMOD_ADDR       ((uint8_t)0xD9)
 #define     CL_ADDR         ((uint8_t)0xE9)
@@ -1150,26 +1206,32 @@ sfr ADCCFG      =   ADCCFG_ADDR;
 #define     CCAPM3_ECCF3           ((uint8_t)0x01)
 
 /* PCA special function registers */
-sfr CCON        =   CCON_ADDR;
-sfr CMOD        =   CMOD_ADDR;
-sfr CL          =   CL_ADDR;
-sfr CH          =   CH_ADDR;
-sfr CCAPM0      =   CCAPM0_ADDR;
-sfr CCAPM1      =   CCAPM1_ADDR;
-sfr CCAPM2      =   CCAPM2_ADDR;
-sfr CCAPM3      =   CCAPM3_ADDR;
-sfr CCAP0L      =   CCAP0L_ADDR;
-sfr CCAP1L      =   CCAP1L_ADDR;
-sfr CCAP2L      =   CCAP2L_ADDR;
-sfr CCAP3L      =   CCAP3L_ADDR;
-sfr CCAP0H      =   CCAP0H_ADDR;
-sfr CCAP1H      =   CCAP1H_ADDR;
-sfr CCAP2H      =   CCAP2H_ADDR;
-sfr CCAP3H      =   CCAP3H_ADDR;
-sfr PCA_PWM0    =   PCA_PWM0_ADDR;
-sfr PCA_PWM1    =   PCA_PWM1_ADDR;
-sfr PCA_PWM2    =   PCA_PWM2_ADDR;
-sfr PCA_PWM3    =   PCA_PWM3_ADDR;
+sfr CCON        =   CCON_ADDR;                  //!< PCA control register
+sfr CMOD        =   CMOD_ADDR;                  //!< PCA mode register
+sfr CL          =   CL_ADDR;                    //!< PCA counter low bytes
+sfr CH          =   CH_ADDR;                    //!< PCA counter high bytes
+sfr CCAPM0      =   CCAPM0_ADDR;                //!< PCA module 0 mode control register
+sfr CCAPM1      =   CCAPM1_ADDR;                //!< PCA module 1 mode control register
+sfr CCAPM2      =   CCAPM2_ADDR;                //!< PCA module 2 mode control register
+sfr CCAPM3      =   CCAPM3_ADDR;                //!< PCA module 3 mode control register
+sfr CCAP0L      =   CCAP0L_ADDR;                //!< PCA module 0 low bytes
+sfr CCAP1L      =   CCAP1L_ADDR;                //!< PCA module 1 low bytes
+sfr CCAP2L      =   CCAP2L_ADDR;                //!< PCA module 2 low bytes
+sfr CCAP3L      =   CCAP3L_ADDR;                //!< PCA module 3 low bytes
+sfr CCAP0H      =   CCAP0H_ADDR;                //!< PCA module 0 high bytes
+sfr CCAP1H      =   CCAP1H_ADDR;                //!< PCA module 1 high bytes
+sfr CCAP2H      =   CCAP2H_ADDR;                //!< PCA module 2 high bytes
+sfr CCAP3H      =   CCAP3H_ADDR;                //!< PCA module 3 high bytes
+sfr PCA_PWM0    =   PCA_PWM0_ADDR;              //!< PCA0 PWM mode register
+sfr PCA_PWM1    =   PCA_PWM1_ADDR;              //!< PCA1 PWM mode register
+sfr PCA_PWM2    =   PCA_PWM2_ADDR;              //!< PCA2 PWM mode register
+sfr PCA_PWM3    =   PCA_PWM3_ADDR;              //!< PCA3 PWM mode register
+
+// PCA generic struct type definitions
+#define     PCA0                    ((PCAx_TypeDef idata * xdata *) PCA0_BASE)
+#define     PCA1                    ((PCAx_TypeDef idata * xdata *) PCA1_BASE)
+#define     PCA2                    ((PCAx_TypeDef idata * xdata *) PCA2_BASE)
+#define     PCA3                    ((PCAx_TypeDef idata * xdata *) PCA3_BASE)
 
 /* Bit definition for CCON register */
 sbit CCON_CF         =   CCON^7;                /*!< PCA counter overflow interupt flag */
@@ -1180,16 +1242,28 @@ sbit CCON_CCF1       =   CCON^1;                /*!< CCF1 PCA module interupt fl
 sbit CCON_CCF0       =   CCON^0;                /*!< CCF0 PCA module interupt flag */
 
 //! PWM peripherals
+/**
+ * @brief General PWM function I/O
+ */
+typedef struct {
+    __IO volatile uint8_t PWMxT1H;
+    __IO volatile uint8_t PWMxT1L;
+    __IO volatile uint8_t PWMxT2H;
+    __IO volatile uint8_t PWMxT2L;
+    __IO volatile uint8_t PWMxCR;
+    __IO volatile uint8_t PWMxHLD;
+}PWMx_TypeDef;
+
 /* PWM basic address definition */
 #define     PWMCFG_ADDR     ((uint8_t)0xF1)
 #define     PWMIF_ADDR      ((uint8_t)0xF6)
 #define     PWMFDCR_ADDR    ((uint8_t)0xF7)
 #define     PWMCR_ADDR      ((uint8_t)0xFE)
 
-#define     PWM_BASE        ((uint16_t)0xFFF0)
-#define     PWMCH_ADDR      (PWM_BASE + 0x0000)
-#define     PWMCL_ADDR      (PWM_BASE + 0x0001)
-#define     PWMCKS_ADDR     (PWM_BASE + 0x0002)
+#define     PWMC_BASE       ((uint16_t)0xFFF0)
+#define     PWMCH_ADDR      (PWMC_BASE + 0x0000)
+#define     PWMCL_ADDR      (PWMC_BASE + 0x0001)
+#define     PWMCKS_ADDR     (PWMC_BASE + 0x0002)
 
 #define     PWM0_BASE       ((uint16_t)0xFF00)
 #define     PWM1_BASE       ((uint16_t)0xFF10)
@@ -1333,23 +1407,32 @@ sbit CCON_CCF0       =   CCON^0;                /*!< CCF0 PCA module interupt fl
 
 
 /* PWM special function registers */
-sfr PWMCFG      =   PWMCFG_ADDR;
-sfr PWMIF       =   PWMIF_ADDR;
-sfr PWMFDCR     =   PWMFDCR_ADDR;
-sfr PWMCR       =   PWMCR_ADDR;
+sfr PWMCFG      =   PWMCFG_ADDR;        //!< Enhanced PWM configuration register
+sfr PWMIF       =   PWMIF_ADDR;         //!< Enhanced PWM interrupt flag register
+sfr PWMFDCR     =   PWMFDCR_ADDR;       //!< Enhanced PWM Anomaly Detection Control Decision Register
+sfr PWMCR       =   PWMCR_ADDR;         //!< Enhanced PWM configuration register
 
-#define     PWM             ((__IO uint16_t xdata *) PWM_BASE)
-#define     PWMCH           ((__IO uint8_t xdata *)  PWMCH_ADDR)
-#define     PWMCL           ((__IO uint8_t xdata *)  PWMCL_ADDR)
-#define     PWMCKS          ((__IO uint8_t xdata *)  PWMCKS_ADDR)
-#define     TADCP           ((__IO uint8_t xdata *)  TADCP_BASE)
-#define     TADCPH          ((__IO uint8_t xdata *)  TADCPH_ADDR)
-#define     TADCPL          ((__IO uint8_t xdata *)  TADCPL_ADDR)
+#define     PWMC            ((__IO uint16_t xdata *) PWMC_BASE)         //!< [PWMCH,PWMCL]
+#define     PWMCH           ((__IO uint8_t xdata *)  PWMCH_ADDR)        //!< High Byte PWM counter register
+#define     PWMCL           ((__IO uint8_t xdata *)  PWMCL_ADDR)        //!< Low Byte PWM counter register
+#define     PWMCKS          ((__IO uint8_t xdata *)  PWMCKS_ADDR)       //!< PWM clock selection register
+#define     TADCP           ((__IO uint16_t xdata *) TADCP_BASE)        //!< [TADCPH, TADCPL]
+#define     TADCPH          ((__IO uint8_t xdata *)  TADCPH_ADDR)       //!< The trigger ADC counts high bytes register
+#define     TADCPL          ((__IO uint8_t xdata *)  TADCPL_ADDR)       //!< The trigger ADC counts low bytes register
 
-#define     PWMxT1(PWMxT1_ADDR)      ((__IO uint16_t xdata *) PWMxT1_ADDR)
-#define     PWMxT2(PWMxT2_ADDR)      ((__IO uint16_t xdata *) PWMxT2_ADDR)
-#define     PWMxCR(PWMxCR_ADDR)      ( (__IO uint8_t xdata *) PWMxCR_ADDR)
-#define     PWMxHLD(PWMxHLD_ADDR)    ( (__IO uint8_t xdata *) PWMxHLD_ADDR)
+#define     PWMxT1(PWMxT1_ADDR)      ((__IO uint16_t xdata *) PWMxT1_ADDR)  //!< PWMxT1 counter [PWMxT1H, PWMxT1L]
+#define     PWMxT2(PWMxT2_ADDR)      ((__IO uint16_t xdata *) PWMxT2_ADDR)  //!< PWMxT2 counter [PWMxT2H, PWMxT2L]
+#define     PWMxCR(PWMxCR_ADDR)      ( (__IO uint8_t xdata *) PWMxCR_ADDR)  //!< PWMx control register
+#define     PWMxHLD(PWMxHLD_ADDR)    ( (__IO uint8_t xdata *) PWMxHLD_ADDR) //!< PWMx level holder control register
+
+#define     PWM0            ((PWMx_TypeDef xdata *) PWM0_BASE)          //!< PWM0 generic struct type
+#define     PWM1            ((PWMx_TypeDef xdata *) PWM1_BASE)          //!< PWM1 generic struct type
+#define     PWM2            ((PWMx_TypeDef xdata *) PWM2_BASE)          //!< PWM2 generic struct type
+#define     PWM3            ((PWMx_TypeDef xdata *) PWM3_BASE)          //!< PWM3 generic struct type
+#define     PWM4            ((PWMx_TypeDef xdata *) PWM4_BASE)          //!< PWM4 generic struct type
+#define     PWM5            ((PWMx_TypeDef xdata *) PWM5_BASE)          //!< PWM5 generic struct type
+#define     PWM6            ((PWMx_TypeDef xdata *) PWM6_BASE)          //!< PWM6 generic struct type
+#define     PWM7            ((PWMx_TypeDef xdata *) PWM7_BASE)          //!< PWM7 generic struct type
 
 #define     PWM0T1          ((__IO uint16_t xdata *) PWM0T1_ADDR)
 #define     PWM0T1H         ((__IO uint8_t xdata *) PWM0T1H_ADDR)
@@ -1424,22 +1507,32 @@ sfr PWMCR       =   PWMCR_ADDR;
 #define     PWM7HLD         ((__IO uint8_t xdata *) PWM7HLD_ADDR)
 
 //! SPI peripherals
+/**
+ * @brief SPI general I/O interface
+ */
+typedef struct {
+    __IO uint8_t SPSTAT;
+    __IO uint8_t SPCTL;
+    __IO uint8_t SPDAT;
+}SPI_TypeDef;
+
 /* SPI basic address definition */
-#define     SPSTAT_ADDR     ((uint8_t)0xCD
-#define     SPCTL_ADDR      ((uint8_t)0xCE
-#define     SPDAT_ADDR      ((uint8_t)0xCF
+#define     SPI_BASE        ((uint8_t)0xCD)
+#define     SPSTAT_ADDR     ((uint8_t)0xCD)
+#define     SPCTL_ADDR      ((uint8_t)0xCE)
+#define     SPDAT_ADDR      ((uint8_t)0xCF)
 
 /* Bit definition for SPSTAT register */
-#define     SPSTAT_SPIF     ((uint8_t)0x80              /*!< SPI interupt flag bit */
-#define     SPSTAT_WCOL     ((uint8_t)0x40              /*!< SPI writing confliction flag bit */
+#define     SPSTAT_SPIF     ((uint8_t)0x80)             /*!< SPI interupt flag bit */
+#define     SPSTAT_WCOL     ((uint8_t)0x40)             /*!< SPI writing confliction flag bit */
 
 /* Bit definition for SPCTL register */
-#define     SPCTL_SSIG      ((uint8_t)0x80              /*!< SS fucntion selection: [0], use SS to determine slave or master; [1], use MSTR rather than SS */
-#define     SPCTL_SPEN      ((uint8_t)0x40              /*!< SPI enabling control bit */
-#define     SPCTL_DORD      ((uint8_t)0x20              /*!< SPI data sending/receiving order: [0], MSB; [1], LSB */
-#define     SPCTL_MSTR      ((uint8_t)0x10              /*!< device mater or slave mode selection: [MASTER], SSIG=0, SS pin high, MSTR=1; SSIG=1, MSTR=1; [SLAVE], SSIG=0, SS pin low; SSIG=1, MSTR=0 */
-#define     SPCTL_CPOL      ((uint8_t)0x08              /*!< SPI clock polarity control: [0] Sclk Idle Time is low level, SCLK front clock edge for the rising edge, after the clock edge for the falling edge; [1], Sclk idle time for high-level, SCLK front clock edge for the down edge, after the clock edge for the rising edge */
-#define     SPCTL_CPHA      ((uint8_t)0x04              /*!< SPI clock phase control: [0], The data SS pin drives the first bit data for the low level and changes the data at the SCLK's back clock edge, and the front clock edge samples the data (must be SSIG = 0); [1], Data is sampled along the front clock edge of SCLK and the back clock edge */
+#define     SPCTL_SSIG      ((uint8_t)0x80)             /*!< SS fucntion selection: [0], use SS to determine slave or master; [1], use MSTR rather than SS */
+#define     SPCTL_SPEN      ((uint8_t)0x40)             /*!< SPI enabling control bit */
+#define     SPCTL_DORD      ((uint8_t)0x20)             /*!< SPI data sending/receiving order: [0], MSB; [1], LSB */
+#define     SPCTL_MSTR      ((uint8_t)0x10)             /*!< device mater or slave mode selection: [MASTER], SSIG=0, SS pin high, MSTR=1; SSIG=1, MSTR=1; [SLAVE], SSIG=0, SS pin low; SSIG=1, MSTR=0 */
+#define     SPCTL_CPOL      ((uint8_t)0x08)             /*!< SPI clock polarity control: [0] Sclk Idle Time is low level, SCLK front clock edge for the rising edge, after the clock edge for the falling edge; [1], Sclk idle time for high-level, SCLK front clock edge for the down edge, after the clock edge for the rising edge */
+#define     SPCTL_CPHA      ((uint8_t)0x04)             /*!< SPI clock phase control: [0], The data SS pin drives the first bit data for the low level and changes the data at the SCLK's back clock edge, and the front clock edge samples the data (must be SSIG = 0); [1], Data is sampled along the front clock edge of SCLK and the back clock edge */
 
 #define     SPCTL_SPR       ((uint8_t)0x03)             /*!< SPR[1:0], SPI clock frequency selection */
 #define     SPCTL_SPR_0     ((uint8_t)0x01)             /*!< Bit 0 */
@@ -1450,14 +1543,42 @@ sfr PWMCR       =   PWMCR_ADDR;
 #define     SPCTL_SPR_SCLK_DIV16    ((uint8_t)0x02)     /*!< SYSCLK/16 */
 #define     SPCTL_SPR_SCLK_DIV32    ((uint8_t)0x03)     /*!< SYSCLK/32 */
 
+/**
+ * @brief define the SPI_TypeDef pointer type
+ * @note To access XDATA peripherals, use the \c volatile keyword to ensure 
+ * that the C compiler does not optimize out necessary memory accesses. \n
+ * \code{.c} ((SPI_TypeDef idata * xdata *) SPI_BASE) \endcode 
+ * means \b SPI_TypeDef pointer is stored in \e xdata space but 
+ * points to \e idata space. If you want to use this struct type, prefix 
+ * \code{.c} (SPI_TypeDef idata *) \endcode is needed, such as 
+ * \code{.c} (SPI_TypeDef idata *) var \endcode, in witch the
+ * \c var is \b SPI_TypeDef .
+ */
+#define     SPI             ((SPI_TypeDef idata * xdata* ) SPI_BASE)    //!< SPI generic struct type definition
 
 /* SPI special function registers */
-sfr SPSTAT      =   SPSTAT_ADDR;
-sfr SPCTL       =   SPCTL_ADDR;
-sfr SPDAT       =   SPDAT_ADDR;
+sfr SPSTAT      =   SPSTAT_ADDR;        //!< SPI State Register
+sfr SPCTL       =   SPCTL_ADDR;         //!< SPI Control Register
+sfr SPDAT       =   SPDAT_ADDR;         //!< SPI Data Register
 
 
 //! I2C peripherals
+/**
+ * @brief I2C general I/O configuration
+ */
+typedef struct {
+    __IO volatile uint8_t I2CCFG;
+    __IO volatile uint8_t I2CMSCR;
+    __IO volatile uint8_t I2CMSST;
+    __IO volatile uint8_t I2CSLCR;
+    __IO volatile uint8_t I2CSLST;
+    __IO volatile uint8_t I2CSLADR;
+    __IO volatile uint8_t I2CTXD;
+    __IO volatile uint8_t I2CRXD;
+    __IO volatile uint8_t I2CMSAUX;
+}I2C_TypeDef;
+
+
 /* Basic address */
 #define     I2C_BASE        ((uint16_t)0xFE80)
 #define     I2CCFG_ADDR     (I2C_BASE + 0x0000)
@@ -1598,15 +1719,17 @@ sfr SPDAT       =   SPDAT_ADDR;
 
 
 /* I2C special function registers */
-#define     I2CCFG          ((__IO uint8_t xdata *) I2CCFG_ADDR)
-#define     I2CMSCR         ((__IO uint8_t xdata *) I2CMSCR_ADDR)
-#define     I2CMSST         ((__IO uint8_t xdata *) I2CMSST_ADDR)
-#define     I2CSLCR         ((__IO uint8_t xdata *) I2CSLCR_ADDR)
-#define     I2CSLST         ((__IO uint8_t xdata *) I2CSLST_ADDR)
-#define     I2CSLADR        ((__IO uint8_t xdata *) I2CSLADR_ADDR)
-#define     I2CTXD          ((__IO uint8_t xdata *) I2CTXD_ADDR)
-#define     I2CRXD          ((__IO uint8_t xdata *) I2CRXD_ADDR)
-#define     I2CMSAUX        ((__IO uint8_t xdata *) I2CMSAUX_ADDR)
+#define     I2CCFG          ((__IO uint8_t xdata *) I2CCFG_ADDR)    //!< I2C configuration register
+#define     I2CMSCR         ((__IO uint8_t xdata *) I2CMSCR_ADDR)   //!< I2C master control register
+#define     I2CMSST         ((__IO uint8_t xdata *) I2CMSST_ADDR)   //!< I2C master state register
+#define     I2CSLCR         ((__IO uint8_t xdata *) I2CSLCR_ADDR)   //!< I2C slave control register
+#define     I2CSLST         ((__IO uint8_t xdata *) I2CSLST_ADDR)   //!< I2C slave state register
+#define     I2CSLADR        ((__IO uint8_t xdata *) I2CSLADR_ADDR)  //!< I2C slave address register
+#define     I2CTXD          ((__IO uint8_t xdata *) I2CTXD_ADDR)    //!< I2C data sending register
+#define     I2CRXD          ((__IO uint8_t xdata *) I2CRXD_ADDR)    //!< I2C data reveiving register
+#define     I2CMSAUX        ((__IO uint8_t xdata *) I2CMSAUX_ADDR)  //!< I2C master auxiliary control register
+
+#define     I2C             ((I2C_TypeDef xdata *) I2C_BASE)        //!< I2C generic struct type definition
 
 
 /** @} */
