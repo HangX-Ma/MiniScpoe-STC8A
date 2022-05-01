@@ -566,31 +566,21 @@ sbit P77        =   P7^7;
 #define     P7NCS       ((__IO uint8_t xdata *) P8NCS_ADDR)            // Extended SFR
 
 //! ISR peripherals
-typedef struct 
-{
-    __IO uint8_t IP2;
-    __IO uint8_t IP2H;
-    __IO uint8_t IPH;
-    __IO uint8_t IP;
-}ISR_Priority_TypeDef;
-
 /* ISR basic address definition */
 #define    IE_ADDR                      ((uint8_t)0xA8)
 #define    IE2_ADDR                     ((uint8_t)0xAF)
 #define    ISR_PRIORITY_CONTR_BASE      ((uint8_t)0xB5)
-/**
- * @brief define the ISR_PRIORITY pointer type
- * @note To access XDATA peripherals, use the \c volatile keyword to ensure 
- * that the C compiler does not optimize out necessary memory accesses. \n
- * \code{.c} ((ISR_Priority_TypeDef idata * xdata *) ISR_PRIORITY_CONTR_BASE) \endcode 
- * means \b ISR_Priority_TypeDef pointer is stored in \e xdata space but 
- * points to \e idata space. If you want to use this struct type, prefix 
- * \code{.c} (ISR_Priority_TypeDef idata *) \endcode is needed, such as 
- * \code{.c} (ISR_Priority_TypeDef idata *) var \endcode, in witch the
- * \c var is \b ISR_Priority_TypeDef .
- */
-#define    ISR_PRIORITY                 ((ISR_Priority_TypeDef idata * xdata *) ISR_PRIORITY_CONTR_BASE)
-
+// /**
+//  * @brief define the ISR_PRIORITY pointer type
+//  * @note To access XDATA peripherals, use the \c volatile keyword to ensure 
+//  * that the C compiler does not optimize out necessary memory accesses. \n
+//  * \code{.c} ((ISR_Priority_TypeDef idata * xdata *) ISR_PRIORITY_CONTR_BASE) \endcode 
+//  * means \b ISR_Priority_TypeDef pointer is stored in \e xdata space but 
+//  * points to \e idata space. If you want to use this struct type, prefix 
+//  * \code{.c} (ISR_Priority_TypeDef idata *) \endcode is needed, such as 
+//  * \code{.c} (ISR_Priority_TypeDef idata *) var \endcode, in witch the
+//  * \c var is \b ISR_Priority_TypeDef .
+//  */
 #define    IP_ADDR                      (ISR_PRIORITY_CONTR_BASE + 0x03)
 #define    IPH_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x02)
 #define    IP2_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x00)
@@ -619,14 +609,14 @@ typedef struct
 #define     IP_PX0          ((uint8_t)0x01)
 
 /* Bit definition for IPH registers */
-#define     PPCAH           ((uint8_t)0x80)
-#define     PLVDH           ((uint8_t)0x40)
-#define     PADCH           ((uint8_t)0x20)
-#define     PSH             ((uint8_t)0x10)
-#define     PT1H            ((uint8_t)0x08)
-#define     PX1H            ((uint8_t)0x04)
-#define     PT0H            ((uint8_t)0x02)
-#define     PX0H            ((uint8_t)0x01)
+#define     IPH_PPCAH       ((uint8_t)0x80)
+#define     IPH_PLVDH       ((uint8_t)0x40)
+#define     IPH_PADCH       ((uint8_t)0x20)
+#define     IPH_PSH         ((uint8_t)0x10)
+#define     IPH_PT1H        ((uint8_t)0x08)
+#define     IPH_PX1H        ((uint8_t)0x04)
+#define     IPH_PT0H        ((uint8_t)0x02)
+#define     IPH_PX0H        ((uint8_t)0x01)
 
 /* Bit definition for IP2 registers */
 #define     IP2_PI2C        ((uint8_t)0x40)
@@ -647,62 +637,62 @@ typedef struct
 #define     IP2H_PS2H       ((uint8_t)0x01)
 
 /* Bit definition for INTCLKO registers */
-#define     EX4             ((uint8_t)0x40)
-#define     EX3             ((uint8_t)0x20)
-#define     EX2             ((uint8_t)0x10)
-#define     T2CLKO          ((uint8_t)0x04)
-#define     T1CLKO          ((uint8_t)0x02)
-#define     T0CLKO          ((uint8_t)0x01)
+#define     INTCLKO_EX4     ((uint8_t)0x40)             /*!< external interrupt 4 interrupt enabling flag */
+#define     INTCLKO_EX3     ((uint8_t)0x20)             /*!< external interrupt 3 interrupt enabling flag */
+#define     INTCLKO_EX2     ((uint8_t)0x10)             /*!< external interrupt 2 interrupt enabling flag */
+#define     INTCLKO_T2CLKO  ((uint8_t)0x04)
+
 
 /* Bit definition for AUXINTIF registers */
-#define     INT4IF          ((uint8_t)0x40)
-#define     INT3IF          ((uint8_t)0x20)
-#define     INT2IF          ((uint8_t)0x10)
-#define     T4IF            ((uint8_t)0x04)
-#define     T3IF            ((uint8_t)0x02)
-#define     T2IF            ((uint8_t)0x01)
+#define     AUXINTIF_INT4IF ((uint8_t)0x40)             /*!< external interrupt 4 interrupt request flag */
+#define     AUXINTIF_INT3IF ((uint8_t)0x20)             /*!< external interrupt 3 interrupt request flag */
+#define     AUXINTIF_INT2IF ((uint8_t)0x10)             /*!< external interrupt 2 interrupt request flag */
+#define     AUXINTIF_T4IF   ((uint8_t)0x04)             /*!< timer 4 overflow interrupt request flag */
+#define     AUXINTIF_T3IF   ((uint8_t)0x02)             /*!< timer 3 overflow interrupt request flag */
+#define     AUXINTIF_T2IF   ((uint8_t)0x01)             /*!< timer 2 overflow interrupt request flag */
 
 /* ISR special function register */
-sfr IE          =   IE_ADDR;
-sfr IE2         =   IE2_ADDR;
-sfr IP          =   IP_ADDR;
-sfr IP2         =   IP2H_ADDR;
-sfr IPH         =   IPH_ADDR;
-sfr IP2H        =   IP2H_ADDR;
-sfr INTCLKO     =   INTCLKO_ADDR;
-sfr AUXINTIF    =   AUXINTIF_ADDR;
+sfr IE          =   IE_ADDR;                            /*!< interrupt enabling register */
+sfr IE2         =   IE2_ADDR;                           /*!< interrupt enabling register 2 */
+sfr IP          =   IP_ADDR;                            /*!< interrupt priority control register IP */
+sfr IP2         =   IP2_ADDR;                           /*!< interrupt priority control register IP2 */
+sfr IPH         =   IPH_ADDR;                           /*!< interrupt priority control register IPH */
+sfr IP2H        =   IP2H_ADDR;                          /*!< interrupt priority control register IP2H */
+sfr INTCLKO     =   INTCLKO_ADDR;                       /*!< external interrupt and clock output control registers */
+sfr AUXINTIF    =   AUXINTIF_ADDR;                      /*!< interrupt flag auxiliary register */
 
 
-// IE BITs (interuption enabling register)
-sbit EA         =   IE^7;
-sbit ELVD       =   IE^6;
-sbit EADC       =   IE^5;
-sbit ES         =   IE^4;
-sbit ET1        =   IE^3;
-sbit EX1        =   IE^2;
-sbit ET0        =   IE^1;
-sbit EX0        =   IE^0;
+/* Bit definition for IE register (interrupt enabling register) */ 
+sbit IE_EA      =   IE^7;                               /*!< totoal interrupt enabling control bit */
+sbit IE_ELVD    =   IE^6;                               /*!< low voltage check interrupt enabling control bit */
+sbit IE_EADC    =   IE^5;                               /*!< A/D convertion interrupt enabling control bit */
+sbit IE_ES      =   IE^4;                               /*!< serial port 1 interrupt enabling control bit */
+sbit IE_ET1     =   IE^3;                               /*!< timer T1 overflow interrupt enabling control bit */
+sbit IE_EX1     =   IE^2;                               /*!< external interrupt 1 interrupt enabling control bit */
+sbit IE_ET0     =   IE^1;                               /*!< timer T0 interrupt enabling control bit */
+sbit IE_EX0     =   IE^0;                               /*!< external interrupt 0 interrupt enabling control bit */
 
-// IP BITs
-// sbit PPCA       =   IP^7;
-// sbit PLVD       =   IP^6;
-// sbit PADC       =   IP^5;
-// sbit PS         =   IP^4;
-// sbit PT1        =   IP^3;
-// sbit PX1        =   IP^2;
-// sbit PT0        =   IP^1;
-// sbit PX0        =   IP^0;
+/* Bit definition for IP register */
+sbit IP_PPCA       =   IP^7;
+sbit IP_PLVD       =   IP^6;
+sbit IP_PADC       =   IP^5;
+sbit IP_PS         =   IP^4;
+sbit IP_PT1        =   IP^3;
+sbit IP_PX1        =   IP^2;
+sbit IP_PT0        =   IP^1;
+sbit IP_PX0        =   IP^0;
 
 //! Timer peripherals
 /* timer basic address definition */
 #define     Timer_BASE      ((uint8_t)0x88)
-#define     T2T3T4_BASE     ((uint8_t)0xD1)
 #define     TCON_ADDR       (Timer_BASE + 0x00u)
 #define     TMOD_ADDR       (Timer_BASE + 0x01u)
 #define     TL0_ADDR        (Timer_BASE + 0x02u)
 #define     TL1_ADDR        (Timer_BASE + 0x03u)
 #define     TH0_ADDR        (Timer_BASE + 0x04u)
 #define     TH1_ADDR        (Timer_BASE + 0x05u)
+
+#define     T2T3T4_BASE     ((uint8_t)0xD1)
 #define     T4T3M_ADDR      (T2T3T4_BASE + 0x00u)
 #define     T4H_ADDR        (T2T3T4_BASE + 0x01u)
 #define     T4L_ADDR        (T2T3T4_BASE + 0x02u)
@@ -711,25 +701,55 @@ sbit EX0        =   IE^0;
 #define     T2H_ADDR        (T2T3T4_BASE + 0x05u)
 #define     T2L_ADDR        (T2T3T4_BASE + 0x06u)
 
-/* TMOD offset */
-#define     T1_GATE         ((uint8_t)0x80)
-#define     T1_CT           ((uint8_t)0x40)
-#define     T1_M1           ((uint8_t)0x20)
-#define     T1_M0           ((uint8_t)0x10)
-#define     T0_GATE         ((uint8_t)0x08)
-#define     T0_CT           ((uint8_t)0x04)
-#define     T0_M1           ((uint8_t)0x02)
-#define     T0_M0           ((uint8_t)0x01)
+/* Bit definition for TMOD register */
+#define     TMOD_T1_GATE    ((uint8_t)0x80)        /*!< Timer/Counter T1 control. T1 works when TR1=1 and INT1 is high. */
+#define     TMOD_T1_CT      ((uint8_t)0x40)        /*!< Timer/Counter T1 function selection: [0] timer-internal SYSCLK input; [1] counter-P3.5 input */
 
-/* T4T3M offset */
-#define     T4R             ((uint8_t)0x80)
-#define     T4_CT           ((uint8_t)0x40)
-#define     T4x12           ((uint8_t)0x20)
-#define     T4CLKO          ((uint8_t)0x10)
-#define     T3R             ((uint8_t)0x08)
-#define     T3_CT           ((uint8_t)0x04)
-#define     T3x12           ((uint8_t)0x02)
-#define     T3CLKO          ((uint8_t)0x01)
+#define     TMOD_T1_SEL     ((uint8_t)0x30)        /*!< Mode selection [1:0] (decided by M1 and M0) */
+#define     TMOD_T1_M1      ((uint8_t)0x20)        /*!< BIT [1] */
+#define     TMOD_T1_M0      ((uint8_t)0x10)        /*!< BIT [0] */
+
+#define     TMOD_T1_SEL_16B_AUTO_RELOAD             ((uint8_t)0x00)     /*!< 16 bits auto reload mode. When T1 overflowing, T1 reload [TH1, TL1] */
+#define     TMOD_T1_SEL_16B_REPEATED                ((uint8_t)0x10)     /*!< 16 bits repeated mode. When T1 overflowing, T1 starts from 0. */
+#define     TMOD_T1_SEL_8B_AUTO_RELOAD              ((uint8_t)0x20)     /*!< 8 bits auto reload mode. When T1 overflowing, T1 reload [TL1] with [TH1]. */
+#define     TMOD_T1_SEL_STOP                        ((uint8_t)0x30)     /*!< T1 stop working */
+
+
+#define     TMOD_T0_GATE    ((uint8_t)0x08)        /*!< Timer T0 control. T1 works when TR1=1 and INT1 is high. */
+#define     TMOD_T0_CT      ((uint8_t)0x04)        /*!< Timer/Counter T1 function selection: [0] timer-internal SYSCLK input; [1] counter-P3.4 input */
+
+#define     TMOD_T0_SEL     ((uint8_t)0x30)        /*!< Mode selection [1:0] (decided by M1 and M0) */
+#define     TMOD_T0_M1      ((uint8_t)0x02)        /*!< BIT [1] */
+#define     TMOD_T0_M0      ((uint8_t)0x01)        /*!< BIT [0] */
+
+#define     TMOD_T0_SEL_16B_AUTO_RELOAD             ((uint8_t)0x00)     /*!< 16 bits auto reload mode. When T0 overflowing, T0 reload [TH0, TL0] */
+#define     TMOD_T0_SEL_16B_REPEATED                ((uint8_t)0x10)     /*!< 16 bits repeated mode. When T0 overflowing, T0 starts from 0. */
+#define     TMOD_T0_SEL_8B_AUTO_RELOAD              ((uint8_t)0x20)     /*!< 8 bits auto reload mode. When T0 overflowing, T0 reload [TL0] with [TH0]. */
+#define     TMOD_T0_SEL_UNSHIELDED_16B_AUTO_RELOAD  ((uint8_t)0x30)     /*!< unshielded 16 bits auto reload mode, which has the highest prioty */
+
+/* Bit definition for AUXR register */
+#define     AUXR_T0x12      ((uint8_t)0x80)        /*!< timer T0 speed selection ([0], CPU clock divied by 12; [1], CPU clock no division)*/
+#define     AUXR_T1x12      ((uint8_t)0x40)        /*!< timer T1 speed selection ([0], CPU clock divied by 12; [1], CPU clock no division) */
+
+#define     AUXR_T2x12      ((uint8_t)0x04)        /*!< timer T2 speed selection ([0], CPU clock divied by 12; [1], CPU clock no division) */
+#define     AUXR_T2R        ((uint8_t)0x10)        /*!< timer T2 running control bit */
+#define     AUXR_T2CT       ((uint8_t)0x08)        /*!< Timer/Counter T2 function selection: [0] timer-internal SYSCLK input; [1] counter-P1.2 input */
+
+/* Bit definition for INTCLKO register  */
+#define     INTCLKO_T1CLKO  ((uint8_t)0x02)        /*!< timer T0 output control ([0], timer output disabled; [1], T0 overflow, P3.5 revert its level) */ 
+#define     INTCLKO_T0CLKO  ((uint8_t)0x01)        /*!< timer T1 output control ([0], timer output disabled; [1], T1 overflow, P3.4 revert its level) */ 
+
+#define     INTCLKO_T0CLKO  ((uint8_t)0x04)        /*!< timer T2 output control ([0], timer output disabled; [1], T2 overflow, P1.3 revert its level)*/ 
+
+/* Bit definition for T4T3M register */
+#define     T4T3M_T4R       ((uint8_t)0x80)        /*!< timer T4 running control flag */ 
+#define     T4T3M_T4_CT     ((uint8_t)0x40)        /*!< Timer/Counter T4 function selection: [0] timer-internal SYSCLK input; [1] counter-P0.6 input */
+#define     T4T3M_T4x12     ((uint8_t)0x20)        /*!< timer T4 speed selection ([0], CPU clock divied by 12; [1], CPU clock no division) */
+#define     T4T3M_T4CLKO    ((uint8_t)0x10)        /*!< timer T4 output control ([0], timer output disabled; [1], T4 overflow, P0.7 revert its level)*/ 
+#define     T4T3M_T3R       ((uint8_t)0x08)        /*!< timer T3 running control flag */ 
+#define     T4T3M_T3_CT     ((uint8_t)0x04)        /*!< Timer/Counter T3 function selection: [0] timer-internal SYSCLK input; [1] counter-P0.6 input */
+#define     T4T3M_T3x12     ((uint8_t)0x02)        /*!< timer T3 speed selection ([0], CPU clock divied by 12; [1], CPU clock no division) */
+#define     T4T3M_T3CLKO    ((uint8_t)0x01)        /*!< timer T3 output control ([0], timer output disabled; [1], T3 overflow, P0.7 revert its level)*/ 
 
 /* timer special function registers */
 sfr TCON        =   TCON_ADDR;
@@ -746,15 +766,15 @@ sfr T3L         =   T3L_ADDR;
 sfr T2H         =   T2H_ADDR;
 sfr T2L         =   T2L_ADDR;
 
-/* TCON BITs setting */
-sbit TF1        =   TCON^7;
-sbit TR1        =   TCON^6;
-sbit TF0        =   TCON^5;
-sbit TR0        =   TCON^4;
-sbit IE1        =   TCON^3;
-sbit IT1        =   TCON^2;
-sbit IE0        =   TCON^1;
-sbit IT0        =   TCON^0;
+/* Bit definition for TCON register */
+sbit TCON_TF1        =   TCON^7;                         /*!< timer T1 overflow interupt flag */
+sbit TCON_TR1        =   TCON^6;                         /*!< timer T1 running enabling control flag */
+sbit TCON_TF0        =   TCON^5;                         /*!< timer T0 overflow interupt flag */
+sbit TCON_TR0        =   TCON^4;                         /*!< timer T0 running enabling control flag */
+sbit TCON_IE1        =   TCON^3;                         /*!< external interupt 1 request flag */
+sbit TCON_IT1        =   TCON^2;                         /*!< external interupt 1 trigger ways selection bit */
+sbit TCON_IE0        =   TCON^1;                         /*!< external interupt 0 request flag */
+sbit TCON_IT0        =   TCON^0;                         /*!< external interupt 0 trigger ways selection bit */
 
 //! UART peripherals
 /* UART basic address definition */
@@ -769,7 +789,15 @@ sbit IT0        =   TCON^0;
 #define     SADDR_ADDR      ((uint8_t)0xA9)
 #define     SADEN_ADDR      ((uint8_t)0xB9)
 
-/* S2CON offset */
+/* Bit definition for AUXR register */
+#define     AUXR_UART_M0x6  ((uint8_t)0x20)             /*!< serial port 1 mode 0 communication speed selection: [0], no change; [1], 6 times speed */
+#define     AUXR_S1ST2      ((uint8_t)0x01)             /*!< serial port 1 baud rate emitter selection: [0], T1; [1], T2 */
+
+/* Bit definition for PCON register */
+#define     PCON_SMOD       ((uint8_t)0x80)             /*!< serial port 1 baud rate speed selection: [0], no change; [1], mode 1,2,3 baud rate double times */
+#define     PCON_SMOD0      ((uint8_t)0x40)             /*!< frame error detection control bit : [0], function not enabled; [1], SCON-SM0/FE works as FE */
+
+/* Bit definition for S2CON register */
 #define     S2SM0           ((uint8_t)0x80)
 #define     S2ST4           ((uint8_t)0x40)
 #define     S2SM2           ((uint8_t)0x20)
@@ -779,7 +807,7 @@ sbit IT0        =   TCON^0;
 #define     S2TI            ((uint8_t)0x02)
 #define     S2RI            ((uint8_t)0x01)
 
-/* S3CON offset */
+/* Bit definition for S3CON register */
 #define     S3SM0           ((uint8_t)0x80)
 #define     S3ST4           ((uint8_t)0x40)
 #define     S3SM2           ((uint8_t)0x20)
@@ -789,7 +817,7 @@ sbit IT0        =   TCON^0;
 #define     S3TI            ((uint8_t)0x02)
 #define     S3RI            ((uint8_t)0x01)
 
-/* S4CON offset */
+/* Bit definition for S4CON register */
 #define     S4SM0           ((uint8_t)0x80)
 #define     S4ST4           ((uint8_t)0x40)
 #define     S4SM2           ((uint8_t)0x20)
@@ -811,52 +839,149 @@ sfr S4BUF       =   S4BUF_ADDR;
 sfr SADDR       =   SADDR_ADDR;
 sfr SADEN       =   SADEN_ADDR;
 
-/* SCON BITs */
-sbit SM0        =   SCON^7;
-sbit SM1        =   SCON^6;
-sbit SM2        =   SCON^5;
-sbit REN        =   SCON^4;
-sbit TB8        =   SCON^3;
-sbit RB8        =   SCON^2;
-sbit TI         =   SCON^1;
-sbit RI         =   SCON^0;
+/* Bit definition for SCON register */
+sbit SCON_SM0        =   SCON^7;
+sbit SCON_SM1        =   SCON^6;
+sbit SCON_SM2        =   SCON^5;
+sbit SCON_REN        =   SCON^4;
+sbit SCON_TB8        =   SCON^3;
+sbit SCON_RB8        =   SCON^2;
+sbit SCON_TI         =   SCON^1;
+sbit SCON_RI         =   SCON^0;
 
 //! COMP peripherals
 /* COMP basic address definition */
-#define     CMPCR1_ADDR     ((uint8_t)0xE6)
-#define     CMPCR2_ADDR     ((uint8_t)0xE7)
+#define     CMPCR1_ADDR             ((uint8_t)0xE6)
+#define     CMPCR2_ADDR             ((uint8_t)0xE7)
 
-/* CMPCR1 offset */
-#define     CMPEN           ((uint8_t)0x80)
-#define     CMPIF           ((uint8_t)0x40)
-#define     PIE             ((uint8_t)0x20)
-#define     NIE             ((uint8_t)0x10)
-#define     PIS             ((uint8_t)0x08)
-#define     NIS             ((uint8_t)0x04)
-#define     CMPOE           ((uint8_t)0x02)
-#define     CMPRES          ((uint8_t)0x01)
+/* Bit definition for CMPCR1 register */
+#define     CMPCR1_CMPEN            ((uint8_t)0x80)      /*!< Comparator module enabling bit */
+#define     CMPCR1_CMPIF            ((uint8_t)0x40)      /*!< Comparator interrupt flag bit <*/
+#define     CMPCR1_PIE              ((uint8_t)0x20)      /*!< Comparator rising edge interrupt enabling bit */
+#define     CMPCR1_NIE              ((uint8_t)0x10)      /*!< Comparator falling edge interrupt enabling bit */
+#define     CMPCR1_PIS              ((uint8_t)0x08)      /*!< Comparator positive selection bit: [0], select P3.7 as the positive source; [1], select by ADC_CONTR-ADC_CHS */
+#define     CMPCR1_NIS              ((uint8_t)0x04)      /*!< Comparator negtive selection bit: [0], select REFV; select P3.6 as the negtive source*/
+#define     CMPCR1_CMPOE            ((uint8_t)0x02)      /*!< Comparator output control bit: [0], disable output; [1], P3.4 or P4.1 ouput pin, decided by P_SW2-CMPO_S */
+#define     CMPCR1_CMPRES           ((uint8_t)0x01)      /*!< The result of a comparator comparison: [0], CMP+ lower than CMP-; [1], CMP+ higher than CMP-; */
 
-/* CMPAR2 offset */
-#define     INVCMPO         ((uint8_t)0x80
-#define     DISFLT          ((uint8_t)0x40
+/* Bit definition for CMPCR2 register */
+#define     CMPAR2_INVCMPO          ((uint8_t)0x80       /*!< Comparator output control: [0], positive output, 0 eq low level, 1 eq high level; [1], negtive output, 0 eq high level, 1 eq low level */
+#define     CMPAR2_DISFLT           ((uint8_t)0x40       /*!< Analog filter function control: [0], enable; [1], disable */
+
+#define     CMPAR2_LCDTY            ((uint8_t)0x3F)      /*!< LCDTY[5:0] Digital filter function control. filtering time = LCDTY+2 */
+#define     CMPAR2_LCDTY_0          ((uint8_t)0x01)      /*!< Bit 0 */
+#define     CMPAR2_LCDTY_1          ((uint8_t)0x02)      /*!< Bit 1 */
+#define     CMPAR2_LCDTY_2          ((uint8_t)0x04)      /*!< Bit 2 */
+#define     CMPAR2_LCDTY_3          ((uint8_t)0x08)      /*!< Bit 3 */
+#define     CMPAR2_LCDTY_4          ((uint8_t)0x10)      /*!< Bit 4 */
+#define     CMPAR2_LCDTY_5          ((uint8_t)0x20)      /*!< Bit 5 */
+
+#define     CMPAR2_LCDTY_VAL0       ((uint8_t)0x00)      /*!< n=0, no filtering */
+#define     CMPAR2_LCDTY_VAL1       ((uint8_t)0x01)      /*!< n=1 */
+#define     CMPAR2_LCDTY_VAL2       ((uint8_t)0x02)      /*!< n=2 */
+#define     CMPAR2_LCDTY_VAL3       ((uint8_t)0x03)      /*!< n=3 */
+#define     CMPAR2_LCDTY_VAL4       ((uint8_t)0x04)      /*!< n=4 */
+#define     CMPAR2_LCDTY_VAL5       ((uint8_t)0x05)      /*!< n=5 */
+#define     CMPAR2_LCDTY_VAL6       ((uint8_t)0x06)      /*!< n=6 */
+#define     CMPAR2_LCDTY_VAL7       ((uint8_t)0x07)      /*!< n=7 */
+#define     CMPAR2_LCDTY_VAL8       ((uint8_t)0x08)      /*!< n=8 */
+#define     CMPAR2_LCDTY_VAL9       ((uint8_t)0x09)      /*!< n=9 */
+#define     CMPAR2_LCDTY_VAL10      ((uint8_t)0x0A)      /*!< n=10 */
+#define     CMPAR2_LCDTY_VAL11      ((uint8_t)0x0B)      /*!< n=11 */
+#define     CMPAR2_LCDTY_VAL12      ((uint8_t)0x0C)      /*!< n=12 */
+#define     CMPAR2_LCDTY_VAL13      ((uint8_t)0x0D)      /*!< n=13 */
+#define     CMPAR2_LCDTY_VAL14      ((uint8_t)0x0E)      /*!< n=14 */
+#define     CMPAR2_LCDTY_VAL15      ((uint8_t)0x0F)      /*!< n=15 */
+#define     CMPAR2_LCDTY_VAL16      ((uint8_t)0x10)      /*!< n=16 */
+#define     CMPAR2_LCDTY_VAL17      ((uint8_t)0x11)      /*!< n=17 */
+#define     CMPAR2_LCDTY_VAL18      ((uint8_t)0x12)      /*!< n=18 */
+#define     CMPAR2_LCDTY_VAL19      ((uint8_t)0x13)      /*!< n=19 */
+#define     CMPAR2_LCDTY_VAL20      ((uint8_t)0x14)      /*!< n=20 */
+#define     CMPAR2_LCDTY_VAL21      ((uint8_t)0x15)      /*!< n=21 */
+#define     CMPAR2_LCDTY_VAL22      ((uint8_t)0x16)      /*!< n=22 */
+#define     CMPAR2_LCDTY_VAL23      ((uint8_t)0x17)      /*!< n=23 */
+#define     CMPAR2_LCDTY_VAL24      ((uint8_t)0x18)      /*!< n=24 */
+#define     CMPAR2_LCDTY_VAL25      ((uint8_t)0x19)      /*!< n=25 */
+#define     CMPAR2_LCDTY_VAL26      ((uint8_t)0x1A)      /*!< n=26 */
+#define     CMPAR2_LCDTY_VAL27      ((uint8_t)0x1B)      /*!< n=27 */
+#define     CMPAR2_LCDTY_VAL28      ((uint8_t)0x1C)      /*!< n=28 */
+#define     CMPAR2_LCDTY_VAL29      ((uint8_t)0x1D)      /*!< n=29 */
+#define     CMPAR2_LCDTY_VAL30      ((uint8_t)0x1E)      /*!< n=30 */
+#define     CMPAR2_LCDTY_VAL31      ((uint8_t)0x1F)      /*!< n=31 */
+#define     CMPAR2_LCDTY_VAL32      ((uint8_t)0x20)      /*!< n=32 */
+#define     CMPAR2_LCDTY_VAL33      ((uint8_t)0x21)      /*!< n=33 */
+#define     CMPAR2_LCDTY_VAL34      ((uint8_t)0x22)      /*!< n=34 */
+#define     CMPAR2_LCDTY_VAL35      ((uint8_t)0x23)      /*!< n=35 */
+#define     CMPAR2_LCDTY_VAL36      ((uint8_t)0x24)      /*!< n=36 */
+#define     CMPAR2_LCDTY_VAL37      ((uint8_t)0x25)      /*!< n=37 */
+#define     CMPAR2_LCDTY_VAL38      ((uint8_t)0x26)      /*!< n=38 */
+#define     CMPAR2_LCDTY_VAL39      ((uint8_t)0x27)      /*!< n=39 */
+#define     CMPAR2_LCDTY_VAL40      ((uint8_t)0x28)      /*!< n=40 */
+#define     CMPAR2_LCDTY_VAL41      ((uint8_t)0x29)      /*!< n=41 */
+#define     CMPAR2_LCDTY_VAL42      ((uint8_t)0x2A)      /*!< n=42 */
+#define     CMPAR2_LCDTY_VAL43      ((uint8_t)0x2B)      /*!< n=43 */
+#define     CMPAR2_LCDTY_VAL44      ((uint8_t)0x2C)      /*!< n=44 */
+#define     CMPAR2_LCDTY_VAL45      ((uint8_t)0x2D)      /*!< n=45 */
+#define     CMPAR2_LCDTY_VAL46      ((uint8_t)0x2E)      /*!< n=46 */
+#define     CMPAR2_LCDTY_VAL47      ((uint8_t)0x2F)      /*!< n=47 */
+#define     CMPAR2_LCDTY_VAL48      ((uint8_t)0x30)      /*!< n=48 */
+#define     CMPAR2_LCDTY_VAL49      ((uint8_t)0x31)      /*!< n=49 */
+#define     CMPAR2_LCDTY_VAL50      ((uint8_t)0x32)      /*!< n=50 */
+#define     CMPAR2_LCDTY_VAL51      ((uint8_t)0x33)      /*!< n=51 */
+#define     CMPAR2_LCDTY_VAL52      ((uint8_t)0x34)      /*!< n=52 */
+#define     CMPAR2_LCDTY_VAL53      ((uint8_t)0x35)      /*!< n=53 */
+#define     CMPAR2_LCDTY_VAL54      ((uint8_t)0x36)      /*!< n=54 */
+#define     CMPAR2_LCDTY_VAL55      ((uint8_t)0x37)      /*!< n=55 */
+#define     CMPAR2_LCDTY_VAL56      ((uint8_t)0x38)      /*!< n=56 */
+#define     CMPAR2_LCDTY_VAL57      ((uint8_t)0x39)      /*!< n=57 */
+#define     CMPAR2_LCDTY_VAL58      ((uint8_t)0x3A)      /*!< n=58 */
+#define     CMPAR2_LCDTY_VAL59      ((uint8_t)0x3B)      /*!< n=59 */
+#define     CMPAR2_LCDTY_VAL60      ((uint8_t)0x3C)      /*!< n=60 */
+#define     CMPAR2_LCDTY_VAL61      ((uint8_t)0x3D)      /*!< n=61 */
+#define     CMPAR2_LCDTY_VAL62      ((uint8_t)0x3E)      /*!< n=62 */
+#define     CMPAR2_LCDTY_VAL63      ((uint8_t)0x3F)      /*!< n=63 */
 
 sfr CMPCR1      =   CMPCR1_ADDR;
 sfr CMPCR2      =   CMPCR2_ADDR;
 
 //! EEPROM peripherals
 /* EEPROM basic address definition */
-#define     IAP_DATA_ADDR   ((uint8_t)0xC2)
-#define     IAP_ADDRH_ADDR  ((uint8_t)0xC3)
-#define     IAP_ADDRL_ADDR  ((uint8_t)0xC4)
-#define     IAP_CMD_ADDR    ((uint8_t)0xC5)
-#define     IAP_TRIG_ADDR   ((uint8_t)0xC6)
-#define     IAP_CONTR_ADDR  ((uint8_t)0xC7)
+#define     IAP_DATA_ADDR           ((uint8_t)0xC2)
+#define     IAP_ADDRH_ADDR          ((uint8_t)0xC3)
+#define     IAP_ADDRL_ADDR          ((uint8_t)0xC4)
+#define     IAP_CMD_ADDR            ((uint8_t)0xC5)
+#define     IAP_TRIG_ADDR           ((uint8_t)0xC6)
+#define     IAP_CONTR_ADDR          ((uint8_t)0xC7)
 
-/* IAP_CONTR offset */
-#define     IAPEN           ((uint8_t)0x80)
-#define     SWBS            ((uint8_t)0x40)
-#define     SWRST           ((uint8_t)0x20)
-#define     CMD_FAIL        ((uint8_t)0x10)
+/* Bit definition for IAP_CONTR register */
+#define     IAP_CONTR_IAPEN         ((uint8_t)0x80)     /*!< EEPROM operation enable control bit: [0], disable; [1], enable */
+#define     IAP_CONTR_SWBS          ((uint8_t)0x40)     /*!< software reset select control bit, (need to be used with SWRST): [0], user code start; [1] ISP monitor space start */
+#define     IAP_CONTR_SWRST         ((uint8_t)0x20)     /*!< software reset control bit: [0], no action; [1], enable software reset */
+#define     IAP_CONTR_CMD_FAIL      ((uint8_t)0x10)     /*!< EEPROM operation failure status bit, requires software reset: [0], right; [1], false */
+
+#define     IAP_CONTR_IAP_WT        ((uint8_t)0x07)     /*!< IAP_WT[2:0], Set the wait time for EEPROM operation */
+#define     IAP_CONTR_IAP_WT_0      ((uint8_t)0x01)     /*!< Bit 0 */
+#define     IAP_CONTR_IAP_WT_1      ((uint8_t)0x02)     /*!< Bit 1 */
+#define     IAP_CONTR_IAP_WT_2      ((uint8_t)0x04)     /*!< Bit 2 */
+
+#define     IAP_CONTR_IAP_WT_VAL7   ((uint8_t)0x07)     /*!< read_t: 2 ticks; write: 7   ticks; erase page: 5k   ticks; clock fq: 1MHz */
+#define     IAP_CONTR_IAP_WT_VAL6   ((uint8_t)0x06)     /*!< read_t: 2 ticks; write: 14  ticks; erase page: 10k  ticks; clock fq: 2MHz */
+#define     IAP_CONTR_IAP_WT_VAL5   ((uint8_t)0x05)     /*!< read_t: 2 ticks; write: 21  ticks; erase page: 15k  ticks; clock fq: 3MHz */
+#define     IAP_CONTR_IAP_WT_VAL4   ((uint8_t)0x04)     /*!< read_t: 2 ticks; write: 42  ticks; erase page: 30k  ticks; clock fq: 6MHz */
+#define     IAP_CONTR_IAP_WT_VAL3   ((uint8_t)0x03)     /*!< read_t: 2 ticks; write: 84  ticks; erase page: 60k  ticks; clock fq: 12MHz */
+#define     IAP_CONTR_IAP_WT_VAL2   ((uint8_t)0x02)     /*!< read_t: 2 ticks; write: 140 ticks; erase page: 100k ticks; clock fq: 20MHz */
+#define     IAP_CONTR_IAP_WT_VAL1   ((uint8_t)0x01)     /*!< read_t: 2 ticks; write: 168 ticks; erase page: 120k ticks; clock fq: 24MHz */
+#define     IAP_CONTR_IAP_WT_VAL0   ((uint8_t)0x00)     /*!< read_t: 2 ticks; write: 301 ticks; erase page: 215k ticks; clock fq: 30MHz */
+
+/* Bit definition for IAP_CMD register */
+#define     IAP_CMD_CMD             ((uint8_t)0x03)     /*!< CMD[1:0], Send EEPROM Operation Command */
+#define     IAP_CMD_CMD_0           ((uint8_t)0x01)     /*!< Bit 0 */
+#define     IAP_CMD_CMD_1           ((uint8_t)0x02)     /*!< Bit 1 */
+
+#define     IAP_CMD_CMD_VAL0        ((uint8_t)0x00)     /*!< nop */
+#define     IAP_CMD_CMD_VAL1        ((uint8_t)0x01)     /*!< read 1 byte at target address */
+#define     IAP_CMD_CMD_VAL2        ((uint8_t)0x02)     /*!< write 1 byte to target address, converting 1 to 0 */
+#define     IAP_CMD_CMD_VAL3        ((uint8_t)0x03)     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
 
 /* IAP special function registers */
 sfr IAP_DATA    =   IAP_DATA_ADDR;
@@ -873,13 +998,61 @@ sfr IAP_CONTR   =   IAP_CONTR_ADDR;
 #define     ADC_RESL_ADDR   ((uint8_t)0xBE)
 #define     ADCCFG_ADDR     ((uint8_t)0xDE)
 
-/* ADC_CONTR offset */
-#define     ADC_POWER       ((uint8_t)0x80)
-#define     ADC_START       ((uint8_t)0x40)
-#define     ADC_FLAG        ((uint8_t)0x20)
+/* Bit definition for ADC_CONTR register */
+#define     ADC_CONTR_ADC_POWER       ((uint8_t)0x80)           /*!< ADC power control: [0], closed; [1], open */
+#define     ADC_CONTR_ADC_START       ((uint8_t)0x40)           /*!< ADC conversion start control: [0], no action; [1], start ADC, auto firmware clearance for this bit */
+#define     ADC_CONTR_ADC_FLAG        ((uint8_t)0x20)           /*!< ADC conversion over flag: firmware set 1 when conversion finished. interupt request sent to CPU. Software reset to 0 needed. */
 
-/* ADCCFG offset */
-#define     ADC_RESFMT      ((uint8_t)0x20)
+#define     ADC_CONTR_ADC_CHS         ((uint8_t)0x0F)           /*!< ADC_CHS[3:0], ADC analog channel selection bits */
+#define     ADC_CONTR_ADC_CHS_0       ((uint8_t)0x01)           /*!< Bit 0 */
+#define     ADC_CONTR_ADC_CHS_1       ((uint8_t)0x02)           /*!< Bit 1 */
+#define     ADC_CONTR_ADC_CHS_2       ((uint8_t)0x04)           /*!< Bit 2 */
+#define     ADC_CONTR_ADC_CHS_3       ((uint8_t)0x08)           /*!< Bit 3 */
+
+#define     ADC_CONTR_ADC_CHS_VAL0    ((uint8_t)0x00)           /*!< P1.0/ADC0 */
+#define     ADC_CONTR_ADC_CHS_VAL1    ((uint8_t)0x01)           /*!< P1.1/ADC1 */
+#define     ADC_CONTR_ADC_CHS_VAL2    ((uint8_t)0x02)           /*!< P1.2/ADC2 */
+#define     ADC_CONTR_ADC_CHS_VAL3    ((uint8_t)0x03)           /*!< P1.3/ADC3 */
+#define     ADC_CONTR_ADC_CHS_VAL4    ((uint8_t)0x04)           /*!< P1.4/ADC4 */
+#define     ADC_CONTR_ADC_CHS_VAL5    ((uint8_t)0x05)           /*!< P1.5/ADC5 */
+#define     ADC_CONTR_ADC_CHS_VAL6    ((uint8_t)0x06)           /*!< P1.6/ADC6 */
+#define     ADC_CONTR_ADC_CHS_VAL7    ((uint8_t)0x07)           /*!< P1.7/ADC7 */
+#define     ADC_CONTR_ADC_CHS_VAL8    ((uint8_t)0x08)           /*!< P0.0/ADC8 */
+#define     ADC_CONTR_ADC_CHS_VAL9    ((uint8_t)0x09)           /*!< P0.1/ADC9 */
+#define     ADC_CONTR_ADC_CHS_VAL10   ((uint8_t)0x0A)           /*!< P0.2/ADC10 */
+#define     ADC_CONTR_ADC_CHS_VAL11   ((uint8_t)0x0B)           /*!< P0.3/ADC11 */
+#define     ADC_CONTR_ADC_CHS_VAL12   ((uint8_t)0x0C)           /*!< P0.4/ADC12 */
+#define     ADC_CONTR_ADC_CHS_VAL13   ((uint8_t)0x0D)           /*!< P0.5/ADC13 */
+#define     ADC_CONTR_ADC_CHS_VAL14   ((uint8_t)0x0E)           /*!< P0.6/ADC14 */
+#define     ADC_CONTR_ADC_CHS_VAL15   ((uint8_t)0x0F)           /*!< REFV */
+
+/* Bit definition for ADCCFG register */
+#define     ADCCFG_ADC_RESFMT         ((uint8_t)0x20)           /*!< ADC conversion result format control bit: [0], align Left; [1], align right */
+
+#define     ADCCFG_SPEED              ((uint8_t)0x0F)           /*!< SPEED[3:0], ADC clock control */
+#define     ADCCFG_SPEED_0            ((uint8_t)0x01)          /*!< Bit 0 */
+#define     ADCCFG_SPEED_1            ((uint8_t)0x02)          /*!< Bit 1 */
+#define     ADCCFG_SPEED_2            ((uint8_t)0x04)          /*!< Bit 2 */
+#define     ADCCFG_SPEED_3            ((uint8_t)0x08)          /*!< Bit 3 */
+
+// F_ADC£½SYSclk/2/16/£¨SPEED[3:0]+1£©
+#define     ADCCFG_SPEED_VAL0         ((uint8_t)0x00)          /*!< SYSCLK tick number: 32 ticks*/
+#define     ADCCFG_SPEED_VAL1         ((uint8_t)0x01)          /*!< SYSCLK tick number: 64 ticks*/
+#define     ADCCFG_SPEED_VAL2         ((uint8_t)0x02)          /*!< SYSCLK tick number: 96 ticks*/
+#define     ADCCFG_SPEED_VAL3         ((uint8_t)0x03)          /*!< SYSCLK tick number: 128 ticks*/
+#define     ADCCFG_SPEED_VAL4         ((uint8_t)0x04)          /*!< SYSCLK tick number: 160 ticks*/
+#define     ADCCFG_SPEED_VAL5         ((uint8_t)0x05)          /*!< SYSCLK tick number: 192 ticks*/
+#define     ADCCFG_SPEED_VAL6         ((uint8_t)0x06)          /*!< SYSCLK tick number: 224 ticks*/
+#define     ADCCFG_SPEED_VAL7         ((uint8_t)0x07)          /*!< SYSCLK tick number: 256 ticks*/
+#define     ADCCFG_SPEED_VAL8         ((uint8_t)0x08)          /*!< SYSCLK tick number: 288 ticks*/
+#define     ADCCFG_SPEED_VAL9         ((uint8_t)0x09)          /*!< SYSCLK tick number: 320 ticks*/
+#define     ADCCFG_SPEED_VAL10        ((uint8_t)0x0A)          /*!< SYSCLK tick number: 352 ticks*/
+#define     ADCCFG_SPEED_VAL11        ((uint8_t)0x0B)          /*!< SYSCLK tick number: 384 ticks*/
+#define     ADCCFG_SPEED_VAL12        ((uint8_t)0x0C)          /*!< SYSCLK tick number: 416 ticks*/
+#define     ADCCFG_SPEED_VAL13        ((uint8_t)0x0D)          /*!< SYSCLK tick number: 448 ticks*/
+#define     ADCCFG_SPEED_VAL14        ((uint8_t)0x0E)          /*!< SYSCLK tick number: 480 ticks*/
+#define     ADCCFG_SPEED_VAL15        ((uint8_t)0x0F)          /*!< SYSCLK tick number: 512 ticks*/
+
 
 /* ADC special function registers */
 sfr ADC_CONTR   =   ADC_CONTR_ADDR;
@@ -910,45 +1083,71 @@ sfr ADCCFG      =   ADCCFG_ADDR;
 #define     PCA_PWM2_ADDR   ((uint8_t)0xF4)
 #define     PCA_PWM3_ADDR   ((uint8_t)0xF5)
 
-/* CMOD offset */
-#define     CIDL            ((uint8_t)0x80)
-#define     ECF             ((uint8_t)0x01)
+/* Bit definition for CMOD register */
+#define     CMOD_CIDL       ((uint8_t)0x80)             /*!< Whether to stop PCA counting in idle mode: [0], continue; [1], stop */
 
-/* CCAPM0 offset */
-#define     ECOM0           ((uint8_t)0x40)
-#define     CCAPP0          ((uint8_t)0x20)
-#define     CCAPN0          ((uint8_t)0x10)
-#define     MAT0            ((uint8_t)0x08)
-#define     TOG0            ((uint8_t)0x04)
-#define     PWM0            ((uint8_t)0x02)
-#define     ECCF0           ((uint8_t)0x01)
+#define     CMOD_CPS        ((uint8_t)0x0E)             /*!< CPS[2:0], PCA counting pulse source selection bit */
+#define     CMOD_CPS_0      ((uint8_t)0x02)             /*!< Bit 0 */
+#define     CMOD_CPS_1      ((uint8_t)0x04)             /*!< Bit 1 */
+#define     CMOD_CPS_2      ((uint8_t)0x08)             /*!< Bit 2 */
 
-/* CCAPM1 offset */
-#define     ECOM1           ((uint8_t)0x40)
-#define     CCAPP1          ((uint8_t)0x20)
-#define     CCAPN1          ((uint8_t)0x10)
-#define     MAT1            ((uint8_t)0x08)
-#define     TOG1            ((uint8_t)0x04)
-#define     PWM1            ((uint8_t)0x02)
-#define     ECCF1           ((uint8_t)0x01)
+#define     CMOD_CPS_SC1    ((uint8_t)0x00)             /*!< SYSCLK/12 */
+#define     CMOD_CPS_SC2    ((uint8_t)0x02)             /*!< SYSCLK/2 */
+#define     CMOD_CPS_SC3    ((uint8_t)0x04)             /*!< Overshoot pulse of Timer T0  */
+#define     CMOD_CPS_SC4    ((uint8_t)0x06)             /*!< ECI pin's external input clock */
+#define     CMOD_CPS_SC5    ((uint8_t)0x08)             /*!< SYSCLK/1 */
+#define     CMOD_CPS_SC6    ((uint8_t)0x0A)             /*!< SYSCLK/4 */
+#define     CMOD_CPS_SC7    ((uint8_t)0x0C)             /*!< SYSCLK/6 */
+#define     CMOD_CPS_SC8    ((uint8_t)0x0E)             /*!< SYSCLK/8 */
 
-/* CCAMP2 offset */
-#define     ECOM2           ((uint8_t)0x40)
-#define     CCAPP2          ((uint8_t)0x20)
-#define     CCAPN2          ((uint8_t)0x10)
-#define     MAT2            ((uint8_t)0x08)
-#define     TOG2            ((uint8_t)0x04)
-#define     PWM2            ((uint8_t)0x02)
-#define     ECCF2           ((uint8_t)0x01)
+#define     CMOD_ECF        ((uint8_t)0x01)             /*!< PCA counter overflow interupt: [0], disable; [1], enable */
 
-/* CCAPM3 offset */
-#define     ECOM3           ((uint8_t)0x40)
-#define     CCAPP3          ((uint8_t)0x20)
-#define     CCAPN3          ((uint8_t)0x10)
-#define     MAT3            ((uint8_t)0x08)
-#define     TOG3            ((uint8_t)0x04)
-#define     PWM3            ((uint8_t)0x02)
-#define     ECCF3           ((uint8_t)0x01)
+/*
+    CCAPPN: allow PCA module N to compare function 
+    CCAPPn: allow PCA module N to do up-edge capture 
+    CCAPNn: allow PCA module N to do down-edge capture 
+    Matn:   allow PCA module N to do matching function 
+    TOGn:   allow PCA module N to do high-speed pulse output function 
+    pwnn:   allow PCA module N to do pulse width modulation output function 
+    ECCFn:  allow PCA module N to do matching/capture interrupt
+ */
+
+
+/* Bit definition for CCAPM0 register */
+#define     CCAPM0_ECOM0           ((uint8_t)0x40)
+#define     CCAPM0_CCAPP0          ((uint8_t)0x20)
+#define     CCAPM0_CCAPN0          ((uint8_t)0x10)
+#define     CCAPM0_MAT0            ((uint8_t)0x08)
+#define     CCAPM0_TOG0            ((uint8_t)0x04)
+#define     CCAPM0_PWM0            ((uint8_t)0x02)
+#define     CCAPM0_ECCF0           ((uint8_t)0x01)
+
+/* Bit definition for CCAPM1 register */
+#define     CCAPM1_ECOM1           ((uint8_t)0x40)
+#define     CCAPM1_CCAPP1          ((uint8_t)0x20)
+#define     CCAPM1_CCAPN1          ((uint8_t)0x10)
+#define     CCAPM1_MAT1            ((uint8_t)0x08)
+#define     CCAPM1_TOG1            ((uint8_t)0x04)
+#define     CCAPM1_PWM1            ((uint8_t)0x02)
+#define     CCAPM1_ECCF1           ((uint8_t)0x01)
+
+/* Bit definition for CCAPM2 register */
+#define     CCAPM2_ECOM2           ((uint8_t)0x40)
+#define     CCAPM2_CCAPP2          ((uint8_t)0x20)
+#define     CCAPM2_CCAPN2          ((uint8_t)0x10)
+#define     CCAPM2_MAT2            ((uint8_t)0x08)
+#define     CCAPM2_TOG2            ((uint8_t)0x04)
+#define     CCAPM2_PWM2            ((uint8_t)0x02)
+#define     CCAPM2_ECCF2           ((uint8_t)0x01)
+
+/* Bit definition for CCAPM3 register */
+#define     CCAPM3_ECOM3           ((uint8_t)0x40)
+#define     CCAPM3_CCAPP3          ((uint8_t)0x20)
+#define     CCAPM3_CCAPN3          ((uint8_t)0x10)
+#define     CCAPM3_MAT3            ((uint8_t)0x08)
+#define     CCAPM3_TOG3            ((uint8_t)0x04)
+#define     CCAPM3_PWM3            ((uint8_t)0x02)
+#define     CCAPM3_ECCF3           ((uint8_t)0x01)
 
 /* PCA special function registers */
 sfr CCON        =   CCON_ADDR;
@@ -972,13 +1171,13 @@ sfr PCA_PWM1    =   PCA_PWM1_ADDR;
 sfr PCA_PWM2    =   PCA_PWM2_ADDR;
 sfr PCA_PWM3    =   PCA_PWM3_ADDR;
 
-/* CCON BITs */
-sbit CF         =   CCON^7;
-sbit CR         =   CCON^6;
-sbit CCF3       =   CCON^3;
-sbit CCF2       =   CCON^2;
-sbit CCF1       =   CCON^1;
-sbit CCF0       =   CCON^0;
+/* Bit definition for CCON register */
+sbit CCON_CF         =   CCON^7;                /*!< PCA counter overflow interupt flag */
+sbit CCON_CR         =   CCON^6;                /*!< PCA counter enabling control bit */
+sbit CCON_CCF3       =   CCON^3;                /*!< CCF3 PCA module interupt flag */
+sbit CCON_CCF2       =   CCON^2;                /*!< CCF2 PCA module interupt flag */
+sbit CCON_CCF1       =   CCON^1;                /*!< CCF1 PCA module interupt flag */
+sbit CCON_CCF0       =   CCON^0;                /*!< CCF0 PCA module interupt flag */
 
 //! PWM peripherals
 /* PWM basic address definition */
@@ -988,6 +1187,10 @@ sbit CCF0       =   CCON^0;
 #define     PWMCR_ADDR      ((uint8_t)0xFE)
 
 #define     PWM_BASE        ((uint16_t)0xFFF0)
+#define     PWMCH_ADDR      (PWM_BASE + 0x0000)
+#define     PWMCL_ADDR      (PWM_BASE + 0x0001)
+#define     PWMCKS_ADDR     (PWM_BASE + 0x0002)
+
 #define     PWM0_BASE       ((uint16_t)0xFF00)
 #define     PWM1_BASE       ((uint16_t)0xFF10)
 #define     PWM2_BASE       ((uint16_t)0xFF20)
@@ -997,14 +1200,9 @@ sbit CCF0       =   CCON^0;
 #define     PWM6_BASE       ((uint16_t)0xFF60)
 #define     PWM7_BASE       ((uint16_t)0xFF70)
 
-#define     PWMC_ADDR       (PWM_BASE + 0x00)
-#define     PWMCH_ADDR      (PWMC_ADDR +  0x00)
-#define     PWMCL_ADDR      (PWMCH_ADDR + 0x01)
-#define     PWMCKS_ADDR     (PWMCL_ADDR + 0x01)
-
-#define     TADCP_ADDR      (PWMCKS_ADDR + 0x01)
-#define     TADCPH_ADDR     (TADCP_ADDR +  0x00)
-#define     TADCPL_ADDR     (TADCPH_ADDR + 0x01)
+#define     TADCP_BASE      ((uint16_t)0xFFF3)
+#define     TADCPH_ADDR     (TADCP_BASE + 0x0000)
+#define     TADCPL_ADDR     (TADCP_BASE + 0x0001)
 
 #define     PWM0T1_ADDR     (PWM0_BASE + 0x00)
 #define     PWM0T1H_ADDR    (PWM0T1_ADDR +  0x00)
@@ -1078,33 +1276,61 @@ sbit CCF0       =   CCON^0;
 #define     PWM7CR_ADDR     (PWM7T2L_ADDR + 0x01)
 #define     PWM7HLD_ADDR    (PWM7CR_ADDR +  0x01)
 
-/* PWMCFG offset */
-#define     CBIF            ((uint8_t)0x80)
-#define     ETADC           ((uint8_t)0x40)
+/* Bit definition for PWMCFG register */
+#define     PWMCFG_CBIF     ((uint8_t)0x80)             /*!< Zero interrupt flag bit for PWM counter overflow happens */
+#define     PWMCFG_ETADC    ((uint8_t)0x40)             /*!< Whether PWM associates with ADC */
 
-/* PWMIF offset */
-#define     C7IF            ((uint8_t)0x80)
-#define     C6IF            ((uint8_t)0x40)
-#define     C5IF            ((uint8_t)0x20)
-#define     C4IF            ((uint8_t)0x10)
-#define     C3IF            ((uint8_t)0x08)
-#define     C2IF            ((uint8_t)0x04)
-#define     C1IF            ((uint8_t)0x02)
-#define     C0IF            ((uint8_t)0x01)
+/* Bit definition for PWMIF register */
+#define     PWMIF_C7IF      ((uint8_t)0x80)             /*!< Interrupt flag bit for channel 7 PWM */
+#define     PWMIF_C6IF      ((uint8_t)0x40)             /*!< Interrupt flag bit for channel 6 PWM */
+#define     PWMIF_C5IF      ((uint8_t)0x20)             /*!< Interrupt flag bit for channel 5 PWM */
+#define     PWMIF_C4IF      ((uint8_t)0x10)             /*!< Interrupt flag bit for channel 4 PWM */
+#define     PWMIF_C3IF      ((uint8_t)0x08)             /*!< Interrupt flag bit for channel 3 PWM */
+#define     PWMIF_C2IF      ((uint8_t)0x04)             /*!< Interrupt flag bit for channel 2 PWM */
+#define     PWMIF_C1IF      ((uint8_t)0x02)             /*!< Interrupt flag bit for channel 1 PWM */
+#define     PWMIF_C0IF      ((uint8_t)0x01)             /*!< Interrupt flag bit for channel 0 PWM */
 
-/* PWMFDCR offset */
-#define     INVCMP          ((uint8_t)0x80)
-#define     INVIO           ((uint8_t)0x40)
-#define     ENFD            ((uint8_t)0x20)
-#define     FLTFLIO         ((uint8_t)0x10)
-#define     EFDI            ((uint8_t)0x08)
-#define     FDCMP           ((uint8_t)0x04)
-#define     FDIO            ((uint8_t)0x02)
-#define     FDIF            ((uint8_t)0x01)
+/* Bit definition for PWMFDCR register */
+#define     PWMFDCR_INVCMP  ((uint8_t)0x80)             /*!< Abnormal signal processing of comparator result: [0] low to high abnormal signal; [1], high to low abnormal signal */
+#define     PWMFDCR_INVIO   ((uint8_t)0x40)             /*!< external port P3.5 abnormal signal processing: [0] low to high abnormal signal; [1], high to low abnormal signal*/
+#define     PWMFDCR_ENFD    ((uint8_t)0x20)             /*!< PWM external abnormal detection control bit: [0], disable; [1], enable */
+#define     PWMFDCR_FLTFLIO ((uint8_t)0x10)             /*!< Control bit of PWM output port when external PWM abnormity occurs: [0], no action; [1], high impedance */
+#define     PWMFDCR_EFDI    ((uint8_t)0x08)             /*!< PWM abnormal detection interrupt enabling bit: [0], disable; [1], enable */
+#define     PWMFDCR_FDCMP   ((uint8_t)0x04)             /*!< Comparator output anomaly detection enable bit: [0], comparator is unrelative with PWM; [1], Set the PWM abnormal detection source as the comparator output */
+#define     PWMFDCR_FDIO    ((uint8_t)0x02)             /*!< P3.5 port level anomaly detection enable bit: [0], P3.5 port level is PWM Independent; [1], Set the abnormal detection source of PWM to P3.5 port */
+#define     PWMFDCR_FDIF    ((uint8_t)0x01)             /*!< Abnormal PWM detection interrupt flag bit */
 
-/* PWMCR offset */
-#define     ENPWM           ((uint8_t)0x80)
-#define     ECBI            ((uint8_t)0x40)
+/* Bit definition for PWMCR register */
+#define     PWMCR_ENPWM     ((uint8_t)0x80)             /*!< Enable enhanced PWM waveform generator: [0], disable; [1], enable */
+#define     PWMCR_ECBI      ((uint8_t)0x40)             /*!< PWM counter zeroing interrupt enable bit: [0], disable; [1], enable */
+
+/* Bit definition for PWMCKS register */
+#define     PWMCKS_SELT2    ((uint8_t)0x0F)             /*!< PWM clock source selection: [0], PWM clock source is the system clock frequency divider after the clock; [1], The PWM clock source is the overflow pulse of Timer 2 */
+
+// If SELT2=1, the following setting will be invalid.
+#define     PWMCKS_PWM_PS    ((uint8_t)0x0F)             /*!< PWM_PS[3:0], System clock pre-frequency parameter */
+#define     PWMCKS_PWM_PS_0  ((uint8_t)0x01)             /*!< Bit 0 */
+#define     PWMCKS_PWM_PS_1  ((uint8_t)0x02)             /*!< Bit 1 */
+#define     PWMCKS_PWM_PS_2  ((uint8_t)0x04)             /*!< Bit 2 */
+#define     PWMCKS_PWM_PS_3  ((uint8_t)0x08)             /*!< Bit 3 */
+
+#define     PWMCKS_PWM_PS_SCLK_DIV1     ((uint8_t)0x00)  /*!< pre-frequency = SCLK/1 */
+#define     PWMCKS_PWM_PS_SCLK_DIV2     ((uint8_t)0x01)  /*!< pre-frequency = SCLK/2 */
+#define     PWMCKS_PWM_PS_SCLK_DIV3     ((uint8_t)0x02)  /*!< pre-frequency = SCLK/3 */
+#define     PWMCKS_PWM_PS_SCLK_DIV4     ((uint8_t)0x03)  /*!< pre-frequency = SCLK/4 */
+#define     PWMCKS_PWM_PS_SCLK_DIV5     ((uint8_t)0x04)  /*!< pre-frequency = SCLK/5 */
+#define     PWMCKS_PWM_PS_SCLK_DIV6     ((uint8_t)0x05)  /*!< pre-frequency = SCLK/6 */
+#define     PWMCKS_PWM_PS_SCLK_DIV7     ((uint8_t)0x06)  /*!< pre-frequency = SCLK/7 */
+#define     PWMCKS_PWM_PS_SCLK_DIV8     ((uint8_t)0x07)  /*!< pre-frequency = SCLK/8 */
+#define     PWMCKS_PWM_PS_SCLK_DIV9     ((uint8_t)0x08)  /*!< pre-frequency = SCLK/9 */
+#define     PWMCKS_PWM_PS_SCLK_DIV10    ((uint8_t)0x09)  /*!< pre-frequency = SCLK/10 */
+#define     PWMCKS_PWM_PS_SCLK_DIV11    ((uint8_t)0x0A)  /*!< pre-frequency = SCLK/11 */
+#define     PWMCKS_PWM_PS_SCLK_DIV12    ((uint8_t)0x0B)  /*!< pre-frequency = SCLK/12 */
+#define     PWMCKS_PWM_PS_SCLK_DIV13    ((uint8_t)0x0C)  /*!< pre-frequency = SCLK/13 */
+#define     PWMCKS_PWM_PS_SCLK_DIV14    ((uint8_t)0x0D)  /*!< pre-frequency = SCLK/14 */
+#define     PWMCKS_PWM_PS_SCLK_DIV15    ((uint8_t)0x0E)  /*!< pre-frequency = SCLK/15 */
+#define     PWMCKS_PWM_PS_SCLK_DIV16    ((uint8_t)0x0F)  /*!< pre-frequency = SCLK/16 */
+
 
 /* PWM special function registers */
 sfr PWMCFG      =   PWMCFG_ADDR;
@@ -1112,18 +1338,18 @@ sfr PWMIF       =   PWMIF_ADDR;
 sfr PWMFDCR     =   PWMFDCR_ADDR;
 sfr PWMCR       =   PWMCR_ADDR;
 
-#define     PWMC            ((__IO uint16_t xdata *) PWMC_ADDR)
+#define     PWM             ((__IO uint16_t xdata *) PWM_BASE)
 #define     PWMCH           ((__IO uint8_t xdata *)  PWMCH_ADDR)
 #define     PWMCL           ((__IO uint8_t xdata *)  PWMCL_ADDR)
 #define     PWMCKS          ((__IO uint8_t xdata *)  PWMCKS_ADDR)
-#define     TADCP           ((__IO uint8_t xdata *)  TADCP_ADDR)
+#define     TADCP           ((__IO uint8_t xdata *)  TADCP_BASE)
 #define     TADCPH          ((__IO uint8_t xdata *)  TADCPH_ADDR)
 #define     TADCPL          ((__IO uint8_t xdata *)  TADCPL_ADDR)
 
-#define     PWMxT1(PWMxT1_ADDR)      ( *(__IO uint16_t xdata *) PWMxT1_ADDR)
-#define     PWMxT2(PWMxT2_ADDR)      ( *(__IO uint16_t xdata *) PWMxT2_ADDR)
-#define     PWMxCR(PWMxCR_ADDR)      ( *(__IO uint8_t  xdata *) PWMxCR_ADDR)
-#define     PWMxHLD(PWMxHLD_ADDR)    ( *(__IO uint8_t  xdata *)PWMxHLD_ADDR)
+#define     PWMxT1(PWMxT1_ADDR)      ((__IO uint16_t xdata *) PWMxT1_ADDR)
+#define     PWMxT2(PWMxT2_ADDR)      ((__IO uint16_t xdata *) PWMxT2_ADDR)
+#define     PWMxCR(PWMxCR_ADDR)      ( (__IO uint8_t xdata *) PWMxCR_ADDR)
+#define     PWMxHLD(PWMxHLD_ADDR)    ( (__IO uint8_t xdata *) PWMxHLD_ADDR)
 
 #define     PWM0T1          ((__IO uint16_t xdata *) PWM0T1_ADDR)
 #define     PWM0T1H         ((__IO uint8_t xdata *) PWM0T1H_ADDR)
@@ -1203,17 +1429,27 @@ sfr PWMCR       =   PWMCR_ADDR;
 #define     SPCTL_ADDR      ((uint8_t)0xCE
 #define     SPDAT_ADDR      ((uint8_t)0xCF
 
-/* Bit definition for SPSTAT */
-#define     SPIF            ((uint8_t)0x80
-#define     WCOL            ((uint8_t)0x40
+/* Bit definition for SPSTAT register */
+#define     SPSTAT_SPIF     ((uint8_t)0x80              /*!< SPI interupt flag bit */
+#define     SPSTAT_WCOL     ((uint8_t)0x40              /*!< SPI writing confliction flag bit */
 
-/* SPCTL offset */
-#define     SSIG            ((uint8_t)0x80
-#define     SPEN            ((uint8_t)0x40
-#define     DORD            ((uint8_t)0x20
-#define     MSTR            ((uint8_t)0x10
-#define     CPOL            ((uint8_t)0x08
-#define     CPHA            ((uint8_t)0x04
+/* Bit definition for SPCTL register */
+#define     SPCTL_SSIG      ((uint8_t)0x80              /*!< SS fucntion selection: [0], use SS to determine slave or master; [1], use MSTR rather than SS */
+#define     SPCTL_SPEN      ((uint8_t)0x40              /*!< SPI enabling control bit */
+#define     SPCTL_DORD      ((uint8_t)0x20              /*!< SPI data sending/receiving order: [0], MSB; [1], LSB */
+#define     SPCTL_MSTR      ((uint8_t)0x10              /*!< device mater or slave mode selection: [MASTER], SSIG=0, SS pin high, MSTR=1; SSIG=1, MSTR=1; [SLAVE], SSIG=0, SS pin low; SSIG=1, MSTR=0 */
+#define     SPCTL_CPOL      ((uint8_t)0x08              /*!< SPI clock polarity control: [0] Sclk Idle Time is low level, SCLK front clock edge for the rising edge, after the clock edge for the falling edge; [1], Sclk idle time for high-level, SCLK front clock edge for the down edge, after the clock edge for the rising edge */
+#define     SPCTL_CPHA      ((uint8_t)0x04              /*!< SPI clock phase control: [0], The data SS pin drives the first bit data for the low level and changes the data at the SCLK's back clock edge, and the front clock edge samples the data (must be SSIG = 0); [1], Data is sampled along the front clock edge of SCLK and the back clock edge */
+
+#define     SPCTL_SPR       ((uint8_t)0x03)             /*!< SPR[1:0], SPI clock frequency selection */
+#define     SPCTL_SPR_0     ((uint8_t)0x01)             /*!< Bit 0 */
+#define     SPCTL_SPR_1     ((uint8_t)0x02)             /*!< Bit 1 */
+
+#define     SPCTL_SPR_SCLK_DIV4     ((uint8_t)0x00)     /*!< SYSCLK/4 */
+#define     SPCTL_SPR_SCLK_DIV8     ((uint8_t)0x01)     /*!< SYSCLK/8 */
+#define     SPCTL_SPR_SCLK_DIV16    ((uint8_t)0x02)     /*!< SYSCLK/16 */
+#define     SPCTL_SPR_SCLK_DIV32    ((uint8_t)0x03)     /*!< SYSCLK/32 */
+
 
 /* SPI special function registers */
 sfr SPSTAT      =   SPSTAT_ADDR;
@@ -1222,47 +1458,144 @@ sfr SPDAT       =   SPDAT_ADDR;
 
 
 //! I2C peripherals
+/* Basic address */
+#define     I2C_BASE        ((uint16_t)0xFE80)
+#define     I2CCFG_ADDR     (I2C_BASE + 0x0000)
+#define     I2CMSCR_ADDR    (I2C_BASE + 0x0001)
+#define     I2CMSST_ADDR    (I2C_BASE + 0x0002)
+#define     I2CSLCR_ADDR    (I2C_BASE + 0x0003)
+#define     I2CSLST_ADDR    (I2C_BASE + 0x0004)
+#define     I2CSLADR_ADDR   (I2C_BASE + 0x0005)
+#define     I2CTXD_ADDR     (I2C_BASE + 0x0006)
+#define     I2CRXD_ADDR     (I2C_BASE + 0x0007)
+#define     I2CMSAUX_ADDR   (I2C_BASE + 0x0008)
 
-/* Base address */
-#define     I2C_BASE         ((uint8_t)0xFE80)
-#define     I2CCFG_ADDR   (I2C_BASE + 0x00U)
-#define     I2CMSCR_ADDR  (I2C_BASE + 0x01U)
-#define     I2CMSST_ADDR  (I2C_BASE + 0x02U)
-#define     I2CSLCR_ADDR  (I2C_BASE + 0x03U)
-#define     I2CSLST_ADDR  (I2C_BASE + 0x04U)
-#define     I2CSLADR_ADDR (I2C_BASE + 0x05U)
-#define     I2CTXD_ADDR   (I2C_BASE + 0x06U)
-#define     I2CRXD_ADDR   (I2C_BASE + 0x07U)
+/* Bit definition for I2CCFG register */
+// The wait parameter set by the MSSPEED parameter is valid only if the I2C module is working in host mode.
+#define     I2CCFG_ENI2C    ((uint8_t)0x80)             /*!< I2C fucntion enablling control bit: [0], disable; [1], enable */
+#define     I2CCFG_MSSL     ((uint8_t)0x40)             /*!< I2C fucntion selection: [0], slave; [1], master */
 
-/* I2CCFG */
-#define     ENI2C           ((uint8_t)0x80)
-#define     MSSL            ((uint8_t)0x40)
+#define     I2CCFG_MSSPEED            ((uint8_t)0x3F)       /*!< MSSPEED[5:0], I2C bus speed control (waiting ticks) I2C_speed = Fosc/2/(MSSPEED * 2 + 4)*/
+#define     I2CCFG_MSSPEED_0          ((uint8_t)0x01)       /*!< Bit 0 */
+#define     I2CCFG_MSSPEED_1          ((uint8_t)0x02)       /*!< Bit 1 */
+#define     I2CCFG_MSSPEED_2          ((uint8_t)0x04)       /*!< Bit 2 */
+#define     I2CCFG_MSSPEED_3          ((uint8_t)0x08)       /*!< Bit 3 */
+#define     I2CCFG_MSSPEED_4          ((uint8_t)0x10)       /*!< Bit 4 */
+#define     I2CCFG_MSSPEED_5          ((uint8_t)0x20)       /*!< Bit 5 */
 
-/* I2CMSCR offset */
-#define     EMSI            ((uint8_t)0x80)
+#define     I2CCFG_MSSPEED_VAL0       ((uint8_t)0x00)      /*!< tick_n=0+4 */
+#define     I2CCFG_MSSPEED_VAL1       ((uint8_t)0x01)      /*!< tick_n=1+4 */
+#define     I2CCFG_MSSPEED_VAL2       ((uint8_t)0x02)      /*!< tick_n=2+4 */
+#define     I2CCFG_MSSPEED_VAL3       ((uint8_t)0x03)      /*!< tick_n=3+4 */
+#define     I2CCFG_MSSPEED_VAL4       ((uint8_t)0x04)      /*!< tick_n=4+4 */
+#define     I2CCFG_MSSPEED_VAL5       ((uint8_t)0x05)      /*!< tick_n=5+4 */
+#define     I2CCFG_MSSPEED_VAL6       ((uint8_t)0x06)      /*!< tick_n=6+4 */
+#define     I2CCFG_MSSPEED_VAL7       ((uint8_t)0x07)      /*!< tick_n=7+4 */
+#define     I2CCFG_MSSPEED_VAL8       ((uint8_t)0x08)      /*!< tick_n=8+4 */
+#define     I2CCFG_MSSPEED_VAL9       ((uint8_t)0x09)      /*!< tick_n=9+4 */
+#define     I2CCFG_MSSPEED_VAL10      ((uint8_t)0x0A)      /*!< tick_n=10+4 */
+#define     I2CCFG_MSSPEED_VAL11      ((uint8_t)0x0B)      /*!< tick_n=11+4 */
+#define     I2CCFG_MSSPEED_VAL12      ((uint8_t)0x0C)      /*!< tick_n=12+4 */
+#define     I2CCFG_MSSPEED_VAL13      ((uint8_t)0x0D)      /*!< tick_n=13+4 */
+#define     I2CCFG_MSSPEED_VAL14      ((uint8_t)0x0E)      /*!< tick_n=14+4 */
+#define     I2CCFG_MSSPEED_VAL15      ((uint8_t)0x0F)      /*!< tick_n=15+4 */
+#define     I2CCFG_MSSPEED_VAL16      ((uint8_t)0x10)      /*!< tick_n=16+4 */
+#define     I2CCFG_MSSPEED_VAL17      ((uint8_t)0x11)      /*!< tick_n=17+4 */
+#define     I2CCFG_MSSPEED_VAL18      ((uint8_t)0x12)      /*!< tick_n=18+4 */
+#define     I2CCFG_MSSPEED_VAL19      ((uint8_t)0x13)      /*!< tick_n=19+4 */
+#define     I2CCFG_MSSPEED_VAL20      ((uint8_t)0x14)      /*!< tick_n=20+4 */
+#define     I2CCFG_MSSPEED_VAL21      ((uint8_t)0x15)      /*!< tick_n=21+4 */
+#define     I2CCFG_MSSPEED_VAL22      ((uint8_t)0x16)      /*!< tick_n=22+4 */
+#define     I2CCFG_MSSPEED_VAL23      ((uint8_t)0x17)      /*!< tick_n=23+4 */
+#define     I2CCFG_MSSPEED_VAL24      ((uint8_t)0x18)      /*!< tick_n=24+4 */
+#define     I2CCFG_MSSPEED_VAL25      ((uint8_t)0x19)      /*!< tick_n=25+4 */
+#define     I2CCFG_MSSPEED_VAL26      ((uint8_t)0x1A)      /*!< tick_n=26+4 */
+#define     I2CCFG_MSSPEED_VAL27      ((uint8_t)0x1B)      /*!< tick_n=27+4 */
+#define     I2CCFG_MSSPEED_VAL28      ((uint8_t)0x1C)      /*!< tick_n=28+4 */
+#define     I2CCFG_MSSPEED_VAL29      ((uint8_t)0x1D)      /*!< tick_n=29+4 */
+#define     I2CCFG_MSSPEED_VAL30      ((uint8_t)0x1E)      /*!< tick_n=30+4 */
+#define     I2CCFG_MSSPEED_VAL31      ((uint8_t)0x1F)      /*!< tick_n=31+4 */
+#define     I2CCFG_MSSPEED_VAL32      ((uint8_t)0x20)      /*!< tick_n=32+4 */
+#define     I2CCFG_MSSPEED_VAL33      ((uint8_t)0x21)      /*!< tick_n=33+4 */
+#define     I2CCFG_MSSPEED_VAL34      ((uint8_t)0x22)      /*!< tick_n=34+4 */
+#define     I2CCFG_MSSPEED_VAL35      ((uint8_t)0x23)      /*!< tick_n=35+4 */
+#define     I2CCFG_MSSPEED_VAL36      ((uint8_t)0x24)      /*!< tick_n=36+4 */
+#define     I2CCFG_MSSPEED_VAL37      ((uint8_t)0x25)      /*!< tick_n=37+4 */
+#define     I2CCFG_MSSPEED_VAL38      ((uint8_t)0x26)      /*!< tick_n=38+4 */
+#define     I2CCFG_MSSPEED_VAL39      ((uint8_t)0x27)      /*!< tick_n=39+4 */
+#define     I2CCFG_MSSPEED_VAL40      ((uint8_t)0x28)      /*!< tick_n=40+4 */
+#define     I2CCFG_MSSPEED_VAL41      ((uint8_t)0x29)      /*!< tick_n=41+4 */
+#define     I2CCFG_MSSPEED_VAL42      ((uint8_t)0x2A)      /*!< tick_n=42+4 */
+#define     I2CCFG_MSSPEED_VAL43      ((uint8_t)0x2B)      /*!< tick_n=43+4 */
+#define     I2CCFG_MSSPEED_VAL44      ((uint8_t)0x2C)      /*!< tick_n=44+4 */
+#define     I2CCFG_MSSPEED_VAL45      ((uint8_t)0x2D)      /*!< tick_n=45+4 */
+#define     I2CCFG_MSSPEED_VAL46      ((uint8_t)0x2E)      /*!< tick_n=46+4 */
+#define     I2CCFG_MSSPEED_VAL47      ((uint8_t)0x2F)      /*!< tick_n=47+4 */
+#define     I2CCFG_MSSPEED_VAL48      ((uint8_t)0x30)      /*!< tick_n=48+4 */
+#define     I2CCFG_MSSPEED_VAL49      ((uint8_t)0x31)      /*!< tick_n=49+4 */
+#define     I2CCFG_MSSPEED_VAL50      ((uint8_t)0x32)      /*!< tick_n=50+4 */
+#define     I2CCFG_MSSPEED_VAL51      ((uint8_t)0x33)      /*!< tick_n=51+4 */
+#define     I2CCFG_MSSPEED_VAL52      ((uint8_t)0x34)      /*!< tick_n=52+4 */
+#define     I2CCFG_MSSPEED_VAL53      ((uint8_t)0x35)      /*!< tick_n=53+4 */
+#define     I2CCFG_MSSPEED_VAL54      ((uint8_t)0x36)      /*!< tick_n=54+4 */
+#define     I2CCFG_MSSPEED_VAL55      ((uint8_t)0x37)      /*!< tick_n=55+4 */
+#define     I2CCFG_MSSPEED_VAL56      ((uint8_t)0x38)      /*!< tick_n=56+4 */
+#define     I2CCFG_MSSPEED_VAL57      ((uint8_t)0x39)      /*!< tick_n=57+4 */
+#define     I2CCFG_MSSPEED_VAL58      ((uint8_t)0x3A)      /*!< tick_n=58+4 */
+#define     I2CCFG_MSSPEED_VAL59      ((uint8_t)0x3B)      /*!< tick_n=59+4 */
+#define     I2CCFG_MSSPEED_VAL60      ((uint8_t)0x3C)      /*!< tick_n=60+4 */
+#define     I2CCFG_MSSPEED_VAL61      ((uint8_t)0x3D)      /*!< tick_n=61+4 */
+#define     I2CCFG_MSSPEED_VAL62      ((uint8_t)0x3E)      /*!< tick_n=62+4 */
+#define     I2CCFG_MSSPEED_VAL63      ((uint8_t)0x3F)      /*!< tick_n=63+4 */
 
-/* I2CMSST offset */
-#define     MSBUSY          ((uint8_t)0x80)
-#define     MSIF            ((uint8_t)0x40)
-#define     MSACKI          ((uint8_t)0x02)
-#define     MSACKO          ((uint8_t)0x01)
 
-/* I2CSLCR offset */
-#define     ESTAI           ((uint8_t)0x40)
-#define     ERXI            ((uint8_t)0x20)
-#define     ETXI            ((uint8_t)0x10)
-#define     ESTOI           ((uint8_t)0x08)
-#define     SLRST           ((uint8_t)0x01)
+/* Bit definition for I2CMSCR register */
+#define     I2CMSCR_EMSI        ((uint8_t)0x80)             /*!< master mode interupt enabling control bit */
 
-/* I2CSLST offset */
-#define     SLBUSY          ((uint8_t)0x80)
-#define     STAIF           ((uint8_t)0x40)
-#define     RXIF            ((uint8_t)0x20)
-#define     TXIF            ((uint8_t)0x10)
-#define     STOIF           ((uint8_t)0x08)
-#define     TXING           ((uint8_t)0x04)
-#define     SLACKI          ((uint8_t)0x02)
-#define     SLACKO          ((uint8_t)0x01)
+#define     I2CMSCR_MSCMD       ((uint8_t)0x0F)             /*!< MSCMD[3:0], master command */
+#define     I2CMSCR_MSCMD_0     ((uint8_t)0x01)             /*!< Bit 0 */
+#define     I2CMSCR_MSCMD_1     ((uint8_t)0x02)             /*!< Bit 1 */
+#define     I2CMSCR_MSCMD_2     ((uint8_t)0x04)             /*!< Bit 2 */
+#define     I2CMSCR_MSCMD_3     ((uint8_t)0x08)             /*!< Bit 3 */
+
+#define     I2CMSCR_MSCMD_IDLE      ((uint8_t)0x00)             /*!< idle, no action */
+#define     I2CMSCR_MSCMD_START     ((uint8_t)0x01)             /*!< start command */
+#define     I2CMSCR_MSCMD_SEND_DATA ((uint8_t)0x02)             /*!< send data command */
+#define     I2CMSCR_MSCMD_RECV_ACK  ((uint8_t)0x03)             /*!< receive ACK command */
+#define     I2CMSCR_MSCMD_RECV_DATA ((uint8_t)0x04)             /*!< receive data command */
+#define     I2CMSCR_MSCMD_SEND_ACK  ((uint8_t)0x05)             /*!< send ACK command */
+#define     I2CMSCR_MSCMD_STOP      ((uint8_t)0x06)             /*!< stop command */
+#define     I2CMSCR_MSCMD_SSDRACK   ((uint8_t)0x09)             /*!< Start Command + SEND Data Command + receive ACK command */
+#define     I2CMSCR_MSCMD_SDRACK    ((uint8_t)0x0A)             /*!< Send Data Command + receive ACK command */
+#define     I2CMSCR_MSCMD_RDSACK0   ((uint8_t)0x0B)             /*!< Receive Data Command + send ACK (0) command */
+#define     I2CMSCR_MSCMD_RDSNAK1   ((uint8_t)0x0C)             /*!< Receive Data Command + send NAK (1) command. */
+
+/* Bit definition for I2CMSST register */
+#define     I2CMSST_MSBUSY          ((uint8_t)0x80)             /*!< I2C control bit on master mode. [0], idle; [1], busy(READ ONLY) */
+#define     I2CMSST_MSIF            ((uint8_t)0x40)             /*!< master mode interrupt request bit (interrupt flag bit)) */
+#define     I2CMSST_MSACKI          ((uint8_t)0x02)             /*!< master mode, ACK received after '0011' command sent to I2CMSCR-MSCMD */
+#define     I2CMSST_MSACKO          ((uint8_t)0x01)             /*!< master mode, ACK signal wait to be sent */
+
+/* Bit definition for I2CSLCR register ([0], disable; [1], enable)*/
+#define     I2CSLCR_ESTAI           ((uint8_t)0x40)             /*!< The START signal interrupt permission bit is received from the slave mode */
+#define     I2CSLCR_ERXI            ((uint8_t)0x20)             /*!< Interrupt allowed bit after receiving 1 byte data from slave mode */
+#define     I2CSLCR_ETXI            ((uint8_t)0x10)             /*!< Interrupt allowed bit after sending 1 byte data from slave mode */
+#define     I2CSLCR_ESTOI           ((uint8_t)0x08)             /*!< Receive STOP signal interrupt permission bit from slave mode */
+#define     I2CSLCR_SLRST           ((uint8_t)0x01)             /*!< Reset slave mode */
+
+/* Bit definition for I2CSLST register */
+#define     I2CSLST_SLBUSY          ((uint8_t)0x80)             /*!< slave mode interupt enabling control bit */
+#define     I2CSLST_STAIF           ((uint8_t)0x40)             /*!< The interrupt request bit after the START signal is received from slave mode. */
+#define     I2CSLST_RXIF            ((uint8_t)0x20)             /*!< Interrupt request bit after receiving 1 byte of data from slave mode */
+#define     I2CSLST_TXIF            ((uint8_t)0x10)             /*!< Interrupt request bit after 1 byte of data has been sent from slave mode */
+#define     I2CSLST_STOIF           ((uint8_t)0x08)             /*!< The interrupt request bit after the STOP signal is received from slave mode */
+// #define     I2CSLST_TXING           ((uint8_t)0x04)             
+#define     I2CSLST_SLACKI          ((uint8_t)0x02)             /*!< ACK data received when in slave mode */
+#define     I2CSLST_SLACKO          ((uint8_t)0x01)             /*!< ACK signal to be sent on slave mode */
+
+/* Bit definition for I2CMSAUX register */
+#define     I2CMSAUX_WDTA           ((uint8_t)0x01)             /*!< I2C data is automatically sent in master mode allowing bits */
+
 
 /* I2C special function registers */
 #define     I2CCFG          ((__IO uint8_t xdata *) I2CCFG_ADDR)
@@ -1273,6 +1606,7 @@ sfr SPDAT       =   SPDAT_ADDR;
 #define     I2CSLADR        ((__IO uint8_t xdata *) I2CSLADR_ADDR)
 #define     I2CTXD          ((__IO uint8_t xdata *) I2CTXD_ADDR)
 #define     I2CRXD          ((__IO uint8_t xdata *) I2CRXD_ADDR)
+#define     I2CMSAUX        ((__IO uint8_t xdata *) I2CMSAUX_ADDR)
 
 
 /** @} */
