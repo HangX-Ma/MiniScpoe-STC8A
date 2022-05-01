@@ -39,7 +39,7 @@
  * @{
  */
 
-/** @defgroup Core
+/** @defgroup configuration
  * @{
  */
 
@@ -565,6 +565,15 @@ sbit P77        =   P7^7;
 #define     P6NCS       ((__IO uint8_t xdata *) P7NCS_ADDR)            // Extended SFR
 #define     P7NCS       ((__IO uint8_t xdata *) P8NCS_ADDR)            // Extended SFR
 
+#define GPIO_Px(x)  (P##x)
+#define Px_M1(x) 	(P##x##M1)
+#define Px_M0(x) 	(P##x##M0)
+#define Px_PU(x)    (P##x##PU)
+#define Px_SR(x)    (P##x##SR)
+#define Px_DR(x)    (P##x##DR)
+#define Px_IE(x)    (P##x##IE)
+#define Px_NCS(x)   (P##x##NCS)
+
 //! ISR peripherals
 /* ISR basic address definition */
 #define    IE_ADDR                      ((uint8_t)0xA8)
@@ -580,13 +589,13 @@ sbit P77        =   P7^7;
 #define    AUXINTIF_ADDR                ((uint8_t)0xEF)
 
 /* Bit definition for IE2 registers [0] off; [1] on */
-#define     IE2_ET4         ((uint8_t)0x40)             /*!< Timer T4 overflow interupt enabling bit */
-#define     IE2_ET3         ((uint8_t)0x20)             /*!< Timer T3 overflow interupt enabling bit */
-#define     IE2_ES4         ((uint8_t)0x10)             /*!< serial port S4 interupt enabling bit */
-#define     IE2_ES3         ((uint8_t)0x08)             /*!< serial port S3 interupt enabling bit */
-#define     IE2_ET2         ((uint8_t)0x04)             /*!< Timer T2 overflow interupt enabling bit */
-#define     IE2_ESPI        ((uint8_t)0x02)             /*!< SPI interupt enabling bit */
-#define     IE2_ES2         ((uint8_t)0x01)             /*!< serial port S2 interupt enabling bit */
+#define     IE2_ET4         ((uint8_t)0x40)             /*!< Timer T4 overflow interrupt enabling bit */
+#define     IE2_ET3         ((uint8_t)0x20)             /*!< Timer T3 overflow interrupt enabling bit */
+#define     IE2_ES4         ((uint8_t)0x10)             /*!< serial port S4 interrupt enabling bit */
+#define     IE2_ES3         ((uint8_t)0x08)             /*!< serial port S3 interrupt enabling bit */
+#define     IE2_ET2         ((uint8_t)0x04)             /*!< Timer T2 overflow interrupt enabling bit */
+#define     IE2_ESPI        ((uint8_t)0x02)             /*!< SPI interrupt enabling bit */
+#define     IE2_ES2         ((uint8_t)0x01)             /*!< serial port S2 interrupt enabling bit */
 
 /* Bit definition for IP registers */
 #define     IP_PPCA         ((uint8_t)0x80)
@@ -757,14 +766,14 @@ sfr T2H         =   T2H_ADDR;                       //!< Timer T2 high 8 bytes r
 sfr T2L         =   T2L_ADDR;                       //!< Timer T2 low 8 bytes regiseter
 
 /* Bit definition for TCON register */
-sbit TCON_TF1        =   TCON^7;                         /*!< timer T1 overflow interupt flag */
+sbit TCON_TF1        =   TCON^7;                         /*!< timer T1 overflow interrupt flag */
 sbit TCON_TR1        =   TCON^6;                         /*!< timer T1 running enabling control flag */
-sbit TCON_TF0        =   TCON^5;                         /*!< timer T0 overflow interupt flag */
+sbit TCON_TF0        =   TCON^5;                         /*!< timer T0 overflow interrupt flag */
 sbit TCON_TR0        =   TCON^4;                         /*!< timer T0 running enabling control flag */
-sbit TCON_IE1        =   TCON^3;                         /*!< external interupt 1 request flag */
-sbit TCON_IT1        =   TCON^2;                         /*!< external interupt 1 trigger ways selection bit */
-sbit TCON_IE0        =   TCON^1;                         /*!< external interupt 0 request flag */
-sbit TCON_IT0        =   TCON^0;                         /*!< external interupt 0 trigger ways selection bit */
+sbit TCON_IE1        =   TCON^3;                         /*!< external interrupt 1 request flag */
+sbit TCON_IT1        =   TCON^2;                         /*!< external interrupt 1 trigger ways selection bit */
+sbit TCON_IE0        =   TCON^1;                         /*!< external interrupt 0 request flag */
+sbit TCON_IT0        =   TCON^0;                         /*!< external interrupt 0 trigger ways selection bit */
 
 //! UART peripherals
 /**
@@ -1037,7 +1046,7 @@ typedef struct {
 /* Bit definition for ADC_CONTR register */
 #define     ADC_CONTR_ADC_POWER       ((uint8_t)0x80)           /*!< ADC power control: [0], closed; [1], open */
 #define     ADC_CONTR_ADC_START       ((uint8_t)0x40)           /*!< ADC conversion start control: [0], no action; [1], start ADC, auto firmware clearance for this bit */
-#define     ADC_CONTR_ADC_FLAG        ((uint8_t)0x20)           /*!< ADC conversion over flag: firmware set 1 when conversion finished. interupt request sent to CPU. Software reset to 0 needed. */
+#define     ADC_CONTR_ADC_FLAG        ((uint8_t)0x20)           /*!< ADC conversion over flag: firmware set 1 when conversion finished. interrupt request sent to CPU. Software reset to 0 needed. */
 
 #define     ADC_CONTR_ADC_CHS         ((uint8_t)0x0F)           /*!< ADC_CHS[3:0], ADC analog channel selection bits */
 #define     ADC_CONTR_ADC_CHS_0       ((uint8_t)0x01)           /*!< Bit 0 */
@@ -1156,7 +1165,7 @@ typedef struct {
 #define     CMOD_CPS_SC7    ((uint8_t)0x0C)             /*!< SYSCLK/6 */
 #define     CMOD_CPS_SC8    ((uint8_t)0x0E)             /*!< SYSCLK/8 */
 
-#define     CMOD_ECF        ((uint8_t)0x01)             /*!< PCA counter overflow interupt: [0], disable; [1], enable */
+#define     CMOD_ECF        ((uint8_t)0x01)             /*!< PCA counter overflow interrupt: [0], disable; [1], enable */
 
 /*
     CCAPPN: allow PCA module N to compare function 
@@ -1234,12 +1243,12 @@ sfr PCA_PWM3    =   PCA_PWM3_ADDR;              //!< PCA3 PWM mode register
 #define     PCA3                    ((PCAx_TypeDef idata * xdata *) PCA3_BASE)
 
 /* Bit definition for CCON register */
-sbit CCON_CF         =   CCON^7;                /*!< PCA counter overflow interupt flag */
+sbit CCON_CF         =   CCON^7;                /*!< PCA counter overflow interrupt flag */
 sbit CCON_CR         =   CCON^6;                /*!< PCA counter enabling control bit */
-sbit CCON_CCF3       =   CCON^3;                /*!< CCF3 PCA module interupt flag */
-sbit CCON_CCF2       =   CCON^2;                /*!< CCF2 PCA module interupt flag */
-sbit CCON_CCF1       =   CCON^1;                /*!< CCF1 PCA module interupt flag */
-sbit CCON_CCF0       =   CCON^0;                /*!< CCF0 PCA module interupt flag */
+sbit CCON_CCF3       =   CCON^3;                /*!< CCF3 PCA module interrupt flag */
+sbit CCON_CCF2       =   CCON^2;                /*!< CCF2 PCA module interrupt flag */
+sbit CCON_CCF1       =   CCON^1;                /*!< CCF1 PCA module interrupt flag */
+sbit CCON_CCF0       =   CCON^0;                /*!< CCF0 PCA module interrupt flag */
 
 //! PWM peripherals
 /**
@@ -1422,8 +1431,8 @@ sfr PWMCR       =   PWMCR_ADDR;         //!< Enhanced PWM configuration register
 
 #define     PWMxT1(PWMxT1_ADDR)      ((__IO uint16_t xdata *) PWMxT1_ADDR)  //!< PWMxT1 counter [PWMxT1H, PWMxT1L]
 #define     PWMxT2(PWMxT2_ADDR)      ((__IO uint16_t xdata *) PWMxT2_ADDR)  //!< PWMxT2 counter [PWMxT2H, PWMxT2L]
-#define     PWMxCR(PWMxCR_ADDR)      ( (__IO uint8_t xdata *) PWMxCR_ADDR)  //!< PWMx control register
-#define     PWMxHLD(PWMxHLD_ADDR)    ( (__IO uint8_t xdata *) PWMxHLD_ADDR) //!< PWMx level holder control register
+#define     PWMxCR(PWMxCR_ADDR)      ((__IO uint8_t xdata *) PWMxCR_ADDR)  //!< PWMx control register
+#define     PWMxHLD(PWMxHLD_ADDR)    ((__IO uint8_t xdata *) PWMxHLD_ADDR) //!< PWMx level holder control register
 
 #define     PWM0            ((PWMx_TypeDef xdata *) PWM0_BASE)          //!< PWM0 generic struct type
 #define     PWM1            ((PWMx_TypeDef xdata *) PWM1_BASE)          //!< PWM1 generic struct type
@@ -1523,7 +1532,7 @@ typedef struct {
 #define     SPDAT_ADDR      ((uint8_t)0xCF)
 
 /* Bit definition for SPSTAT register */
-#define     SPSTAT_SPIF     ((uint8_t)0x80)             /*!< SPI interupt flag bit */
+#define     SPSTAT_SPIF     ((uint8_t)0x80)             /*!< SPI interrupt flag bit */
 #define     SPSTAT_WCOL     ((uint8_t)0x40)             /*!< SPI writing confliction flag bit */
 
 /* Bit definition for SPCTL register */
@@ -1671,7 +1680,7 @@ typedef struct {
 
 
 /* Bit definition for I2CMSCR register */
-#define     I2CMSCR_EMSI        ((uint8_t)0x80)             /*!< master mode interupt enabling control bit */
+#define     I2CMSCR_EMSI        ((uint8_t)0x80)             /*!< master mode interrupt enabling control bit */
 
 #define     I2CMSCR_MSCMD       ((uint8_t)0x0F)             /*!< MSCMD[3:0], master command */
 #define     I2CMSCR_MSCMD_0     ((uint8_t)0x01)             /*!< Bit 0 */
@@ -1705,7 +1714,7 @@ typedef struct {
 #define     I2CSLCR_SLRST           ((uint8_t)0x01)             /*!< Reset slave mode */
 
 /* Bit definition for I2CSLST register */
-#define     I2CSLST_SLBUSY          ((uint8_t)0x80)             /*!< slave mode interupt enabling control bit */
+#define     I2CSLST_SLBUSY          ((uint8_t)0x80)             /*!< slave mode interrupt enabling control bit */
 #define     I2CSLST_STAIF           ((uint8_t)0x40)             /*!< The interrupt request bit after the START signal is received from slave mode. */
 #define     I2CSLST_RXIF            ((uint8_t)0x20)             /*!< Interrupt request bit after receiving 1 byte of data from slave mode */
 #define     I2CSLST_TXIF            ((uint8_t)0x10)             /*!< Interrupt request bit after 1 byte of data has been sent from slave mode */

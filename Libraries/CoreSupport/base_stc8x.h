@@ -36,6 +36,16 @@
  * @{
  */
 
+//! integer types
+typedef  signed char  int8_t;	//  8 bits 
+typedef  signed int  int16_t;	// 16 bits 
+typedef  signed long int32_t;	// 32 bits 
+
+//! unsigned integer types
+typedef  unsigned char   uint8_t; //  8 bits 
+typedef  unsigned int   uint16_t; // 16 bits 
+typedef  unsigned long  uint32_t; // 32 bits 
+
 //! volatile signed integer types
 typedef volatile int8_t     vint8_t;
 typedef volatile int16_t    vint16_t;
@@ -53,6 +63,29 @@ typedef volatile uint32_t    vuint32_t;
 #define  __I   volatile const /*!< defines 'read only' permissions      */
 #define  __O   volatile       /*!< defines 'write only' permissions     */
 #define  __IO  volatile       /*!< defines 'read / write' permissions   */
+
+
+/** @defgroup Exported_macro
+  * @{
+  */
+ 
+#define SET_BIT(REG, BIT)     ((REG) |= (BIT))
+
+#define CLEAR_BIT(REG, BIT)   ((REG) &= ~(BIT))
+
+#define READ_BIT(REG, BIT)    ((REG) & (BIT))
+
+#define CLEAR_REG(REG)        ((REG) = (0x0))
+
+#define WRITE_REG(REG, VAL)   ((REG) = (VAL))
+
+#define READ_REG(REG)         ((REG))
+
+#define MODIFY_REG(REG, CLEARMASK, SETMASK)  WRITE_REG((REG), (((READ_REG(REG)) & (~(CLEARMASK))) | (SETMASK)))
+
+/** @} */
+
+
 
 /** @} */
 
