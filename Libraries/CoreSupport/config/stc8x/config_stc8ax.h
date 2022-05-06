@@ -648,113 +648,6 @@ sbit P77        =   P7^7;
 #define     INTCLKO_EX3     ((uint8_t)0x20)             /*!< external interrupt 3 interrupt enabling flag */
 #define     INTCLKO_EX2     ((uint8_t)0x10)             /*!< external interrupt 2 interrupt enabling flag */
 #define     INTCLKO_T2CLKO  ((uint8_t)0x04)
-=======
-typedef struct 
-{
-    __IO uint8_t IP2;
-    __IO uint8_t IP2H;
-    __IO uint8_t IPH;
-    __IO uint8_t IP;
-}ISR_Priority_TypeDef;
-
-/* ISR basic address definition */
-#define    IE_ADDR                      ((uint8_t)0xA8)
-#define    IE2_ADDR                     ((uint8_t)0xAF)
-#define    ISR_PRIORITY_CONTR_BASE      ((uint8_t)0xB5)
-/**
- * @brief define the ISR_PRIORITY pointer type
- * @note To access XDATA peripherals, use the \c volatile keyword to ensure 
- * that the C compiler does not optimize out necessary memory accesses. \n
- * \code{.c} ((ISR_Priority_TypeDef idata * xdata *) ISR_PRIORITY_CONTR_BASE) \endcode 
- * means \b ISR_Priority_TypeDef pointer is stored in \e xdata space but 
- * points to \e idata space. If you want to use this struct type, prefix 
- * \code{.c} (ISR_Priority_TypeDef idata *) \endcode is needed, such as 
- * \code{.c} (ISR_Priority_TypeDef idata *) var \endcode, in witch the
- * \c var is \b ISR_Priority_TypeDef .
- */
-#define    ISR_PRIORITY                 ((ISR_Priority_TypeDef idata * xdata *) ISR_PRIORITY_CONTR_BASE)
-
-#define    IP_ADDR                      (ISR_PRIORITY_CONTR_BASE + 0x03)
-#define    IPH_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x02)
-#define    IP2_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x00)
-#define    IP2H_ADDR                    (ISR_PRIORITY_CONTR_BASE + 0x01)
-
-#define    INTCLKO_ADDR                 ((uint8_t)0x8F)
-#define    AUXINTIF_ADDR                ((uint8_t)0xEF)
-
-/* Bit definition for IE2 registers [0] off; [1] on */
-#define     IE2_ET4         ((uint8_t)0x40)             /*!< Timer T4 overflow interupt enabling bit */
-#define     IE2_ET3         ((uint8_t)0x20)             /*!< Timer T3 overflow interupt enabling bit */
-#define     IE2_ES4         ((uint8_t)0x10)             /*!< serial port S4 interupt enabling bit */
-#define     IE2_ES3         ((uint8_t)0x08)             /*!< serial port S3 interupt enabling bit */
-#define     IE2_ET2         ((uint8_t)0x04)             /*!< Timer T2 overflow interupt enabling bit */
-#define     IE2_ESPI        ((uint8_t)0x02)             /*!< SPI interupt enabling bit */
-#define     IE2_ES2         ((uint8_t)0x01)             /*!< serial port S2 interupt enabling bit */
-
-/* Bit definition for IP registers */
-#define     IP_PPCA         ((uint8_t)0x80)
-#define     IP_PLVD         ((uint8_t)0x40)
-#define     IP_PADC         ((uint8_t)0x20)
-#define     IP_PS           ((uint8_t)0x10)
-#define     IP_PT1          ((uint8_t)0x08)
-#define     IP_PX1          ((uint8_t)0x04)
-#define     IP_PT0          ((uint8_t)0x02)
-#define     IP_PX0          ((uint8_t)0x01)
-
-/* Bit definition for IPH registers */
-#define     PPCAH           ((uint8_t)0x80)
-#define     PLVDH           ((uint8_t)0x40)
-#define     PADCH           ((uint8_t)0x20)
-#define     PSH             ((uint8_t)0x10)
-#define     PT1H            ((uint8_t)0x08)
-#define     PX1H            ((uint8_t)0x04)
-#define     PT0H            ((uint8_t)0x02)
-#define     PX0H            ((uint8_t)0x01)
-
-/* Bit definition for IP2 registers */
-#define     IP2_PI2C        ((uint8_t)0x40)
-#define     IP2_PCMP        ((uint8_t)0x20)
-#define     IP2_PX4         ((uint8_t)0x10)
-#define     IP2_PPWMFD      ((uint8_t)0x08)
-#define     IP2_PPWM        ((uint8_t)0x04)
-#define     IP2_PSPI        ((uint8_t)0x02)
-#define     IP2_PS2         ((uint8_t)0x01)
-
-/* Bit definition for IP2H registers */
-#define     IP2H_PI2CH      ((uint8_t)0x40)
-#define     IP2H_PCMPH      ((uint8_t)0x20)
-#define     IP2H_PX4H       ((uint8_t)0x10)
-#define     IP2H_PPWMFDH    ((uint8_t)0x08)
-#define     IP2H_PPWMH      ((uint8_t)0x04)
-#define     IP2H_PSPIH      ((uint8_t)0x02)
-#define     IP2H_PS2H       ((uint8_t)0x01)
-
-/* Bit definition for INTCLKO registers */
-#define     EX4             ((uint8_t)0x40)
-#define     EX3             ((uint8_t)0x20)
-#define     EX2             ((uint8_t)0x10)
-#define     T2CLKO          ((uint8_t)0x04)
-#define     T1CLKO          ((uint8_t)0x02)
-#define     T0CLKO          ((uint8_t)0x01)
-
-/* Bit definition for AUXINTIF registers */
-#define     INT4IF          ((uint8_t)0x40)
-#define     INT3IF          ((uint8_t)0x20)
-#define     INT2IF          ((uint8_t)0x10)
-#define     T4IF            ((uint8_t)0x04)
-#define     T3IF            ((uint8_t)0x02)
-#define     T2IF            ((uint8_t)0x01)
-
-/* ISR special function register */
-sfr IE          =   IE_ADDR;
-sfr IE2         =   IE2_ADDR;
-sfr IP          =   IP_ADDR;
-sfr IP2         =   IP2H_ADDR;
-sfr IPH         =   IPH_ADDR;
-sfr IP2H        =   IP2H_ADDR;
-sfr INTCLKO     =   INTCLKO_ADDR;
-sfr AUXINTIF    =   AUXINTIF_ADDR;
->>>>>>> e6953dd (perf: STC8A core configuration v3.0)
 
 
 /* Bit definition for AUXINTIF registers */
@@ -796,17 +689,6 @@ sbit IP_PT1        =   IP^3;
 sbit IP_PX1        =   IP^2;
 sbit IP_PT0        =   IP^1;
 sbit IP_PX0        =   IP^0;
-=======
-// IP BITs
-// sbit PPCA       =   IP^7;
-// sbit PLVD       =   IP^6;
-// sbit PADC       =   IP^5;
-// sbit PS         =   IP^4;
-// sbit PT1        =   IP^3;
-// sbit PX1        =   IP^2;
-// sbit PT0        =   IP^1;
-// sbit PX0        =   IP^0;
->>>>>>> e6953dd (perf: STC8A core configuration v3.0)
 
 //! Timer peripherals
 /* timer basic address definition */
