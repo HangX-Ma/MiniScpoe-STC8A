@@ -1,7 +1,7 @@
 /**
  * @file config_stc8ax.h
  * @author MContour (m-contour@qq.com)
- * @brief core and peripheral definition for stc8ax 
+ * @brief core and peripheral definition for stc8hx 
  * @details This file contains all the peripheral register's definitions, bits 
  *          definitions and memory mapping for STC8x Connectivity line.
  * @version 0.1
@@ -25,10 +25,11 @@
  * limitations under the License.
  *****************************************************************************
  */
-#ifndef __CONFIG_STC8AX_H__
-#define __CONFIG_STC8AX_H__
+#ifndef __CONFIG_STC8HX_H__
+#define __CONFIG_STC8HX_H__
 
 #include "base_stc8x.h"
+//包含本头文件后,不用另外再包含"REG51.H"
 
 /**
  * @defgroup Special_function_registers
@@ -186,27 +187,34 @@ typedef struct
     __IO uint8_t RCC_IRC24MCR;
     __IO uint8_t RCC_XOSCCR;
     __IO uint8_t RCC_IRC32KCR;
+    __IO uint8_t RCC_MCLKOCR;
+    __IO uint8_t RCC_IRCDB;
 } SYSCLK_TypeDef;
 
 // * system clock special function register setting in internal expansion RAM 
 /* internel oscillator frequency control and adjustment registers*/
-#define     IRTRIM_ADDR                 ((uint8_t)0x9F)
+#define     IRCBAND_ADDR                ((uint8_t)0x9D)
 #define     LIRTRIM_ADDR                ((uint8_t)0x9E)
+#define     IRTRIM_ADDR                 ((uint8_t)0x9F)
+
+/* Bit definition for IRCBAND register */
+#define     IRCBAND_SEL                 ((uint8_t)0x03) /*!< SEL[1:0], IRC band selection */
+#define     IRCBAND_SEL_0               ((uint8_t)0x01) /*!< Bit 0 */
+#define     IRCBAND_SEL_1               ((uint8_t)0x02) /*!< Bit 1 */
+
+#define     IRCBAND_SEL_6MHz            ((uint8_t)0x00)
+#define     IRCBAND_SEL_10MHz           ((uint8_t)0x00)
+#define     IRCBAND_SEL_27MHz           ((uint8_t)0x00)
+#define     IRCBAND_SEL_44MHz           ((uint8_t)0x00)
+
+
+/* Bit definition for LIRTRIM register */
+#define     LIRTRIM_BIT                 ((uint8_t)0x01)
 
 /* Bit definition for IRTRIM register */
 // user define the value from 0~255 for this register
 
-/* Bit definition for LIRTRIM register */
-#define     LIRTRIM_BITS                ((uint8_t)0x03)
-#define     LIRTRIM_BITS_0              ((uint8_t)0x01)
-#define     LIRTRIM_BITS_1              ((uint8_t)0x02)
-
-#define     LIRTRIM_BITS_FT000          ((uint8_t)0x00) /*!< on fine-turning */
-#define     LIRTRIM_BITS_FT001          ((uint8_t)0x01) /*!< Internal high accurate IRC fine-turning 0.01% */
-#define     LIRTRIM_BITS_FT004          ((uint8_t)0x02) /*!< Internal high accurate IRC fine-turning 0.04% */
-#define     LIRTRIM_BITS_FT010          ((uint8_t)0x03) /*!< Internal high accurate IRC fine-turning 0.10% */
-
-
+sfr IRCBAND     =   IRCBAND_ADDR;   //! IRC band selection
 sfr IRTRIM      =   IRTRIM_ADDR;    //! internal IRC frequency adjustment register
 sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment register
 
@@ -218,28 +226,10 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 #define     IRC24MCR_ADDR               (SYSCLK_BASE + 0x0002)
 #define     XOSCCR_ADDR                 (SYSCLK_BASE + 0x0003)
 #define     IRC32KCR_ADDR               (SYSCLK_BASE + 0x0004)
+#define     MCLKOCR_ADDR                (SYSCLK_BASE + 0x0005)
+#define     IRCDB_ADDR                  (SYSCLK_BASE + 0x0006)
 
 /* Bit definition for CKSEL register */
-// * MCLKODIV configuration
-#define     CKSEL_MCLKODIV              ((uint8_t)0xF0) /*!< MCLKODIV[3:0] bits (main clock output division coefficient) */
-#define     CKSEL_MCLKODIV_0            ((uint8_t)0x10) /*!< Bit 0 */
-#define     CKSEL_MCLKODIV_1            ((uint8_t)0x20) /*!< Bit 1 */
-#define     CKSEL_MCLKODIV_2            ((uint8_t)0x40) /*!< Bit 2 */
-#define     CKSEL_MCLKODIV_3            ((uint8_t)0x80) /*!< Bit 3 */
-
-#define     CKSEL_MCLKODIV_DIV0         ((uint8_t)0x00) /*!< no MCLK output */
-#define     CKSEL_MCLKODIV_DIV1         ((uint8_t)0x10) /*!< MCLK input clock not divided */
-#define     CKSEL_MCLKODIV_DIV2         ((uint8_t)0x20) /*!< MCLK input clock divided by 2 */
-#define     CKSEL_MCLKODIV_DIV4         ((uint8_t)0x40) /*!< MCLK input clock divided by 4 */
-#define     CKSEL_MCLKODIV_DIV8         ((uint8_t)0x60) /*!< MCLK input clock divided by 8 */
-#define     CKSEL_MCLKODIV_DIV16        ((uint8_t)0x80) /*!< MCLK input clock divided by 16 */
-#define     CKSEL_MCLKODIV_DIV32        ((uint8_t)0xA0) /*!< MCLK input clock divided by 32 */
-#define     CKSEL_MCLKODIV_DIV64        ((uint8_t)0xC0) /*!< MCLK input clock divided by 64 */
-#define     CKSEL_MCLKODIV_DIV128       ((uint8_t)0xE0) /*!< MCLK input clock divided by 128 */
-
-// * MCLKO_S configuration
-#define     CKSEL_MCLKO_S               ((uint8_t)0x08) /*!< divided MCLK output pin: [0] P5.4; [1] P1.6 */
-
 // * MCKSEL configuration
 #define     CKSEL_MCKSEL                ((uint8_t)0x03) /*!< MCLKODIV[1:0] bits (system clock output division coefficient) */
 #define     CKSEL_MCKSEL_0              ((uint8_t)0x01) /*!< Bit 0 */
@@ -270,12 +260,37 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 // * XOSCST configuration
 #define     XOSCCR_XOSCST               ((uint8_t)0x01) /*!< external oscillator stable state flag */
 
+// * XCFILTER configuration
+#define     XOSCCR_XCFILTER             ((uint8_t)0x30) /*!< XCFILTER[1:0], External Crystal Oscillator anti-interference control register */
+#define     XOSCCR_XCFILTER_0           ((uint8_t)0x10) /*!< BIT 0 */
+#define     XOSCCR_XCFILTER_1           ((uint8_t)0x20) /*!< BIT 1 */
+
+#define     XOSCCR_XCFILTER_48M_LOWER   ((uint8_t)0x00) /*!< Select if the external Crystal oscillator frequency is 48M or below */
+#define     XOSCCR_XCFILTER_24M_LOWER   ((uint8_t)0x10) /*!< Select if the external Crystal oscillator frequency is 24M or below */
+#define     XOSCCR_XCFILTER_12M_LOWER   ((uint8_t)0x20) /*!< Select if the external Crystal oscillator frequency is 12M or below */
+
+// * NMXCG configuration
+#define     XOSCCR_NMXCG                ((uint8_t)0x08)/*!< External Crystal oscillator gain control: [0], Low gain; [1], High gain */
+
 /* Bit definition for IRC32KCR register */
 // * ENIRC32K configuration
 #define     IRC32KCR_ENIRC32K           ((uint8_t)0x80) /*!< IRC32KCR enabling control */
 
 // * IRC32KST configuration
 #define     IRC32KCR_IRC32KST           ((uint8_t)0x01) /*!< IRC32KCR stable state flag */
+
+/* Bit definition for MCLKOCR register */
+#define     MCLKOCR_MCLKODIV            ((uint8_t)0x7F) /*!< MCLKODIV[6:0] bits (main clock output division coefficient) */
+#define     MCLKOCR_MCLKODIV_0          ((uint8_t)0x01) /*!< Bit 0 */
+#define     MCLKOCR_MCLKODIV_1          ((uint8_t)0x02) /*!< Bit 1 */
+#define     MCLKOCR_MCLKODIV_2          ((uint8_t)0x04) /*!< Bit 2 */
+#define     MCLKOCR_MCLKODIV_3          ((uint8_t)0x08) /*!< Bit 3 */
+#define     MCLKOCR_MCLKODIV_4          ((uint8_t)0x10) /*!< Bit 4 */
+#define     MCLKOCR_MCLKODIV_5          ((uint8_t)0x20) /*!< Bit 5 */
+#define     MCLKOCR_MCLKODIV_6          ((uint8_t)0x40) /*!< Bit 6 */
+
+// MCLKO_S configuration
+#define     MCLKOCR_MCLKO_S             ((uint8_t)0x08) /*!< divided MCLK output pin: [0] P5.4; [1] P1.6 */
 
 /**
  * @brief define the SYSCLK type
@@ -289,6 +304,9 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 #define     IRC24MCR        (*(__IO uint8_t xdata *)   IRC24MCR_ADDR)  //!< internal 24MHz oscillator control
 #define     XOSCCR          (*(__IO uint8_t xdata *)   XOSCCR_ADDR)    //!< external oscillator control
 #define     IRC32KCR        (*(__IO uint8_t xdata *)   IRC32KCR_ADDR)  //!< internal 32kHz oscillator control
+#define     MCLKOCR         (*(__IO uint8_t xdata *)   MCLKOCR_ADDR)   //!< Master Clock Output Control Register
+#define     IRCDB           (*(__IO uint8_t xdata *)   IRCDB_ADDR)     //!< Internal IRC start-up shake-out control
+
 
 //! system power special function register setting
 /* power control base address */
@@ -326,10 +344,10 @@ sfr VOCTRL      =   VOCTRL_ADDR;        //! voltage level control register
 #define     WDT_CONTR_WDT_FLAG          ((uint8_t)0x80)     /*!< Watch dog overflow flag */
 
 // * EN_WDT configuration
-#define     WDT_CONTR_EN_WDT            ((uint8_t)0x20)     /*!< Watch dog enabling bit: [0] off; [1] on */
+#define     WDT_CONTR_EN_WDT            ((uint8_t)0x20)     /*!< Watch dog enabling bit：[0] off; [1] on */
 
 // * CLR_WDT configuration
-#define     WDT_CONTR_CLR_WDT           ((uint8_t)0x10)     /*!< Watch dog timer auto clearance by firmware: [0] off; [1] on */
+#define     WDT_CONTR_CLR_WDT           ((uint8_t)0x10)     /*!< Watch dog timer auto clearance by firmware：[0] off; [1] on */
 
 // * IDL_WDT configuration
 #define     WDT_CONTR_IDL_WDT           ((uint8_t)0x08)     /*!< Watch dog counting function control on IDLE model [0] stop; [1] resume */
@@ -360,7 +378,7 @@ sfr VOCTRL      =   VOCTRL_ADDR;        //! voltage level control register
 #define     RSTCFG_P54RST               ((uint8_t)0x10)     /*!< RST pin selection: [0] regard P5.4 as normal pin; [1]: regard P5.4 as RST */
 
 // * LVDS configuration
-#define     RSTCFG_LVDS                 ((uint8_t)0x03)     /*!< WDT_PS[1:0] bits, low voltage threshold selection */
+#define     RSTCFG_LVDS                 ((uint8_t)0x03)     /*!< WDT_PS[1:0] bits（low voltage threshold selection） */
 #define     RSTCFG_LVDS_0               ((uint8_t)0x01)     /*!< Bit 0 */
 #define     RSTCFG_LVDS_1               ((uint8_t)0x02)     /*!< Bit 1 */
 
@@ -581,7 +599,6 @@ sbit P77        =   P7^7;
 #define Px_NCS(x)   (P##x##NCS)
 
 //! ISR peripherals
-<<<<<<< HEAD
 /* ISR basic address definition */
 #define    IE_ADDR                      ((uint8_t)0xA8)
 #define    IE2_ADDR                     ((uint8_t)0xAF)
@@ -990,6 +1007,8 @@ typedef struct {
 #define     IAP_CMD_ADDR            ((uint8_t)0xC5)
 #define     IAP_TRIG_ADDR           ((uint8_t)0xC6)
 #define     IAP_CONTR_ADDR          ((uint8_t)0xC7)
+#define     IAP_TPS_ADDR          ((uint8_t)0xF5)
+
 
 /* Bit definition for IAP_CONTR register */
 #define     IAP_CONTR_IAPEN         ((uint8_t)0x80)     /*!< EEPROM operation enable control bit: [0], disable; [1], enable */
@@ -1030,6 +1049,7 @@ sfr IAP_ADDRL   =   IAP_ADDRL_ADDR;                     //!< IAP low address reg
 sfr IAP_CMD     =   IAP_CMD_ADDR;                       //!< IAP command regiseter
 sfr IAP_TRIG    =   IAP_TRIG_ADDR;                      //!< IAP trigger regiseter
 sfr IAP_CONTR   =   IAP_CONTR_ADDR;                     //!< IAP control regiseter
+sfr IAP_TPS     =   IAP_TPS_ADDR;                       //!< EEPROM wait time control register. Set this register value the same as the working frequency.
 
 //! ADC peripherals
 /**
@@ -1087,7 +1107,7 @@ typedef struct {
 #define     ADCCFG_SPEED_2            ((uint8_t)0x04)          /*!< Bit 2 */
 #define     ADCCFG_SPEED_3            ((uint8_t)0x08)          /*!< Bit 3 */
 
-// F_ADC SYSclk/2/16/SPEED[3:0]+1
+// F_ADC＝SYSclk/2/16/（SPEED[3:0]+1）
 #define     ADCCFG_SPEED_VAL0         ((uint8_t)0x00)          /*!< SYSCLK tick number: 32 ticks*/
 #define     ADCCFG_SPEED_VAL1         ((uint8_t)0x01)          /*!< SYSCLK tick number: 64 ticks*/
 #define     ADCCFG_SPEED_VAL2         ((uint8_t)0x02)          /*!< SYSCLK tick number: 96 ticks*/
@@ -1262,12 +1282,12 @@ sbit CCON_CCF0       =   CCON^0;                /*!< CCF0 PCA module interrupt f
  * @brief General PWM function I/O
  */
 typedef struct {
-    __IO  uint8_t PWMxT1H;
-    __IO  uint8_t PWMxT1L;
-    __IO  uint8_t PWMxT2H;
-    __IO  uint8_t PWMxT2L;
-    __IO  uint8_t PWMxCR;
-    __IO  uint8_t PWMxHLD;
+    __IO uint8_t PWMxT1H;
+    __IO uint8_t PWMxT1L;
+    __IO uint8_t PWMxT2H;
+    __IO uint8_t PWMxT2L;
+    __IO uint8_t PWMxCR;
+    __IO uint8_t PWMxHLD;
 }PWMx_TypeDef;
 
 /* PWM basic address definition */
@@ -1577,6 +1597,901 @@ sfr SPSTAT      =   SPSTAT_ADDR;        //!< SPI State Register
 sfr SPCTL       =   SPCTL_ADDR;         //!< SPI Control Register
 sfr SPDAT       =   SPDAT_ADDR;         //!< SPI Data Register
 
+//! LCM peripherals
+/**
+ * @brief LCM general I/O configuration
+ */
+typedef struct {
+    __IO uint8_t LCMIFCFG;
+    __IO uint8_t LCMIFCFG2;
+    __IO uint8_t LCMIFCR;
+    __IO uint8_t LCMIFSTA;
+    __IO uint8_t LCMIDDATL;
+    __IO uint8_t LCMIDDATH;
+} LCM_TypeDef;
+
+/* Basic address */
+#define     LCM_BASE          ((uint16_t)0xFE50)
+#define     LCMIFCFG_ADDR     (LCM_BASE + 0x0000)
+#define     LCMIFCFG2_ADDR    (LCM_BASE + 0x0001)
+#define     LCMIFCR_ADDR      (LCM_BASE + 0x0002)
+#define     LCMIFSTA_ADDR     (LCM_BASE + 0x0003)
+#define     LCMIDDATL_ADDR    (LCM_BASE + 0x0004)
+#define     LCMIDDATH_ADDR    (LCM_BASE + 0x0005)
+
+/* Bit definition for LCMIFCFG register */
+#define     LCMIFCFG_LCMIFIE            ((uint8_t)0x80)     /*!< LCM interface interrupt enable control bit: [0], disable; [1], enable */
+
+#define     LCMIFCFG_LCMIFIP            ((uint8_t)0x30)     /*!< LCMIFIP[1:0], LCM interface interrupt priority control bit */
+#define     LCMIFCFG_LCMIFIP_0          ((uint8_t)0x10)     /*!< BIT 0 */
+#define     LCMIFCFG_LCMIFIP_1          ((uint8_t)0x20)     /*!< BIT 1 */
+
+#define     LCMIFCFG_LCMIFIP_LOWEST     ((uint8_t)0x10)
+#define     LCMIFCFG_LCMIFIP_LOW        ((uint8_t)0x10)
+#define     LCMIFCFG_LCMIFIP_HIGH       ((uint8_t)0x20)
+#define     LCMIFCFG_LCMIFIP_HIGHEST    ((uint8_t)0x30)
+
+#define     LCMIFCFG_LCMIFDPS           ((uint8_t)0xC0)     /*!< LCMIFDPS[1:0], LCM interface data foot select bit */
+#define     LCMIFCFG_LCMIFDPS_0         ((uint8_t)0x40)     /*!< BIT 0 */
+#define     LCMIFCFG_LCMIFDPS_1         ((uint8_t)0x80)     /*!< BIT 1 */
+
+#define     LCMIFCFG_D16_D8             ((uint8_t)0x02)     /*!< LCM interface data width control bit: [0], 8-bit data width; [1], 16-bit data width  */
+
+#define     LCMIFCFG_M68_I80            ((uint8_t)0x01)     /*!< LCM interface mode selection bit: [0], I8080 Mode; [1], M6800 Mode */
+
+/* Bit definition for LCMIFCFG2 register */
+#define     LCMIFCFG2_LCMIFCPS          ((uint8_t)0x60)     /*!< LCMIFCPS[1:0], LCM interface data foot select bit */
+#define     LCMIFCFG2_LCMIFDPS_0        ((uint8_t)0x20)     /*!< BIT 0 */
+#define     LCMIFCFG2_LCMIFDPS_1        ((uint8_t)0x40)     /*!< BIT 1 */
+
+#define     LCMIFCFG2_SETUPT            ((uint8_t)0x1C)     /*!< SETUPT[2:0], Data establishment time control bit of LCM interface communication */
+#define     LCMIFCFG2_SETUPT_0          ((uint8_t)0x04)     /*!< BIT 0 */
+#define     LCMIFCFG2_SETUPT_1          ((uint8_t)0x08)     /*!< BIT 1 */
+#define     LCMIFCFG2_SETUPT_2          ((uint8_t)0x10)     /*!< BIT 2 */
+
+#define     LCMIFCFG2_HOLDT             ((uint8_t)0x03)     /*!< HOLDT[1:0], Data hold time control bit for LCM interface communication */
+#define     LCMIFCFG2_HOLDT_0           ((uint8_t)0x01)     /*!< BIT 0 */
+#define     LCMIFCFG2_HOLDT_1           ((uint8_t)0x02)     /*!< BIT 1 */
+
+/* Bit definition for LCMIFCR register */
+#define     LCMIFCR_ELCMIF              ((uint8_t)0x80)     /*!< The LCM interface enables the control bit, [0], disable; [1], enable */
+
+#define     LCMIFCR_CMD                 ((uint8_t)0x07)     /*!< CMD[2:0], The LCM interface triggers commands */
+#define     LCMIFCR_CMD_0               ((uint8_t)0x01)     /*!< BIT 0 */
+#define     LCMIFCR_CMD_1               ((uint8_t)0x02)     /*!< BIT 1 */
+#define     LCMIFCR_CMD_2               ((uint8_t)0x04)     /*!< BIT 2 */
+
+#define     LCMIFCR_CMD_WRITE_CMD       ((uint8_t)0x04)     /*!< Write commands */
+#define     LCMIFCR_CMD_WRITE_DATA      ((uint8_t)0x05)     /*!< Write data */
+#define     LCMIFCR_CMD_READ            ((uint8_t)0x06)     /*!< read commands or state */
+#define     LCMIFCR_CMD_READ_DATA       ((uint8_t)0x07)     /*!< read data */
+
+/* Bit definition for LCMIFSTA register */
+#define     LCMIFSTA_LCMIFIF             ((uint8_t)0x01)     /*!< LCM interface interrupt request flag, software clear 0 */
+
+
+#define     LCMIFCFG          (*(__IO uint8_t xdata *) LCMIFCFG_ADDR)    //!< LCM interface configuration register
+#define     LCMIFCFG2         (*(__IO uint8_t xdata *) LCMIFCFG2_ADDR)   //!< LCM interface configuration register 2
+#define     LCMIFCR           (*(__IO uint8_t xdata *) LCMIFCR_ADDR)     //!< LCM interface control register
+#define     LCMIFSTA          (*(__IO uint8_t xdata *) LCMIFSTA_ADDR)    //!< LCM interface state register
+#define     LCMIDDATL         (*(__IO uint8_t xdata *) LCMIDDATL_ADDR)   //!< LCM interface low-byte data
+#define     LCMIDDATH         (*(__IO uint8_t xdata *) LCMIDDATH_ADDR)   //!< LCM interface High-byte data
+
+//! DMA peripherals
+/**
+ * @brief BMM general I/O configuration
+ */
+struct BMM_General{
+    __IO uint8_t CFG;
+    __IO uint8_t CR;
+    __IO uint8_t STA;
+    __IO uint8_t AMT;
+    __IO uint8_t DONE;
+    __IO uint8_t TXAH;
+    __IO uint8_t TXAL;
+};
+
+/**
+ * @brief M2M_BMM I/O configuration
+ */
+typedef struct{
+    struct BMM_General* BMM;
+    __IO uint8_t RXAH;
+    __IO uint8_t RXAL;
+} M2M_BMM_TypeDef;
+
+/**
+ * @brief ADC_BMM I/O configuration
+ */
+typedef struct{
+    struct BMM_General* BMM;
+    __IO uint8_t RXAH;
+    __IO uint8_t RXAL;
+    __IO uint8_t CFG2;
+    __IO uint8_t CHSW0;
+    __IO uint8_t CHSW1;
+} ADC_BMM_TypeDef; 
+
+/**
+ * @brief SPI_BMM I/O configuration
+ */
+typedef struct{
+    struct BMM_General* BMM;
+    struct BMM_General* BMM;
+    __IO uint8_t RXAH;
+    __IO uint8_t RXAL;
+    __IO uint8_t CFG2;
+} ADC_BMM_TypeDef; 
+
+/**
+ * @brief UR1T_BMM I/O configuration
+ */
+typedef struct BMM_General UR1T_BMM_TypeDef;
+
+
+/**
+ * @brief UR1R_BMM I/O configuration
+ */
+typedef struct BMM_General UR1R_BMM_TypeDef;
+
+/**
+ * @brief UR2T_BMM I/O configuration
+ */
+typedef struct BMM_General UR2T_BMM_TypeDef;
+
+/**
+ * @brief UR2R_BMM I/O configuration
+ */
+typedef struct BMM_General UR2R_BMM_TypeDef;
+
+/**
+ * @brief UR3T_BMM I/O configuration
+ */
+typedef struct BMM_General UR3T_BMM_TypeDef;
+
+/**
+ * @brief UR3R_BMM I/O configuration
+ */
+typedef struct BMM_General UR4R_BMM_TypeDef;
+
+/**
+ * @brief UR4T_BMM I/O configuration
+ */
+typedef struct BMM_General UR4T_BMM_TypeDef;
+
+/**
+ * @brief LCM_BMM I/O configuration
+ */
+typedef struct{
+    struct BMM_General* BMM;
+    __IO uint8_t RXAH;
+    __IO uint8_t RXAL;
+}LCM_BMM_TypeDef;
+
+/* Basic address */
+#define     M2M_BMM_BASE            ((uint16_t)FA00)
+#define     BMM_M2M_CFG_ADDR        (M2M_BMM_BASE + 0x0000)
+#define     BMM_M2M_CR_ADDR         (M2M_BMM_BASE + 0x0001)
+#define     BMM_M2M_STA_ADDR        (M2M_BMM_BASE + 0x0002)
+#define     BMM_M2M_AMT_ADDR        (M2M_BMM_BASE + 0x0003)
+#define     BMM_M2M_DONE_ADDR       (M2M_BMM_BASE + 0x0004)
+#define     BMM_M2M_TXAH_ADDR       (M2M_BMM_BASE + 0x0005)
+#define     BMM_M2M_TXAL_ADDR       (M2M_BMM_BASE + 0x0006)
+#define     BMM_M2M_RXAH_ADDR       (M2M_BMM_BASE + 0x0007)
+#define     BMM_M2M_RXAL_ADDR       (M2M_BMM_BASE + 0x0008)
+
+#define     ADC_BMM_BASE            ((uint16_t)FA10)
+#define     BMM_ADC_CFG_ADDR        (ADC_BMM_BASE + 0x0000)
+#define     BMM_ADC_CR_ADDR         (ADC_BMM_BASE + 0x0001)
+#define     BMM_ADC_STA_ADDR        (ADC_BMM_BASE + 0x0002)
+#define     BMM_ADC_AMT_ADDR        (ADC_BMM_BASE + 0x0003)
+#define     BMM_ADC_DONE_ADDR       (ADC_BMM_BASE + 0x0004)
+#define     BMM_ADC_TXAH_ADDR       (ADC_BMM_BASE + 0x0005)
+#define     BMM_ADC_TXAL_ADDR       (ADC_BMM_BASE + 0x0006)
+#define     BMM_ADC_RXAH_ADDR       (ADC_BMM_BASE + 0x0007)
+#define     BMM_ADC_RXAL_ADDR       (ADC_BMM_BASE + 0x0008)
+#define     BMM_ADC_CFG2_ADDR       (ADC_BMM_BASE + 0x0009)
+#define     BMM_ADC_CHSW0_ADDR      (ADC_BMM_BASE + 0x000A)
+#define     BMM_ADC_CHSW1_ADDR      (ADC_BMM_BASE + 0x000B)
+
+#define     SPI_BMM_BASE            ((uint16_t)FA20)
+#define     SPI_M2M_CFG_ADDR        (SPI_BMM_BASE + 0x0000)
+#define     BMM_SPI_CR_ADDR         (SPI_BMM_BASE + 0x0001)
+#define     BMM_SPI_STA_ADDR        (SPI_BMM_BASE + 0x0002)
+#define     BMM_SPI_AMT_ADDR        (SPI_BMM_BASE + 0x0003)
+#define     BMM_SPI_DONE_ADDR       (SPI_BMM_BASE + 0x0004)
+#define     BMM_SPI_TXAH_ADDR       (SPI_BMM_BASE + 0x0005)
+#define     BMM_SPI_TXAL_ADDR       (SPI_BMM_BASE + 0x0006)
+#define     BMM_SPI_RXAH_ADDR       (SPI_BMM_BASE + 0x0007)
+#define     BMM_SPI_RXAL_ADDR       (SPI_BMM_BASE + 0x0008)
+#define     BMM_SPI_CFG2_ADDR       (SPI_BMM_BASE + 0x0009)
+
+#define     UR1T_BMM_BASE           ((uint16_t)FA30)
+#define     BMM_UR1T_CFG_ADDR       (UR1T_BMM_BASE + 0x0000)
+#define     BMM_UR1T_CR_ADDR        (UR1T_BMM_BASE + 0x0001)
+#define     BMM_UR1T_STA_ADDR       (UR1T_BMM_BASE + 0x0002)
+#define     BMM_UR1T_AMT_ADDR       (UR1T_BMM_BASE + 0x0003)
+#define     BMM_UR1T_DONE_ADDR      (UR1T_BMM_BASE + 0x0004)
+#define     BMM_UR1T_TXAH_ADDR      (UR1T_BMM_BASE + 0x0005)
+#define     BMM_UR1T_TXAL_ADDR      (UR1T_BMM_BASE + 0x0006)
+
+#define     UR1R_BMM_BASE           ((uint16_t)FA38)
+#define     BMM_UR1R_CFG_ADDR       (UR1R_BMM_BASE + 0x0000)
+#define     BMM_UR1R_CR_ADDR        (UR1R_BMM_BASE + 0x0001)
+#define     BMM_UR1R_STA_ADDR       (UR1R_BMM_BASE + 0x0002)
+#define     BMM_UR1R_AMT_ADDR       (UR1R_BMM_BASE + 0x0003)
+#define     BMM_UR1R_DONE_ADDR      (UR1R_BMM_BASE + 0x0004)
+#define     BMM_UR1R_TXAH_ADDR      (UR1R_BMM_BASE + 0x0005)
+#define     BMM_UR1R_TXAL_ADDR      (UR1R_BMM_BASE + 0x0006)
+
+#define     UR2T_BMM_BASE           ((uint16_t)FA40)
+#define     BMM_UR2T_CFG_ADDR       (UR2T_BMM_BASE + 0x0000)
+#define     BMM_UR2T_CR_ADDR        (UR2T_BMM_BASE + 0x0001)
+#define     BMM_UR2T_STA_ADDR       (UR2T_BMM_BASE + 0x0002)
+#define     BMM_UR2T_AMT_ADDR       (UR2T_BMM_BASE + 0x0003)
+#define     BMM_UR2T_DONE_ADDR      (UR2T_BMM_BASE + 0x0004)
+#define     BMM_UR2T_TXAH_ADDR      (UR2T_BMM_BASE + 0x0005)
+#define     BMM_UR2T_TXAL_ADDR      (UR2T_BMM_BASE + 0x0006)
+
+#define     UR2R_BMM_BASE           ((uint16_t)FA48)
+#define     BMM_UR2R_CFG_ADDR       (UR2R_BMM_BASE + 0x0000)
+#define     BMM_UR2R_CR_ADDR        (UR2R_BMM_BASE + 0x0001)
+#define     BMM_UR2R_STA_ADDR       (UR2R_BMM_BASE + 0x0002)
+#define     BMM_UR2R_AMT_ADDR       (UR2R_BMM_BASE + 0x0003)
+#define     BMM_UR2R_DONE_ADDR      (UR2R_BMM_BASE + 0x0004)
+#define     BMM_UR2R_TXAH_ADDR      (UR2R_BMM_BASE + 0x0005)
+#define     BMM_UR2R_TXAL_ADDR      (UR2R_BMM_BASE + 0x0006)
+
+#define     UR3T_BMM_BASE           ((uint16_t)FA50)
+#define     BMM_UR3T_CFG_ADDR       (UR3T_BMM_BASE + 0x0000)
+#define     BMM_UR3T_CR_ADDR        (UR3T_BMM_BASE + 0x0001)
+#define     BMM_UR3T_STA_ADDR       (UR3T_BMM_BASE + 0x0002)
+#define     BMM_UR3T_AMT_ADDR       (UR3T_BMM_BASE + 0x0003)
+#define     BMM_UR3T_DONE_ADDR      (UR3T_BMM_BASE + 0x0004)
+#define     BMM_UR3T_TXAH_ADDR      (UR3T_BMM_BASE + 0x0005)
+#define     BMM_UR3T_TXAL_ADDR      (UR3T_BMM_BASE + 0x0006)
+
+#define     UR3R_BMM_BASE           ((uint16_t)FA58)
+#define     BMM_UR3R_CFG_ADDR       (UR3R_BMM_BASE + 0x0000)
+#define     BMM_UR3R_CR_ADDR        (UR3R_BMM_BASE + 0x0001)
+#define     BMM_UR3R_STA_ADDR       (UR3R_BMM_BASE + 0x0002)
+#define     BMM_UR3R_AMT_ADDR       (UR3R_BMM_BASE + 0x0003)
+#define     BMM_UR3R_DONE_ADDR      (UR3R_BMM_BASE + 0x0004)
+#define     BMM_UR3R_TXAH_ADDR      (UR3R_BMM_BASE + 0x0005)
+#define     BMM_UR3R_TXAL_ADDR      (UR3R_BMM_BASE + 0x0006)
+
+#define     UR4T_BMM_BASE           ((uint16_t)FA60)
+#define     BMM_UR4T_CFG_ADDR       (UR4T_BMM_BASE + 0x0000)
+#define     BMM_UR4T_CR_ADDR        (UR4T_BMM_BASE + 0x0001)
+#define     BMM_UR4T_STA_ADDR       (UR4T_BMM_BASE + 0x0002)
+#define     BMM_UR4T_AMT_ADDR       (UR4T_BMM_BASE + 0x0003)
+#define     BMM_UR4T_DONE_ADDR      (UR4T_BMM_BASE + 0x0004)
+#define     BMM_UR4T_TXAH_ADDR      (UR4T_BMM_BASE + 0x0005)
+#define     BMM_UR4T_TXAL_ADDR      (UR4T_BMM_BASE + 0x0006)
+
+#define     UR4R_BMM_BASE           ((uint16_t)FA68)
+#define     BMM_UR4R_CFG_ADDR       (UR4R_BMM_BASE + 0x0000)
+#define     BMM_UR4R_CR_ADDR        (UR4R_BMM_BASE + 0x0001)
+#define     BMM_UR4R_STA_ADDR       (UR4R_BMM_BASE + 0x0002)
+#define     BMM_UR4R_AMT_ADDR       (UR4R_BMM_BASE + 0x0003)
+#define     BMM_UR4R_DONE_ADDR      (UR4R_BMM_BASE + 0x0004)
+#define     BMM_UR4R_TXAH_ADDR      (UR4R_BMM_BASE + 0x0005)
+#define     BMM_UR4R_TXAL_ADDR      (UR4R_BMM_BASE + 0x0006)
+
+#define     LCM_BMM_BASE            ((uint16_t)FA70)
+#define     BMM_LCM_CFG_ADDR        (LCM_BMM_BASE + 0x0000)
+#define     BMM_LCM_CR_ADDR         (LCM_BMM_BASE + 0x0001)
+#define     BMM_LCM_STA_ADDR        (LCM_BMM_BASE + 0x0002)
+#define     BMM_LCM_AMT_ADDR        (LCM_BMM_BASE + 0x0003)
+#define     BMM_LCM_DONE_ADDR       (LCM_BMM_BASE + 0x0004)
+#define     BMM_LCM_TXAH_ADDR       (LCM_BMM_BASE + 0x0005)
+#define     BMM_LCM_TXAL_ADDR       (LCM_BMM_BASE + 0x0006)
+#define     BMM_LCM_RXAH_ADDR       (LCM_BMM_BASE + 0x0007)
+#define     BMM_LCM_RXAL_ADDR       (LCM_BMM_BASE + 0x0008)
+
+
+/* BMM special function registers */
+#define     BMM_M2M_CFG             (*(__IO uint8_t xdata *) BMM_M2M_CFG_ADDR)      //! configuration register
+#define     BMM_M2M_CR              (*(__IO uint8_t xdata *) BMM_M2M_CR_ADDR)       //! control register
+#define     BMM_M2M_STA             (*(__IO uint8_t xdata *) BMM_M2M_STA_ADDR)      //! state register
+#define     BMM_M2M_AMT             (*(__IO uint8_t xdata *) BMM_M2M_AMT_ADDR)      //! total transfer bytes register
+#define     BMM_M2M_DONE            (*(__IO uint8_t xdata *) BMM_M2M_DONE_ADDR)     //! Transfer completed bytes register
+#define     BMM_M2M_TXAH            (*(__IO uint8_t xdata *) BMM_M2M_TXAH_ADDR)     //! Send High address
+#define     BMM_M2M_TXAL            (*(__IO uint8_t xdata *) BMM_M2M_TXAL_ADDR)     //! Send Low address
+#define     BMM_M2M_RXAH            (*(__IO uint8_t xdata *) BMM_M2M_RXAH_ADDR)     //! Reveice High address
+#define     BMM_M2M_RXAL            (*(__IO uint8_t xdata *) BMM_M2M_RXAL_ADDR)     //! Reveice Low address
+
+#define     BMM_ADC_CFG             (*(__IO uint8_t xdata *) BMM_ADC_CFG_ADDR)
+#define     BMM_ADC_CR              (*(__IO uint8_t xdata *) BMM_ADC_CR_ADDR)
+#define     BMM_ADC_STA             (*(__IO uint8_t xdata *) BMM_ADC_STA_ADDR)
+#define     BMM_ADC_AMT             (*(__IO uint8_t xdata *) BMM_ADC_AMT_ADDR)
+#define     BMM_ADC_DONE            (*(__IO uint8_t xdata *) BMM_ADC_DONE_ADDR)
+#define     BMM_ADC_TXAH            (*(__IO uint8_t xdata *) BMM_ADC_TXAH_ADDR)
+#define     BMM_ADC_TXAL            (*(__IO uint8_t xdata *) BMM_ADC_TXAL_ADDR)
+#define     BMM_ADC_RXAH            (*(__IO uint8_t xdata *) BMM_ADC_RXAH_ADDR)
+#define     BMM_ADC_RXAL            (*(__IO uint8_t xdata *) BMM_ADC_RXAL_ADDR)
+#define     BMM_ADC_CFG2            (*(__IO uint8_t xdata *) BMM_ADC_CFG2_ADDR)
+#define     BMM_ADC_CHSW0           (*(__IO uint8_t xdata *) BMM_ADC_CHSW0_ADDR)
+#define     BMM_ADC_CHSW1           (*(__IO uint8_t xdata *) BMM_ADC_CHSW1_ADDR)
+
+#define     BMM_SPI_CFG             (*(__IO uint8_t xdata *) BMM_SPI_CFG_ADDR)
+#define     BMM_SPI_CR              (*(__IO uint8_t xdata *) BMM_SPI_CR_ADDR)
+#define     BMM_SPI_STA             (*(__IO uint8_t xdata *) BMM_SPI_STA_ADDR)
+#define     BMM_SPI_AMT             (*(__IO uint8_t xdata *) BMM_SPI_AMT_ADDR)
+#define     BMM_SPI_DONE            (*(__IO uint8_t xdata *) BMM_SPI_DONE_ADDR)
+#define     BMM_SPI_TXAH            (*(__IO uint8_t xdata *) BMM_SPI_TXAH_ADDR)
+#define     BMM_SPI_TXAL            (*(__IO uint8_t xdata *) BMM_SPI_TXAL_ADDR)
+#define     BMM_SPI_RXAH            (*(__IO uint8_t xdata *) BMM_SPI_RXAH_ADDR)
+#define     BMM_SPI_RXAL            (*(__IO uint8_t xdata *) BMM_SPI_RXAL_ADDR)
+#define     BMM_SPI_CFG2            (*(__IO uint8_t xdata *) BMM_SPI_CFG2_ADDR)
+
+#define     BMM_UR1T_CFG            (*(__IO uint8_t xdata *) BMM_UR1T_CFG_ADDR)
+#define     BMM_UR1T_CR             (*(__IO uint8_t xdata *) BMM_UR1T_CR_ADDR)
+#define     BMM_UR1T_STA            (*(__IO uint8_t xdata *) BMM_UR1T_STA_ADDR)
+#define     BMM_UR1T_AMT            (*(__IO uint8_t xdata *) BMM_UR1T_AMT_ADDR)
+#define     BMM_UR1T_DONE           (*(__IO uint8_t xdata *) BMM_UR1T_DONE_ADDR)
+#define     BMM_UR1T_TXAH           (*(__IO uint8_t xdata *) BMM_UR1T_TXAH_ADDR)
+#define     BMM_UR1T_TXAL           (*(__IO uint8_t xdata *) BMM_UR1T_TXAL_ADDR)
+
+#define     BMM_UR1R_CFG            (*(__IO uint8_t xdata *) BMM_UR1R_CFG_ADDR)
+#define     BMM_UR1R_CR             (*(__IO uint8_t xdata *) BMM_UR1R_CR_ADDR)
+#define     BMM_UR1R_STA            (*(__IO uint8_t xdata *) BMM_UR1R_STA_ADDR)
+#define     BMM_UR1R_AMT            (*(__IO uint8_t xdata *) BMM_UR1R_AMT_ADDR)
+#define     BMM_UR1R_DONE           (*(__IO uint8_t xdata *) BMM_UR1R_DONE_ADDR)
+#define     BMM_UR1R_TXAH           (*(__IO uint8_t xdata *) BMM_UR1R_TXAH_ADDR)
+#define     BMM_UR1R_TXAL           (*(__IO uint8_t xdata *) BMM_UR1R_TXAL_ADDR)
+
+#define     BMM_UR2T_CFG            (*(__IO uint8_t xdata *) BMM_UR2T_CFG_ADDR)
+#define     BMM_UR2T_CR             (*(__IO uint8_t xdata *) BMM_UR2T_CR_ADDR)
+#define     BMM_UR2T_STA            (*(__IO uint8_t xdata *) BMM_UR2T_STA_ADDR)
+#define     BMM_UR2T_AMT            (*(__IO uint8_t xdata *) BMM_UR2T_AMT_ADDR)
+#define     BMM_UR2T_DONE           (*(__IO uint8_t xdata *) BMM_UR2T_DONE_ADDR)
+#define     BMM_UR2T_TXAH           (*(__IO uint8_t xdata *) BMM_UR2T_TXAH_ADDR)
+#define     BMM_UR2T_TXAL           (*(__IO uint8_t xdata *) BMM_UR2T_TXAL_ADDR)
+
+#define     BMM_UR2R_CFG            (*(__IO uint8_t xdata *) BMM_UR2R_CFG_ADDR)
+#define     BMM_UR2R_CR             (*(__IO uint8_t xdata *) BMM_UR2R_CR_ADDR)
+#define     BMM_UR2R_STA            (*(__IO uint8_t xdata *) BMM_UR2R_STA_ADDR)
+#define     BMM_UR2R_AMT            (*(__IO uint8_t xdata *) BMM_UR2R_AMT_ADDR)
+#define     BMM_UR2R_DONE           (*(__IO uint8_t xdata *) BMM_UR2R_DONE_ADDR)
+#define     BMM_UR2R_TXAH           (*(__IO uint8_t xdata *) BMM_UR2R_TXAH_ADDR)
+#define     BMM_UR2R_TXAL           (*(__IO uint8_t xdata *) BMM_UR2R_TXAL_ADDR)
+
+#define     BMM_UR3T_CFG            (*(__IO uint8_t xdata *) BMM_UR3T_CFG_ADDR)
+#define     BMM_UR3T_CR             (*(__IO uint8_t xdata *) BMM_UR3T_CR_ADDR)
+#define     BMM_UR3T_STA            (*(__IO uint8_t xdata *) BMM_UR3T_STA_ADDR)
+#define     BMM_UR3T_AMT            (*(__IO uint8_t xdata *) BMM_UR3T_AMT_ADDR)
+#define     BMM_UR3T_DONE           (*(__IO uint8_t xdata *) BMM_UR3T_DONE_ADDR)
+#define     BMM_UR3T_TXAH           (*(__IO uint8_t xdata *) BMM_UR3T_TXAH_ADDR)
+#define     BMM_UR3T_TXAL           (*(__IO uint8_t xdata *) BMM_UR3T_TXAL_ADDR)
+
+#define     BMM_UR3R_CFG            (*(__IO uint8_t xdata *) BMM_UR3R_CFG_ADDR)
+#define     BMM_UR3R_CR             (*(__IO uint8_t xdata *) BMM_UR3R_CR_ADDR)
+#define     BMM_UR3R_STA            (*(__IO uint8_t xdata *) BMM_UR3R_STA_ADDR)
+#define     BMM_UR3R_AMT            (*(__IO uint8_t xdata *) BMM_UR3R_AMT_ADDR)
+#define     BMM_UR3R_DONE           (*(__IO uint8_t xdata *) BMM_UR3R_DONE_ADDR)
+#define     BMM_UR3R_TXAH           (*(__IO uint8_t xdata *) BMM_UR3R_TXAH_ADDR)
+#define     BMM_UR3R_TXAL           (*(__IO uint8_t xdata *) BMM_UR3R_TXAL_ADDR)
+
+#define     BMM_UR4T_CFG            (*(__IO uint8_t xdata *) BMM_UR4T_CFG_ADDR)
+#define     BMM_UR4T_CR             (*(__IO uint8_t xdata *) BMM_UR4T_CR_ADDR)
+#define     BMM_UR4T_STA            (*(__IO uint8_t xdata *) BMM_UR4T_STA_ADDR)
+#define     BMM_UR4T_AMT            (*(__IO uint8_t xdata *) BMM_UR4T_AMT_ADDR)
+#define     BMM_UR4T_DONE           (*(__IO uint8_t xdata *) BMM_UR4T_DONE_ADDR)
+#define     BMM_UR4T_TXAH           (*(__IO uint8_t xdata *) BMM_UR4T_TXAH_ADDR)
+#define     BMM_UR4T_TXAL           (*(__IO uint8_t xdata *) BMM_UR4T_TXAL_ADDR)
+
+#define     BMM_UR4R_CFG            (*(__IO uint8_t xdata *) BMM_UR4R_CFG_ADDR)
+#define     BMM_UR4R_CR             (*(__IO uint8_t xdata *) BMM_UR4R_CR_ADDR)
+#define     BMM_UR4R_STA            (*(__IO uint8_t xdata *) BMM_UR4R_STA_ADDR)
+#define     BMM_UR4R_AMT            (*(__IO uint8_t xdata *) BMM_UR4R_AMT_ADDR)
+#define     BMM_UR4R_DONE           (*(__IO uint8_t xdata *) BMM_UR4R_DONE_ADDR)
+#define     BMM_UR4R_TXAH           (*(__IO uint8_t xdata *) BMM_UR4R_TXAH_ADDR)
+#define     BMM_UR4R_TXAL           (*(__IO uint8_t xdata *) BMM_UR4R_TXAL_ADDR)
+
+#define     BMM_LCM_CFG             (*(__IO uint8_t xdata *) BMM_LCM_CFG_ADDR)
+#define     BMM_LCM_CR              (*(__IO uint8_t xdata *) BMM_LCM_CR_ADDR)
+#define     BMM_LCM_STA             (*(__IO uint8_t xdata *) BMM_LCM_STA_ADDR)
+#define     BMM_LCM_AMT             (*(__IO uint8_t xdata *) BMM_LCM_AMT_ADDR)
+#define     BMM_LCM_DONE            (*(__IO uint8_t xdata *) BMM_LCM_DONE_ADDR)
+#define     BMM_LCM_TXAH            (*(__IO uint8_t xdata *) BMM_LCM_TXAH_ADDR)
+#define     BMM_LCM_TXAL            (*(__IO uint8_t xdata *) BMM_LCM_TXAL_ADDR)
+#define     BMM_LCM_RXAH            (*(__IO uint8_t xdata *) BMM_LCM_RXAH_ADDR)
+#define     BMM_LCM_RXAL            (*(__IO uint8_t xdata *) BMM_LCM_RXAL_ADDR)
+
+/* general structure I/O */
+#define     M2M_BMM                 ((M2M_BMM_TypeDef *) M2M_BMM_BASE)
+#define     ADC_BMM                 ((ADC_BMM_TypeDef *) ADC_BMM_BASE)
+#define     SPI_BMM                 ((SPI_BMM_TypeDef *) SPI_BMM_BASE)
+#define     UR1T_BMM                ((UR1T_BMM_TypeDef *) UR1T_BMM_BASE)
+#define     UR1R_BMM                ((UR1R_BMM_TypeDef *) UR1R_BMM_BASE)
+#define     UR2T_BMM                ((UR2T_BMM_TypeDef *) UR2T_BMM_BASE)
+#define     UR2R_BMM                ((UR2R_BMM_TypeDef *) UR2R_BMM_BASE)
+#define     UR3T_BMM                ((UR3T_BMM_TypeDef *) UR3T_BMM_BASE)
+#define     UR3R_BMM                ((UR3R_BMM_TypeDef *) UR3R_BMM_BASE)
+#define     UR4T_BMM                ((UR4T_BMM_TypeDef *) UR4T_BMM_BASE)
+#define     UR4R_BMM                ((UR4R_BMM_TypeDef *) UR4R_BMM_BASE)
+#define     LCM_BMM                 ((LCM_BMM_TypeDef *) LCM_BMM_BASE)
+
+/* Bit definition for BMM_M2M_CFG register */
+#define     BMM_M2M_CFG_M2MIE           ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+#define     BMM_M2M_CFG_TXACO           ((uint8_t)0x20)         /*!< The source address (read address) changes direction: [0], addr increase; [1], addr decrease */
+#define     BMM_M2M_CFG_RXACO           ((uint8_t)0x10)         /*!< The target address (write address) changes direction: [0], addr increase; [1], addr decrease */
+
+#define     BMM_M2M_CFG_M2MIP           ((uint8_t)0x0C)         /*!< M2MIP[1:0], Interrupt priority control bit */
+#define     BMM_M2M_CFG_M2MIP_0         ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_M2M_CFG_M2MIP_1         ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_M2M_CFG_M2MIP_LOWEST    ((uint8_t)0x00)
+#define     BMM_M2M_CFG_M2MIP_LOW       ((uint8_t)0x04)
+#define     BMM_M2M_CFG_M2MIP_HIGH      ((uint8_t)0x08)
+#define     BMM_M2M_CFG_M2MIP_HIGHEST   ((uint8_t)0x0C)
+
+
+#define     BMM_M2M_CFG_M2MPTY          ((uint8_t)0x03)         /*!< M2MPTY[1:0], Data bus access priority control bit */
+#define     BMM_M2M_CFG_M2MPTY_0        ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_M2M_CFG_M2MPTY_1        ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_M2M_CFG_M2MPTY_LOWEST   ((uint8_t)0x00)
+#define     BMM_M2M_CFG_M2MPTY_LOW      ((uint8_t)0x01)
+#define     BMM_M2M_CFG_M2MPTY_HIGH     ((uint8_t)0x02)
+#define     BMM_M2M_CFG_M2MPTY_HIGHEST  ((uint8_t)0x03)
+
+/* Bit definition for BMM_M2M_CR register */
+#define     BMM_M2M_CR_ENM2M            ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+#define     BMM_M2M_CR_TRIG             ((uint8_t)0x40)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_M2M_STA register */
+#define     BMM_M2M_STA_M2MIF           ((uint8_t)0x01)         /*!< M2M interrupt request flag bit, when M2M operation is completed, the hardware automatically places M2MIF 1; software clearence */
+
+
+
+
+/* Bit definition for BMM_ADC_CFG register */
+#define     BMM_ADC_CFG_ADCIE           ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_ADC_CFG_ADCIP           ((uint8_t)0x0C)         /*!< ADCIP[1:0], Interrupt priority control bit */
+#define     BMM_ADC_CFG_ADCIP_0         ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_ADC_CFG_ADCIP_1         ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_ADC_CFG_ADCIP_LOWEST    ((uint8_t)0x00)
+#define     BMM_ADC_CFG_ADCIP_LOW       ((uint8_t)0x04)
+#define     BMM_ADC_CFG_ADCIP_HIGH      ((uint8_t)0x08)
+#define     BMM_ADC_CFG_ADCIP_HIGHEST   ((uint8_t)0x0C)
+
+
+#define     BMM_ADC_CFG_ADCPTY          ((uint8_t)0x03)         /*!< ADCPTY[1:0], Data bus access priority control bit */
+#define     BMM_ADC_CFG_ADCPTY_0        ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_ADC_CFG_ADCPTY_1        ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_ADC_CFG_ADCPTY_LOWEST   ((uint8_t)0x00)
+#define     BMM_ADC_CFG_ADCPTY_LOW      ((uint8_t)0x01)
+#define     BMM_ADC_CFG_ADCPTY_HIGH     ((uint8_t)0x02)
+#define     BMM_ADC_CFG_ADCPTY_HIGHEST  ((uint8_t)0x03)
+
+
+/* Bit definition for BMM_ADC_CR register */
+#define     BMM_ADC_CR_ENADC            ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+#define     BMM_ADC_CR_TRIG             ((uint8_t)0x40)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_ADC_STA register */
+#define     BMM_ADC_STA_ADCIF           ((uint8_t)0x01)         /*!< ADC interrupt request flag bit, when ADC operation is completed, the hardware automatically places ADCIF 1; software clearence */
+
+/* Bit definition for BMM_ADC_CFG2 register */
+#define     BMM_ADC_CFG2_CVTIMESEL      ((uint8_t)0x0F)         /*!< CVTIMESEL[3:0], Sets the number of ADC conversions per ADC channel when ADC operations are performed */
+#define     BMM_ADC_CFG2_CVTIMESEL_0    ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_ADC_CFG2_CVTIMESEL_1    ((uint8_t)0x02)         /*!< Bit 1 */
+#define     BMM_ADC_CFG2_CVTIMESEL_2    ((uint8_t)0x04)         /*!< Bit 2 */
+#define     BMM_ADC_CFG2_CVTIMESEL_3    ((uint8_t)0x08)         /*!< Bit 3 */
+
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT1     ((uint8_t)0x07)    /*!< Conversion Times 1 */
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT2     ((uint8_t)0x08)    /*!< Conversion Times 2 */
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT4     ((uint8_t)0x09)    /*!< Conversion Times 4 */
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT8     ((uint8_t)0x0A)    /*!< Conversion Times 8 */
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT16    ((uint8_t)0x0B)    /*!< Conversion Times 16 */
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT32    ((uint8_t)0x0C)    /*!< Conversion Times 32 */
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT64    ((uint8_t)0x0D)    /*!< Conversion Times 64 */
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT128   ((uint8_t)0x0E)    /*!< Conversion Times 128 */
+#define     BMM_ADC_CFG2_CVTIMESEL_CONT256   ((uint8_t)0x0F)    /*!< Conversion Times 256 */
+
+/* Bit definition for BMM_ADC_CHSW0 register */
+#define     BMM_ADC_CHSW0_CH15          ((uint8_t)0x80)
+#define     BMM_ADC_CHSW0_CH14          ((uint8_t)0x40)
+#define     BMM_ADC_CHSW0_CH13          ((uint8_t)0x20)
+#define     BMM_ADC_CHSW0_CH12          ((uint8_t)0x10)
+#define     BMM_ADC_CHSW0_CH11          ((uint8_t)0x08)
+#define     BMM_ADC_CHSW0_CH10          ((uint8_t)0x04)
+#define     BMM_ADC_CHSW0_CH9           ((uint8_t)0x02)
+#define     BMM_ADC_CHSW0_CH8           ((uint8_t)0x01)
+
+/* Bit definition for BMM_ADC_CHSW1 register */
+#define     BMM_ADC_CHSW1_CH7           ((uint8_t)0x80)
+#define     BMM_ADC_CHSW1_CH6           ((uint8_t)0x40)
+#define     BMM_ADC_CHSW1_CH5           ((uint8_t)0x20)
+#define     BMM_ADC_CHSW1_CH4           ((uint8_t)0x10)
+#define     BMM_ADC_CHSW1_CH3           ((uint8_t)0x08)
+#define     BMM_ADC_CHSW1_CH2           ((uint8_t)0x04)
+#define     BMM_ADC_CHSW1_CH1           ((uint8_t)0x02)
+#define     BMM_ADC_CHSW1_CH0           ((uint8_t)0x01)
+
+
+
+/* Bit definition for BMM_SPI_CFG register */
+#define     BMM_SPI_CFG_SPIIE           ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_SPI_CFG_ACT_TX          ((uint8_t)0x40)         /*!< Send data control bit: [0], disable; [1], enable */
+
+#define     BMM_SPI_CFG_ACT_RX          ((uint8_t)0x20)         /*!< Receive data control bit: [0], disable; [1], enable */
+
+
+#define     BMM_SPI_CFG_SPIIP           ((uint8_t)0x0C)         /*!< SPIIP[1:0], Interrupt priority control bit */
+#define     BMM_SPI_CFG_SPIIP_0         ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_SPI_CFG_SPIIP_1         ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_SPI_CFG_SPIIP_LOWEST    ((uint8_t)0x00)
+#define     BMM_SPI_CFG_SPIIP_LOW       ((uint8_t)0x04)
+#define     BMM_SPI_CFG_SPIIP_HIGH      ((uint8_t)0x08)
+#define     BMM_SPI_CFG_SPIIP_HIGHEST   ((uint8_t)0x0C)
+
+
+#define     BMM_SPI_CFG_SPIPTY          ((uint8_t)0x03)         /*!< SPIPTY[1:0], Data bus access priority control bit */
+#define     BMM_SPI_CFG_SPIPTY_0        ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_SPI_CFG_SPIPTY_1        ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_SPI_CFG_SPIPTY_LOWEST   ((uint8_t)0x00)
+#define     BMM_SPI_CFG_SPIPTY_LOW      ((uint8_t)0x01)
+#define     BMM_SPI_CFG_SPIPTY_HIGH     ((uint8_t)0x02)
+#define     BMM_SPI_CFG_SPIPTY_HIGHEST  ((uint8_t)0x03)
+
+/* Bit definition for BMM_SPI_CR register */
+#define     BMM_SPI_CR_ENSPI            ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+
+#define     BMM_SPI_CR_TRIG_M           ((uint8_t)0x40)         /*!< Master mode trigger control bit: [0], disable; [1], enable */
+ 
+#define     BMM_SPI_CR_TRIG_S           ((uint8_t)0x20)         /*!< Slave mode trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_SPI_CR_CLRFIFO          ((uint8_t)0x01)         /*!< Clear SPI_BMM receiving FIFO control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_SPI_STA register */
+#define     BMM_SPI_STA_SPIIF           ((uint8_t)0x01)         /*!< SPI interrupt request flag bit, when SPI operation is completed, the hardware automatically places SPIIF 1; software clearence */
+
+#define     BMM_SPI_STA_RXLOSS          ((uint8_t)0x02)         /*!< Receive data discard flag bit */
+
+#define     BMM_SPI_STA_TXOVW           ((uint8_t)0x04)         /*!< Data overwrite flag bit */
+
+/* Bit definition for BMM_SPI_CFG2 register */
+#define     BMM_SPI_CFG2_WRPSS          ((uint8_t)0x04)         /*!< SS pin enable control bit: [0], disable; [1], enable automatically pull down SS before transmission complete */
+
+#define     BMM_SPI_CFG2_SSS            ((uint8_t)0x03)         /*!< SSS[1:0], During the SPI_BMM process, automatic control SS select bit */
+#define     BMM_SPI_CFG2_SSS_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_SPI_CFG2_SSS_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_SPI_CFG2_SSS_P12        ((uint8_t)0x00)
+#define     BMM_SPI_CFG2_SSS_P22        ((uint8_t)0x01)
+#define     BMM_SPI_CFG2_SSS_P74        ((uint8_t)0x02)
+#define     BMM_SPI_CFG2_SSS_P35        ((uint8_t)0x03)
+
+
+
+
+/* Bit definition for BMM_UR1T_CFG register */
+#define     BMM_UR1T_CFG_UR1TIE             ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR1T_CFG_UR1TIP             ((uint8_t)0x0C)         /*!< UR1TIP[1:0], Interrupt priority control bit */
+#define     BMM_UR1T_CFG_UR1TIP_0           ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_UR1T_CFG_UR1TIP_1           ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_UR1T_CFG_UR1TIP_LOWEST      ((uint8_t)0x00)
+#define     BMM_UR1T_CFG_UR1TIP_LOW         ((uint8_t)0x04)
+#define     BMM_UR1T_CFG_UR1TIP_HIGH        ((uint8_t)0x08)
+#define     BMM_UR1T_CFG_UR1TIP_HIGHEST     ((uint8_t)0x0C)
+
+
+#define     BMM_UR1T_CFG_UR1TPTY            ((uint8_t)0x03)         /*!< UR1TPTY[1:0], Data bus access priority control bit */
+#define     BMM_UR1T_CFG_UR1TPTY_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_UR1T_CFG_UR1TPTY_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_UR1T_CFG_UR1TPTY_LOWES      ((uint8_t)0x00)
+#define     BMM_UR1T_CFG_UR1TPTY_LOW        ((uint8_t)0x01)
+#define     BMM_UR1T_CFG_UR1TPTY_HIGH       ((uint8_t)0x02)
+#define     BMM_UR1T_CFG_UR1TPTY_HIGHEST    ((uint8_t)0x03)
+
+/* Bit definition for BMM_UR1T_CR register */
+#define     BMM_UR1T_CR_ENUR1T              ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+#define     BMM_UR1T_CR_TRIG                ((uint8_t)0x40)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_UR1T_STA register */
+#define     BMM_UR1T_STA_UR1TIF             ((uint8_t)0x01)         /*!< UR1T interrupt request flag bit, when UR1T operation is completed, the hardware automatically places UR1TIF 1; software clearence */
+
+#define     BMM_UR1T_STA_TXOVW              ((uint8_t)0x04)         /*!< Data overwrite flag bit */
+
+
+
+/* Bit definition for BMM_UR1R_CFG register */
+#define     BMM_UR1R_CFG_UR1RIE             ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR1R_CFG_UR1RIP             ((uint8_t)0x0C)         /*!< UR1RIP[1:0], Interrupt priority control bit */
+#define     BMM_UR1R_CFG_UR1RIP_0           ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_UR1R_CFG_UR1RIP_1           ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_UR1R_CFG_UR1RIP_LOWEST      ((uint8_t)0x00)
+#define     BMM_UR1R_CFG_UR1RIP_LOW         ((uint8_t)0x04)
+#define     BMM_UR1R_CFG_UR1RIP_HIGH        ((uint8_t)0x08)
+#define     BMM_UR1R_CFG_UR1RIP_HIGHEST     ((uint8_t)0x0C)
+
+
+#define     BMM_UR1R_CFG_UR1RPTY            ((uint8_t)0x03)         /*!< UR1RPTY[1:0], Data bus access priority control bit */
+#define     BMM_UR1R_CFG_UR1RPTY_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_UR1R_CFG_UR1RPTY_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_UR1R_CFG_UR1RPTY_LOWES      ((uint8_t)0x00)
+#define     BMM_UR1R_CFG_UR1RPTY_LOW        ((uint8_t)0x01)
+#define     BMM_UR1R_CFG_UR1RPTY_HIGH       ((uint8_t)0x02)
+#define     BMM_UR1R_CFG_UR1RPTY_HIGHEST    ((uint8_t)0x03)
+
+/* Bit definition for BMM_UR1R_CR register */
+#define     BMM_UR1R_CR_ENUR1R              ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR1R_CR_TRIG                ((uint8_t)0x20)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_UR1R_CR_CLRFIFO             ((uint8_t)0x01)         /*!< Clear UR1R_BMM receiving FIFO control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_UR1R_STA register */
+#define     BMM_UR1R_STA_UR1RIF             ((uint8_t)0x01)         /*!< UR1R interrupt request flag bit, when UR1R operation is completed, the hardware automatically places UR1RIF 1; software clearence */
+
+#define     BMM_UR1R_STA_RXLOSS             ((uint8_t)0x02)         /*!< Receive data discard flag bit */
+
+
+
+/* Bit definition for BMM_UR2T_CFG register */
+#define     BMM_UR2T_CFG_UR2TIE             ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR2T_CFG_UR2TIP             ((uint8_t)0x0C)         /*!< UR2TIP[1:0], Interrupt priority control bit */
+#define     BMM_UR2T_CFG_UR2TIP_0           ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_UR2T_CFG_UR2TIP_1           ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_UR2T_CFG_UR2TIP_LOWEST      ((uint8_t)0x00)
+#define     BMM_UR2T_CFG_UR2TIP_LOW         ((uint8_t)0x04)
+#define     BMM_UR2T_CFG_UR2TIP_HIGH        ((uint8_t)0x08)
+#define     BMM_UR2T_CFG_UR2TIP_HIGHEST     ((uint8_t)0x0C)
+
+
+#define     BMM_UR2T_CFG_UR2TPTY            ((uint8_t)0x03)         /*!< UR2TPTY[1:0], Data bus access priority control bit */
+#define     BMM_UR2T_CFG_UR2TPTY_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_UR2T_CFG_UR2TPTY_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_UR2T_CFG_UR2TPTY_LOWES      ((uint8_t)0x00)
+#define     BMM_UR2T_CFG_UR2TPTY_LOW        ((uint8_t)0x01)
+#define     BMM_UR2T_CFG_UR2TPTY_HIGH       ((uint8_t)0x02)
+#define     BMM_UR2T_CFG_UR2TPTY_HIGHEST    ((uint8_t)0x03)
+
+/* Bit definition for BMM_UR2T_CR register */
+#define     BMM_UR2T_CR_ENUR2T              ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+#define     BMM_UR2T_CR_TRIG                ((uint8_t)0x40)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_UR2T_STA register */
+#define     BMM_UR2T_STA_UR2TIF             ((uint8_t)0x01)         /*!< UR2T interrupt request flag bit, when UR2T operation is completed, the hardware automatically places UR2TIF 1; software clearence */
+
+#define     BMM_UR2T_STA_TXOVW              ((uint8_t)0x04)         /*!< Data overwrite flag bit */
+
+
+
+/* Bit definition for BMM_UR2R_CFG register */
+#define     BMM_UR2R_CFG_UR2RIE             ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR2R_CFG_UR2RIP             ((uint8_t)0x0C)         /*!< UR2RIP[1:0], Interrupt priority control bit */
+#define     BMM_UR2R_CFG_UR2RIP_0           ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_UR2R_CFG_UR2RIP_1           ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_UR2R_CFG_UR2RIP_LOWEST      ((uint8_t)0x00)
+#define     BMM_UR2R_CFG_UR2RIP_LOW         ((uint8_t)0x04)
+#define     BMM_UR2R_CFG_UR2RIP_HIGH        ((uint8_t)0x08)
+#define     BMM_UR2R_CFG_UR2RIP_HIGHEST     ((uint8_t)0x0C)
+
+
+#define     BMM_UR2R_CFG_UR2RPTY            ((uint8_t)0x03)         /*!< UR2RPTY[1:0], Data bus access priority control bit */
+#define     BMM_UR2R_CFG_UR2RPTY_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_UR2R_CFG_UR2RPTY_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_UR2R_CFG_UR2RPTY_LOWES      ((uint8_t)0x00)
+#define     BMM_UR2R_CFG_UR2RPTY_LOW        ((uint8_t)0x01)
+#define     BMM_UR2R_CFG_UR2RPTY_HIGH       ((uint8_t)0x02)
+#define     BMM_UR2R_CFG_UR2RPTY_HIGHEST    ((uint8_t)0x03)
+
+/* Bit definition for BMM_UR2R_CR register */
+#define     BMM_UR2R_CR_ENUR2R              ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR2R_CR_TRIG                ((uint8_t)0x20)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_UR2R_CR_CLRFIFO             ((uint8_t)0x01)         /*!< Clear UR2R_BMM receiving FIFO control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_UR2R_STA register */
+#define     BMM_UR2R_STA_UR2RIF             ((uint8_t)0x01)         /*!< UR2R interrupt request flag bit, when UR2R operation is completed, the hardware automatically places UR2RIF 1; software clearence */
+
+#define     BMM_UR2R_STA_RXLOSS             ((uint8_t)0x02)         /*!< Receive data discard flag bit */
+
+
+
+/* Bit definition for BMM_UR3T_CFG register */
+#define     BMM_UR3T_CFG_UR3TIE             ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR3T_CFG_UR3TIP             ((uint8_t)0x0C)         /*!< UR3TIP[1:0], Interrupt priority control bit */
+#define     BMM_UR3T_CFG_UR3TIP_0           ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_UR3T_CFG_UR3TIP_1           ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_UR3T_CFG_UR3TIP_LOWEST      ((uint8_t)0x00)
+#define     BMM_UR3T_CFG_UR3TIP_LOW         ((uint8_t)0x04)
+#define     BMM_UR3T_CFG_UR3TIP_HIGH        ((uint8_t)0x08)
+#define     BMM_UR3T_CFG_UR3TIP_HIGHEST     ((uint8_t)0x0C)
+
+
+#define     BMM_UR3T_CFG_UR3TPTY            ((uint8_t)0x03)         /*!< UR3TPTY[1:0], Data bus access priority control bit */
+#define     BMM_UR3T_CFG_UR3TPTY_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_UR3T_CFG_UR3TPTY_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_UR3T_CFG_UR3TPTY_LOWES      ((uint8_t)0x00)
+#define     BMM_UR3T_CFG_UR3TPTY_LOW        ((uint8_t)0x01)
+#define     BMM_UR3T_CFG_UR3TPTY_HIGH       ((uint8_t)0x02)
+#define     BMM_UR3T_CFG_UR3TPTY_HIGHEST    ((uint8_t)0x03)
+
+/* Bit definition for BMM_UR3T_CR register */
+#define     BMM_UR3T_CR_ENUR3T              ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+#define     BMM_UR3T_CR_TRIG                ((uint8_t)0x40)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_UR3T_STA register */
+#define     BMM_UR3T_STA_UR3TIF             ((uint8_t)0x01)         /*!< UR3T interrupt request flag bit, when UR3T operation is completed, the hardware automatically places UR3TIF 1; software clearence */
+
+#define     BMM_UR3T_STA_TXOVW              ((uint8_t)0x04)         /*!< Data overwrite flag bit */
+
+
+
+/* Bit definition for BMM_UR3R_CFG register */
+#define     BMM_UR3R_CFG_UR3RIE             ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR3R_CFG_UR3RIP             ((uint8_t)0x0C)         /*!< UR3RIP[1:0], Interrupt priority control bit */
+#define     BMM_UR3R_CFG_UR3RIP_0           ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_UR3R_CFG_UR3RIP_1           ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_UR3R_CFG_UR3RIP_LOWEST      ((uint8_t)0x00)
+#define     BMM_UR3R_CFG_UR3RIP_LOW         ((uint8_t)0x04)
+#define     BMM_UR3R_CFG_UR3RIP_HIGH        ((uint8_t)0x08)
+#define     BMM_UR3R_CFG_UR3RIP_HIGHEST     ((uint8_t)0x0C)
+
+
+#define     BMM_UR3R_CFG_UR3RPTY            ((uint8_t)0x03)         /*!< UR3RPTY[1:0], Data bus access priority control bit */
+#define     BMM_UR3R_CFG_UR3RPTY_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_UR3R_CFG_UR3RPTY_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_UR3R_CFG_UR3RPTY_LOWES      ((uint8_t)0x00)
+#define     BMM_UR3R_CFG_UR3RPTY_LOW        ((uint8_t)0x01)
+#define     BMM_UR3R_CFG_UR3RPTY_HIGH       ((uint8_t)0x02)
+#define     BMM_UR3R_CFG_UR3RPTY_HIGHEST    ((uint8_t)0x03)
+
+/* Bit definition for BMM_UR3R_CR register */
+#define     BMM_UR3R_CR_ENUR3R              ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR3R_CR_TRIG                ((uint8_t)0x20)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_UR3R_CR_CLRFIFO             ((uint8_t)0x01)         /*!< Clear UR3R_BMM receiving FIFO control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_UR3R_STA register */
+#define     BMM_UR3R_STA_UR3RIF             ((uint8_t)0x01)         /*!< UR3R interrupt request flag bit, when UR3R operation is completed, the hardware automatically places UR3RIF 1; software clearence */
+
+#define     BMM_UR3R_STA_RXLOSS             ((uint8_t)0x02)         /*!< Receive data discard flag bit */
+
+
+
+
+/* Bit definition for BMM_UR4T_CFG register */
+#define     BMM_UR4T_CFG_UR4TIE             ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR4T_CFG_UR4TIP             ((uint8_t)0x0C)         /*!< UR4TIP[1:0], Interrupt priority control bit */
+#define     BMM_UR4T_CFG_UR4TIP_0           ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_UR4T_CFG_UR4TIP_1           ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_UR4T_CFG_UR4TIP_LOWEST      ((uint8_t)0x00)
+#define     BMM_UR4T_CFG_UR4TIP_LOW         ((uint8_t)0x04)
+#define     BMM_UR4T_CFG_UR4TIP_HIGH        ((uint8_t)0x08)
+#define     BMM_UR4T_CFG_UR4TIP_HIGHEST     ((uint8_t)0x0C)
+
+
+#define     BMM_UR4T_CFG_UR4TPTY            ((uint8_t)0x03)         /*!< UR4TPTY[1:0], Data bus access priority control bit */
+#define     BMM_UR4T_CFG_UR4TPTY_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_UR4T_CFG_UR4TPTY_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_UR4T_CFG_UR4TPTY_LOWES      ((uint8_t)0x00)
+#define     BMM_UR4T_CFG_UR4TPTY_LOW        ((uint8_t)0x01)
+#define     BMM_UR4T_CFG_UR4TPTY_HIGH       ((uint8_t)0x02)
+#define     BMM_UR4T_CFG_UR4TPTY_HIGHEST    ((uint8_t)0x03)
+
+/* Bit definition for BMM_UR4T_CR register */
+#define     BMM_UR4T_CR_ENUR4T              ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+#define     BMM_UR4T_CR_TRIG                ((uint8_t)0x40)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_UR4T_STA register */
+#define     BMM_UR4T_STA_UR4TIF             ((uint8_t)0x01)         /*!< UR4T interrupt request flag bit, when UR4T operation is completed, the hardware automatically places UR4TIF 1; software clearence */
+
+#define     BMM_UR4T_STA_TXOVW              ((uint8_t)0x04)         /*!< Data overwrite flag bit */
+
+
+
+/* Bit definition for BMM_UR4R_CFG register */
+#define     BMM_UR4R_CFG_UR4RIE             ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR4R_CFG_UR4RIP             ((uint8_t)0x0C)         /*!< UR4RIP[1:0], Interrupt priority control bit */
+#define     BMM_UR4R_CFG_UR4RIP_0           ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_UR4R_CFG_UR4RIP_1           ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_UR4R_CFG_UR4RIP_LOWEST      ((uint8_t)0x00)
+#define     BMM_UR4R_CFG_UR4RIP_LOW         ((uint8_t)0x04)
+#define     BMM_UR4R_CFG_UR4RIP_HIGH        ((uint8_t)0x08)
+#define     BMM_UR4R_CFG_UR4RIP_HIGHEST     ((uint8_t)0x0C)
+
+
+#define     BMM_UR4R_CFG_UR4RPTY            ((uint8_t)0x03)         /*!< UR4RPTY[1:0], Data bus access priority control bit */
+#define     BMM_UR4R_CFG_UR4RPTY_0          ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_UR4R_CFG_UR4RPTY_1          ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_UR4R_CFG_UR4RPTY_LOWES      ((uint8_t)0x00)
+#define     BMM_UR4R_CFG_UR4RPTY_LOW        ((uint8_t)0x01)
+#define     BMM_UR4R_CFG_UR4RPTY_HIGH       ((uint8_t)0x02)
+#define     BMM_UR4R_CFG_UR4RPTY_HIGHEST    ((uint8_t)0x03)
+
+/* Bit definition for BMM_UR4R_CR register */
+#define     BMM_UR4R_CR_ENUR4R              ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+
+#define     BMM_UR4R_CR_TRIG                ((uint8_t)0x20)         /*!< Data read write trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_UR4R_CR_CLRFIFO             ((uint8_t)0x01)         /*!< Clear UR4R_BMM receiving FIFO control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_UR4R_STA register */
+#define     BMM_UR4R_STA_UR4RIF             ((uint8_t)0x01)         /*!< UR4R interrupt request flag bit, when UR4R operation is completed, the hardware automatically places UR4RIF 1; software clearence */
+
+#define     BMM_UR4R_STA_RXLOSS             ((uint8_t)0x02)         /*!< Receive data discard flag bit */
+
+
+
+
+
+/* Bit definition for BMM_LCM_CFG register */
+#define     BMM_LCM_CFG_LCMIE               ((uint8_t)0x80)         /*!< Interrupt enable control bit: [0], disable; [1], enable */
+
+#define     BMM_LCM_CFG_LCMIP               ((uint8_t)0x0C)         /*!< LCMIP[1:0], Interrupt priority control bit */
+#define     BMM_LCM_CFG_LCMIP_0             ((uint8_t)0x04)         /*!< Bit 0 */
+#define     BMM_LCM_CFG_LCMIP_1             ((uint8_t)0x08)         /*!< Bit 1 */
+
+#define     BMM_LCM_CFG_LCMIP_LOWEST        ((uint8_t)0x00)
+#define     BMM_LCM_CFG_LCMIP_LOW           ((uint8_t)0x04)
+#define     BMM_LCM_CFG_LCMIP_HIGH          ((uint8_t)0x08)
+#define     BMM_LCM_CFG_LCMIP_HIGHEST       ((uint8_t)0x0C)
+
+
+#define     BMM_LCM_CFG_LCMPTY              ((uint8_t)0x03)         /*!< LCMPTY[1:0], Data bus access priority control bit */
+#define     BMM_LCM_CFG_LCMPTY_0            ((uint8_t)0x01)         /*!< Bit 0 */
+#define     BMM_LCM_CFG_LCMPTY_1            ((uint8_t)0x02)         /*!< Bit 1 */
+
+#define     BMM_LCM_CFG_LCMPTY_LOWES        ((uint8_t)0x00)
+#define     BMM_LCM_CFG_LCMPTY_LOW          ((uint8_t)0x01)
+#define     BMM_LCM_CFG_LCMPTY_HIGH         ((uint8_t)0x02)
+#define     BMM_LCM_CFG_LCMPTY_HIGHEST      ((uint8_t)0x03)
+
+/* Bit definition for BMM_LCM_CR register */
+#define     BMM_LCM_CR_ENLCM                ((uint8_t)0x80)         /*!< function enable control bit: [0], disable; [1], enable */
+
+#define     BMM_LCM_CR_TRIGWC               ((uint8_t)0x40)         /*!< Send command mode trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_LCM_CR_TRIGWD               ((uint8_t)0x20)         /*!< Send data mode trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_LCM_CR_TRIGRC               ((uint8_t)0x10)         /*!< Read command mode trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_LCM_CR_TRIGRD               ((uint8_t)0x08)         /*!< Read data mode trigger control bit: [0], disable; [1], enable */
+
+#define     BMM_LCM_CR_CLRFIFO              ((uint8_t)0x01)         /*!< Clear LCM_BMM receiving FIFO control bit: [0], disable; [1], enable */
+
+/* Bit definition for BMM_LCM_STA register */
+#define     BMM_LCM_STA_LCMIF               ((uint8_t)0x01)         /*!< LCM interrupt request flag bit, when LCM operation is completed, the hardware automatically places LCMIF 1; software clearence */
+
+#define     BMM_LCM_STA_TXOVW               ((uint8_t)0x02)         /*!< Data overwrite flag bit */
 
 //! I2C peripherals
 /**
@@ -1746,6 +2661,78 @@ typedef struct {
 #define     I2CMSAUX        (*(__IO uint8_t xdata *) I2CMSAUX_ADDR)  //!< I2C master auxiliary control register
 
 #define     I2C             ((I2C_TypeDef xdata *) I2C_BASE)        //!< I2C generic struct type definition
+
+//! MDU peripherals
+/**
+ * @brief MDU general I/O configuration
+ */
+typedef struct {
+    __IO uint8_t MD3_REG;     /*---- MDU Divisor data register */
+    __IO uint8_t MD2_REG;     /*---- MDU Divisor data register */
+    __IO uint8_t MD1_REG;     /*---- MDU Divisor data register   */	
+    __IO uint8_t MD0_REG;     /*---- MDU Divisor data register  */
+    __IO uint8_t MD5_REG;     /*---- MDU Divisor data register */
+    __IO uint8_t MD4_REG;     /*---- MDU Divisor data register */ 
+    __IO uint8_t ARCON_REG;   /*----MDU module data registe */
+    __IO uint8_t OPCON_REG;   /*----MDU control data registe */
+} MDU16_TypeDef;
+
+/* Basic address */
+#define    MDU16_BASE        ((uint16_t)0xFCF0U)
+
+#define     MD3_ADDRESS      (MDU16_BASE)
+#define     MD2_ADDRESS      (MDU16_BASE + 0x0001U)
+#define     MD1_ADDRESS      (MDU16_BASE + 0x0002U)
+#define     MD0_ADDRESS      (MDU16_BASE + 0x0003U)
+#define     MD5_ADDRESS      (MDU16_BASE + 0x0004U)
+#define     MD4_ADDRESS      (MDU16_BASE + 0x0005U)
+#define     ARCON_ADDRESS    (MDU16_BASE + 0x0006U)
+#define     OPCON_ADDRESS    (MDU16_BASE + 0x0007U)
+
+/* Bit definition for ARCON register */
+#define     ARCON_MODE              ((uint8_t)0xE0)    /*!< MODE[2:0], MDU mode selection */
+#define     ARCON_MODE_0            ((uint8_t)0x20)    /*!< BIT 0 */
+#define     ARCON_MODE_1            ((uint8_t)0x40)    /*!< BIT 1 */
+#define     ARCON_MODE_2            ((uint8_t)0x80)    /*!< BIT 2 */
+
+#define     ARCON_MODE_SHR          ((uint8_t)0x20)    /*!< shift right logical */
+#define     ARCON_MODE_SHL          ((uint8_t)0x40)    /*!< shift left logical */
+#define     ARCON_MODE_Normalized   ((uint8_t)0x60)    /*!< Normalized */
+#define     ARCON_MODE_16MUL16      ((uint8_t)0x80)    /*!< 16 bits multiply 16 bits */
+#define     ARCON_MODE_16DIV16      ((uint8_t)0xA0)    /*!< 16 bits divide 16 bits */
+#define     ARCON_MODE_32DIV16      ((uint8_t)0xC0)    /*!< 32 bits multiply 16 bits */
+
+#define     ARCON_SC                ((uint8_t)0x1F)    /*!< SC[4:0], Data movement digits */
+#define     ARCON_SC_0              ((uint8_t)0x01)    /*!< BIT 0 */
+#define     ARCON_SC_1              ((uint8_t)0x02)    /*!< BIT 1 */
+#define     ARCON_SC_2              ((uint8_t)0x04)    /*!< BIT 2 */
+#define     ARCON_SC_3              ((uint8_t)0x08)    /*!< BIT 3 */
+#define     ARCON_SC_4              ((uint8_t)0x10)    /*!< BIT 4 */
+
+
+/* Bit definition for OPCON register */
+#define     OPCON_MDOV       ((uint8_t)0x40)    /*!< overflow flag, READ ONLY */
+#define     OPCON_RST        ((uint8_t)0x02)    /*!< Software reset MDU multiplication and division unit */
+#define     OPCON_ENOP       ((uint8_t)0x01)    /*!< MDU module enabled. When the MDU computation is complete, the hardware automatically resets the ENOP: [0], idle; [1], enable */
+
+
+/* MDU16 special function registers */
+#define     MDU16       ((MDU16_TypeDef  xdata *) MDU16_BASE)
+
+#define     MD3U32      (*(__IO uint32_t xdata *)  MD3_ADDRESS)
+#define     MD3U16      (*(__IO uint16_t xdata *)  MD3_ADDRESS)
+#define     MD1U16      (*(__IO uint16_t xdata *)  MD1_ADDRESS)
+#define     MD5U16      (*(__IO uint16_t xdata *)  MD5_ADDRESS)
+
+#define     MD3         (*(__IO uint8_t xdata *)  MD3_ADDRESS)
+#define     MD2         (*(__IO uint8_t xdata *)  MD2_ADDRESS)
+#define     MD1         (*(__IO uint8_t xdata *)  MD1_ADDRESS)
+#define     MD0         (*(__IO uint8_t xdata *)  MD0_ADDRESS)
+#define     MD5         (*(__IO uint8_t xdata *)  MD5_ADDRESS)
+#define     MD4         (*(__IO uint8_t xdata *)  MD4_ADDRESS)
+
+#define     ARCON       (*(__IO uint8_t xdata *)  ARCON_ADDRESS) //! MDU Mode Control Register
+#define     OPCON       (*(__IO uint8_t xdata *)  OPCON_ADDRESS) //! MDU Operation Control Register
 
 
 /** @} */
