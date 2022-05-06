@@ -37,24 +37,24 @@
  */
 
 //! integer types
-typedef  signed char  int8_t;	//  8 bits 
-typedef  signed int  int16_t;	// 16 bits 
-typedef  signed long int32_t;	// 32 bits 
+typedef signed char int8_t;
+typedef signed int  int16_t;
+typedef signed long int32_t;
 
 //! unsigned integer types
-typedef  unsigned char   uint8_t; //  8 bits 
-typedef  unsigned int   uint16_t; // 16 bits 
-typedef  unsigned long  uint32_t; // 32 bits 
+typedef unsigned char uint8_t;
+typedef unsigned int  uint16_t;
+typedef unsigned long uint32_t;
 
 //! volatile signed integer types
-typedef volatile int8_t     vint8_t;
-typedef volatile int16_t    vint16_t;
-typedef volatile int32_t    vint32_t;
+typedef volatile int8_t  vint8_t;
+typedef volatile int16_t vint16_t;
+typedef volatile int32_t vint32_t;
 
 //! volatile unsigned integer types
-typedef volatile uint8_t     vuint8_t;
-typedef volatile uint16_t    vuint16_t;
-typedef volatile uint32_t    vuint32_t;
+typedef volatile uint8_t  vuint8_t;
+typedef volatile uint16_t vuint16_t;
+typedef volatile uint32_t vuint32_t;
 
 /**
  * @brief IO definitions
@@ -68,7 +68,6 @@ typedef volatile uint32_t    vuint32_t;
 /** @defgroup Exported_macro
   * @{
   */
- 
 #define SET_BIT(REG, BIT)     ((REG) |= (BIT))
 
 #define CLEAR_BIT(REG, BIT)   ((REG) &= ~(BIT))
