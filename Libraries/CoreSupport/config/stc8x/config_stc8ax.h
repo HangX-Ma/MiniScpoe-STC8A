@@ -29,7 +29,7 @@
 #define __CONFIG_STC8AX_H__
 
 #include "base_stc8x.h"
-//°üº¬±¾Í·ÎÄ¼þºó,²»ÓÃÁíÍâÔÙ°üº¬"REG51.H"
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù°ï¿½ï¿½ï¿½"REG51.H"
 
 /**
  * @defgroup Special_function_registers
@@ -327,10 +327,10 @@ sfr VOCTRL      =   VOCTRL_ADDR;        //! voltage level control register
 #define     WDT_CONTR_WDT_FLAG          ((uint8_t)0x80)     /*!< Watch dog overflow flag */
 
 // * EN_WDT configuration
-#define     WDT_CONTR_EN_WDT            ((uint8_t)0x20)     /*!< Watch dog enabling bit£º[0] off; [1] on */
+#define     WDT_CONTR_EN_WDT            ((uint8_t)0x20)     /*!< Watch dog enabling bitï¿½ï¿½[0] off; [1] on */
 
 // * CLR_WDT configuration
-#define     WDT_CONTR_CLR_WDT           ((uint8_t)0x10)     /*!< Watch dog timer auto clearance by firmware£º[0] off; [1] on */
+#define     WDT_CONTR_CLR_WDT           ((uint8_t)0x10)     /*!< Watch dog timer auto clearance by firmwareï¿½ï¿½[0] off; [1] on */
 
 // * IDL_WDT configuration
 #define     WDT_CONTR_IDL_WDT           ((uint8_t)0x08)     /*!< Watch dog counting function control on IDLE model [0] stop; [1] resume */
@@ -361,7 +361,7 @@ sfr VOCTRL      =   VOCTRL_ADDR;        //! voltage level control register
 #define     RSTCFG_P54RST               ((uint8_t)0x10)     /*!< RST pin selection: [0] regard P5.4 as normal pin; [1]: regard P5.4 as RST */
 
 // * LVDS configuration
-#define     RSTCFG_LVDS                 ((uint8_t)0x03)     /*!< WDT_PS[1:0] bits£¨low voltage threshold selection£© */
+#define     RSTCFG_LVDS                 ((uint8_t)0x03)     /*!< WDT_PS[1:0] bitsï¿½ï¿½low voltage threshold selectionï¿½ï¿½ */
 #define     RSTCFG_LVDS_0               ((uint8_t)0x01)     /*!< Bit 0 */
 #define     RSTCFG_LVDS_1               ((uint8_t)0x02)     /*!< Bit 1 */
 
@@ -658,7 +658,6 @@ sbit P77        =   P7^7;
 #define     AUXINTIF_T3IF   ((uint8_t)0x02)             /*!< timer 3 overflow interrupt request flag */
 #define     AUXINTIF_T2IF   ((uint8_t)0x01)             /*!< timer 2 overflow interrupt request flag */
 
-<<<<<<< HEAD
 /* ISR special function register */
 sfr IE          =   IE_ADDR;                            //! interrupt enabling register
 sfr IE2         =   IE2_ADDR;                           //! interrupt enabling register 2
@@ -1089,7 +1088,7 @@ typedef struct {
 #define     ADCCFG_SPEED_2            ((uint8_t)0x04)          /*!< Bit 2 */
 #define     ADCCFG_SPEED_3            ((uint8_t)0x08)          /*!< Bit 3 */
 
-// F_ADC£½SYSclk/2/16/£¨SPEED[3:0]+1£©
+// F_ADCï¿½ï¿½SYSclk/2/16/ï¿½ï¿½SPEED[3:0]+1ï¿½ï¿½
 #define     ADCCFG_SPEED_VAL0         ((uint8_t)0x00)          /*!< SYSCLK tick number: 32 ticks*/
 #define     ADCCFG_SPEED_VAL1         ((uint8_t)0x01)          /*!< SYSCLK tick number: 64 ticks*/
 #define     ADCCFG_SPEED_VAL2         ((uint8_t)0x02)          /*!< SYSCLK tick number: 96 ticks*/
