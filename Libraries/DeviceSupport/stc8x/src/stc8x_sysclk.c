@@ -25,17 +25,10 @@
  */
 #include "stc8x_sysclk.h"
 
+
 void RCC_DeInit(void) {
     /* Enable access to the internal extended RAM area */
     P_SW2 |= P_SW2_EAXFR;
-    /* clear CKSEL */
-    SYSCLK->RCC_CKSEL &= ~(0xFF);
-    /* select 24MHz IRC */
-    SYSCLK->RCC_CKSEL |= CKSEL_MCKSEL_IRC24MCR;
-    /* MCLK no output */
-    SYSCLK->RCC_CKSEL |= CKSEL_MCLKODIV_DIV0;
-    /* SYSCLK no division */
-    SYSCLK->RCC_CLKDIV = 0x00;
     /* disable unused clock registers */
     SYSCLK->RCC_IRC32KCR = 0x7E;
     SYSCLK->RCC_XOSCCR   = 0x7E;
@@ -45,8 +38,99 @@ void RCC_DeInit(void) {
     while (!(SYSCLK->RCC_IRC24MCR & IRC24MCR_IRC24MST)) {
         ;
     }
-    /* set internal 24MHz IRC to 27MHz actually */
-    IRCTRIM  = 200;
-    /* internal clock IRC no trim */
-    LIRCTRIM = LIRTRIM_BITS_FT000;
+    /* SYSCLK no division */
+    SYSCLK->RCC_CLKDIV = 0x00;
+    /* clear CKSEL */
+    SYSCLK->RCC_CKSEL &= ~(0xFF);
+    if (LIB_MCU_MODULE == STC8Ax) {
+        IRTRIM = T24M_RAM;
+        /* MCLK no output */
+        SYSCLK->RCC_CKSEL |= CKSEL_MCLKODIV_DIV0;
+    } 
+    else if (LIB_MCU_MODULE == STC8Hx) {
+        SYSCLK->RCC_MCLKOCR = 0x00;
+        IRCBAND = IRCBAND_SEL_27MHz;
+        IRTRIM  = T24M_CHIPID;
+        VRTRIM  = VRT27M_CHIPID;
+
+    }
+    /* select 24MHz IRC */
+    SYSCLK->RCC_CKSEL |= CKSEL_MCKSEL_IRC24MCR;
 }
+
+
+#if  (LIB_MCU_MODULE == STC8Ax) 
+
+    void STC8Ax_RCC_UserIRC(uint8_t _irtrim, uint8_t _clkdiv, uint8_t _mclk_div_val, uint8_t _mclk_output_pin) {
+        /* enable external special registers */
+        P_SW2 |= P_SW2_EAXFR;
+        /* set value for irtrim */
+        IRTRIM = _irtrim;
+        /* disable unused clock registers */
+        SYSCLK->RCC_IRC32KCR = 0x7E;
+        SYSCLK->RCC_XOSCCR   = 0x7E;
+        /* enable 24MHz IRC */
+        SYSCLK->RCC_IRC24MCR = 0xFE;
+
+        /* wait for oscillator to be stable */
+        while (!(SYSCLK->RCC_IRC24MCR & IRC24MCR_IRC24MST)) {
+            ;
+        }
+        /* clear CKSEL */
+        SYSCLK->RCC_CKSEL &= ~(0xFF);
+
+        /* no clock division */
+        SYSCLK->RCC_CLKDIV = _clkdiv;
+        /* MCLK division value */
+        SYSCLK->RCC_CKSEL |= _mclk_div_val;
+        /* MCLK output pin */
+        SYSCLK->RCC_CKSEL  = _mclk_output_pin;
+
+        /* select 24MHz IRC */
+        SYSCLK->RCC_CKSEL |= CKSEL_MCKSEL_IRC24MCR;
+        /* disable external special registers */
+        P_SW2 &= ~P_SW2_EAXFR;
+    }
+
+#endif
+
+
+#if  (LIB_MCU_MODULE == STC8Hx) 
+
+    void STC8Hx_RCC_UserIRC(uint8_t _irtrim, uint8_t _vrtrim, uint8_t _ircband,
+                             uint8_t _clkdiv, uint8_t _mclk_div_val, uint8_t _mclk_output_pin) {
+        /* enable external special registers */
+        P_SW2 |= P_SW2_EAXFR;
+        /* set value for IRTRIM */
+        IRTRIM  = _irtrim;
+        /* set value for VRTRIM */
+        VRTRIM  = _vrtrim;
+        /* select IRC band */
+        IRCBAND = _ircband;
+        /* disable unused clock registers */
+        SYSCLK->RCC_IRC32KCR = 0x7E;
+        SYSCLK->RCC_XOSCCR   = 0x7E;
+        /* enable 24MHz IRC */
+        SYSCLK->RCC_IRC24MCR = 0xFE;
+
+        /* wait for oscillator to be stable */
+        while (!(SYSCLK->RCC_IRC24MCR & IRC24MCR_IRC24MST)) {
+            ;
+        }
+        /* clear CKSEL */
+        SYSCLK->RCC_CKSEL   &= ~(0xFF);
+
+        /* no clock division */
+        SYSCLK->RCC_CLKDIV   = _clkdiv;
+        /* MCLK division value */
+        SYSCLK->RCC_MCLKOCR |= _mclk_div_val;
+        /* clear previous definition of MCLK output pin */
+        SYSCLK->RCC_MCLKOCR &= ~MCLKOCR_MCLKO_S;
+        SYSCLK->RCC_MCLKOCR |= _mclk_output_pin;
+        /* select 24MHz IRC */
+        SYSCLK->RCC_CKSEL   |= CKSEL_MCKSEL_IRC24MCR;
+        /* disable external special registers */
+        P_SW2 &= ~P_SW2_EAXFR;
+    }
+
+#endif

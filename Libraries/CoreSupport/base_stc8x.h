@@ -36,6 +36,14 @@
  * @{
  */
 
+//* MCU MODULE Definitions
+// #define LIB_MCU_MODULE  STC8Ax
+#define LIB_MCU_MODULE  STC8Hx
+
+//* Clock frequency Definition beforehand
+#define LIB_CLK_FREQ    ((uint32_t)0x00)    // auto clock frequency acquirement
+
+
 //! integer types
 typedef signed char int8_t;
 typedef signed int  int16_t;

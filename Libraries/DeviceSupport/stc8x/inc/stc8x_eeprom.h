@@ -27,8 +27,12 @@
 #ifndef __STC8X_EEPROM__H__
 #define __STC8X_EEPROM__H__
 
-#include "config_stc8ax.h"
-#include "core_stc8x.h"
+#if (LIB_MCU_MODULE == STC8Ax)
+    #include "config_stc8ax.h"
+#elif (LIB_MCU_MODULE == STC8Hx)
+    #include "config_stc8hx.h"
+#endif
+
 
 /** @addtogroup STC
  * @{
@@ -38,6 +42,12 @@
  * @{
  */
 
+
+void EEPROM_PageErase(uint16_t addr);
+
+void EEPROM_Read(uint8_t *str, char num);
+
+void EEPROM_Write(uint8_t *str, char num);
 
 
 

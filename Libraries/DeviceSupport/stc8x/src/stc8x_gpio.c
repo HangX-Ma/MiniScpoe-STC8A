@@ -1,7 +1,7 @@
 /**
- * @file stc8x_eeprom.c
+ * @file stc8x_gpio.c
  * @author MContour (m-contour@qq.com)
- * @brief STC8x EEPROM basic function realization 
+ * @brief STC8x GPIO basic function realization 
  * @version 0.1
  * @date 2022-05-02
  * 
@@ -23,3 +23,24 @@
  * limitations under the License.
  *****************************************************************************
  */
+
+#include "stc8x_gpio.h"
+
+void GPIO_DeInit(void) {
+    P0M0 = 0x00;
+    P0M1 = 0x00;
+    P1M0 = 0x00;
+    P1M1 = 0x00;
+    P2M0 = 0x00;
+    P2M1 = 0x00;
+    P3M0 = 0x00;
+    P3M1 = 0x00;
+    P4M0 = 0x00;
+    P4M1 = 0x00;
+    P5M0 = 0x00;
+    P5M1 = 0x00;
+    P6M0 = 0x00;
+    P6M1 = 0x00;
+    P7M0 = 0x00;
+    P7M1 = 0x00;
+}

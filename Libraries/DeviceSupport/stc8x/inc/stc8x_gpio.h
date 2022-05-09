@@ -1,7 +1,7 @@
 /**
- * @file stc8x_eeprom.c
- * @author MContour (m-contour@qq.com)
- * @brief STC8x EEPROM basic function realization 
+ * @file stc8x_gpio.h
+* @author MContour (m-contour@qq.com)
+ * @brief STC8x GPIO basic function definitions 
  * @version 0.1
  * @date 2022-05-02
  * 
@@ -23,3 +23,31 @@
  * limitations under the License.
  *****************************************************************************
  */
+
+#ifndef __STC8X_GPIO__H__
+#define __STC8X_GPIO__H__
+#if (LIB_MCU_MODULE == STC8Ax)
+    #include "config_stc8ax.h"
+#elif (LIB_MCU_MODULE == STC8Hx)
+    #include "config_stc8hx.h"
+#endif
+
+
+/** @addtogroup STC
+ * @{
+ */
+
+/** @addtogroup Peripheral
+ * @{
+ */
+
+void GPIO_DeInit(void);
+
+
+
+/** @} */
+
+/** @} */
+
+
+#endif  //!__STC8X_GPIO__H__

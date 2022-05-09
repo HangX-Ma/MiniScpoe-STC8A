@@ -203,9 +203,9 @@ typedef struct
 #define     IRCBAND_SEL_1               ((uint8_t)0x02) /*!< Bit 1 */
 
 #define     IRCBAND_SEL_6MHz            ((uint8_t)0x00)
-#define     IRCBAND_SEL_10MHz           ((uint8_t)0x00)
-#define     IRCBAND_SEL_27MHz           ((uint8_t)0x00)
-#define     IRCBAND_SEL_44MHz           ((uint8_t)0x00)
+#define     IRCBAND_SEL_10MHz           ((uint8_t)0x01)
+#define     IRCBAND_SEL_27MHz           ((uint8_t)0x02)
+#define     IRCBAND_SEL_44MHz           ((uint8_t)0x03)
 
 
 /* Bit definition for LIRTRIM register */
@@ -1896,8 +1896,10 @@ typedef struct{
 #define     BMM_M2M_STA             (*(__IO uint8_t xdata *) BMM_M2M_STA_ADDR)      //! state register
 #define     BMM_M2M_AMT             (*(__IO uint8_t xdata *) BMM_M2M_AMT_ADDR)      //! total transfer bytes register
 #define     BMM_M2M_DONE            (*(__IO uint8_t xdata *) BMM_M2M_DONE_ADDR)     //! Transfer completed bytes register
+#define     BMM_M2M_TXA             (*(__IO uint16_t xdata *) BMM_M2M_TXAH_ADDR)    //! Send address
 #define     BMM_M2M_TXAH            (*(__IO uint8_t xdata *) BMM_M2M_TXAH_ADDR)     //! Send High address
 #define     BMM_M2M_TXAL            (*(__IO uint8_t xdata *) BMM_M2M_TXAL_ADDR)     //! Send Low address
+#define     BMM_M2M_RXA             (*(__IO uint16_t xdata *) BMM_M2M_RXAH_ADDR)    //! Reveice address
 #define     BMM_M2M_RXAH            (*(__IO uint8_t xdata *) BMM_M2M_RXAH_ADDR)     //! Reveice High address
 #define     BMM_M2M_RXAL            (*(__IO uint8_t xdata *) BMM_M2M_RXAL_ADDR)     //! Reveice Low address
 
@@ -1906,8 +1908,10 @@ typedef struct{
 #define     BMM_ADC_STA             (*(__IO uint8_t xdata *) BMM_ADC_STA_ADDR)
 #define     BMM_ADC_AMT             (*(__IO uint8_t xdata *) BMM_ADC_AMT_ADDR)
 #define     BMM_ADC_DONE            (*(__IO uint8_t xdata *) BMM_ADC_DONE_ADDR)
+#define     BMM_ADC_TXA             (*(__IO uint16_t xdata *) BMM_ADC_TXAH_ADDR)
 #define     BMM_ADC_TXAH            (*(__IO uint8_t xdata *) BMM_ADC_TXAH_ADDR)
 #define     BMM_ADC_TXAL            (*(__IO uint8_t xdata *) BMM_ADC_TXAL_ADDR)
+#define     BMM_ADC_RXA             (*(__IO uint16_t xdata *) BMM_ADC_RXAH_ADDR)
 #define     BMM_ADC_RXAH            (*(__IO uint8_t xdata *) BMM_ADC_RXAH_ADDR)
 #define     BMM_ADC_RXAL            (*(__IO uint8_t xdata *) BMM_ADC_RXAL_ADDR)
 #define     BMM_ADC_CFG2            (*(__IO uint8_t xdata *) BMM_ADC_CFG2_ADDR)
@@ -1919,8 +1923,10 @@ typedef struct{
 #define     BMM_SPI_STA             (*(__IO uint8_t xdata *) BMM_SPI_STA_ADDR)
 #define     BMM_SPI_AMT             (*(__IO uint8_t xdata *) BMM_SPI_AMT_ADDR)
 #define     BMM_SPI_DONE            (*(__IO uint8_t xdata *) BMM_SPI_DONE_ADDR)
+#define     BMM_SPI_TXA             (*(__IO uint16_t xdata *) BMM_SPI_TXAH_ADDR)
 #define     BMM_SPI_TXAH            (*(__IO uint8_t xdata *) BMM_SPI_TXAH_ADDR)
 #define     BMM_SPI_TXAL            (*(__IO uint8_t xdata *) BMM_SPI_TXAL_ADDR)
+#define     BMM_SPI_RXA             (*(__IO uint16_t xdata *) BMM_SPI_RXAH_ADDR)
 #define     BMM_SPI_RXAH            (*(__IO uint8_t xdata *) BMM_SPI_RXAH_ADDR)
 #define     BMM_SPI_RXAL            (*(__IO uint8_t xdata *) BMM_SPI_RXAL_ADDR)
 #define     BMM_SPI_CFG2            (*(__IO uint8_t xdata *) BMM_SPI_CFG2_ADDR)
@@ -1930,6 +1936,7 @@ typedef struct{
 #define     BMM_UR1T_STA            (*(__IO uint8_t xdata *) BMM_UR1T_STA_ADDR)
 #define     BMM_UR1T_AMT            (*(__IO uint8_t xdata *) BMM_UR1T_AMT_ADDR)
 #define     BMM_UR1T_DONE           (*(__IO uint8_t xdata *) BMM_UR1T_DONE_ADDR)
+#define     BMM_UR1T_TXA            (*(__IO uint16_t xdata *) BMM_UR1T_TXAH_ADDR)
 #define     BMM_UR1T_TXAH           (*(__IO uint8_t xdata *) BMM_UR1T_TXAH_ADDR)
 #define     BMM_UR1T_TXAL           (*(__IO uint8_t xdata *) BMM_UR1T_TXAL_ADDR)
 
@@ -1938,6 +1945,7 @@ typedef struct{
 #define     BMM_UR1R_STA            (*(__IO uint8_t xdata *) BMM_UR1R_STA_ADDR)
 #define     BMM_UR1R_AMT            (*(__IO uint8_t xdata *) BMM_UR1R_AMT_ADDR)
 #define     BMM_UR1R_DONE           (*(__IO uint8_t xdata *) BMM_UR1R_DONE_ADDR)
+#define     BMM_UR1R_TXA            (*(__IO uint16_t xdata *) BMM_UR1R_TXAH_ADDR)
 #define     BMM_UR1R_TXAH           (*(__IO uint8_t xdata *) BMM_UR1R_TXAH_ADDR)
 #define     BMM_UR1R_TXAL           (*(__IO uint8_t xdata *) BMM_UR1R_TXAL_ADDR)
 
@@ -1946,6 +1954,7 @@ typedef struct{
 #define     BMM_UR2T_STA            (*(__IO uint8_t xdata *) BMM_UR2T_STA_ADDR)
 #define     BMM_UR2T_AMT            (*(__IO uint8_t xdata *) BMM_UR2T_AMT_ADDR)
 #define     BMM_UR2T_DONE           (*(__IO uint8_t xdata *) BMM_UR2T_DONE_ADDR)
+#define     BMM_UR2T_TXA            (*(__IO uint16_t xdata *) BMM_UR2T_TXAH_ADDR)
 #define     BMM_UR2T_TXAH           (*(__IO uint8_t xdata *) BMM_UR2T_TXAH_ADDR)
 #define     BMM_UR2T_TXAL           (*(__IO uint8_t xdata *) BMM_UR2T_TXAL_ADDR)
 
@@ -1954,6 +1963,7 @@ typedef struct{
 #define     BMM_UR2R_STA            (*(__IO uint8_t xdata *) BMM_UR2R_STA_ADDR)
 #define     BMM_UR2R_AMT            (*(__IO uint8_t xdata *) BMM_UR2R_AMT_ADDR)
 #define     BMM_UR2R_DONE           (*(__IO uint8_t xdata *) BMM_UR2R_DONE_ADDR)
+#define     BMM_UR2R_TXA            (*(__IO uint16_t xdata *) BMM_UR2R_TXAH_ADDR)
 #define     BMM_UR2R_TXAH           (*(__IO uint8_t xdata *) BMM_UR2R_TXAH_ADDR)
 #define     BMM_UR2R_TXAL           (*(__IO uint8_t xdata *) BMM_UR2R_TXAL_ADDR)
 
@@ -1962,6 +1972,7 @@ typedef struct{
 #define     BMM_UR3T_STA            (*(__IO uint8_t xdata *) BMM_UR3T_STA_ADDR)
 #define     BMM_UR3T_AMT            (*(__IO uint8_t xdata *) BMM_UR3T_AMT_ADDR)
 #define     BMM_UR3T_DONE           (*(__IO uint8_t xdata *) BMM_UR3T_DONE_ADDR)
+#define     BMM_UR3T_TXA            (*(__IO uint16_t xdata *) BMM_UR3T_TXAH_ADDR)
 #define     BMM_UR3T_TXAH           (*(__IO uint8_t xdata *) BMM_UR3T_TXAH_ADDR)
 #define     BMM_UR3T_TXAL           (*(__IO uint8_t xdata *) BMM_UR3T_TXAL_ADDR)
 
@@ -1970,6 +1981,7 @@ typedef struct{
 #define     BMM_UR3R_STA            (*(__IO uint8_t xdata *) BMM_UR3R_STA_ADDR)
 #define     BMM_UR3R_AMT            (*(__IO uint8_t xdata *) BMM_UR3R_AMT_ADDR)
 #define     BMM_UR3R_DONE           (*(__IO uint8_t xdata *) BMM_UR3R_DONE_ADDR)
+#define     BMM_UR3R_TXA            (*(__IO uint16_t xdata *) BMM_UR3R_TXAH_ADDR)
 #define     BMM_UR3R_TXAH           (*(__IO uint8_t xdata *) BMM_UR3R_TXAH_ADDR)
 #define     BMM_UR3R_TXAL           (*(__IO uint8_t xdata *) BMM_UR3R_TXAL_ADDR)
 
@@ -1978,6 +1990,7 @@ typedef struct{
 #define     BMM_UR4T_STA            (*(__IO uint8_t xdata *) BMM_UR4T_STA_ADDR)
 #define     BMM_UR4T_AMT            (*(__IO uint8_t xdata *) BMM_UR4T_AMT_ADDR)
 #define     BMM_UR4T_DONE           (*(__IO uint8_t xdata *) BMM_UR4T_DONE_ADDR)
+#define     BMM_UR4T_TXA            (*(__IO uint16_t xdata *) BMM_UR4T_TXAH_ADDR)
 #define     BMM_UR4T_TXAH           (*(__IO uint8_t xdata *) BMM_UR4T_TXAH_ADDR)
 #define     BMM_UR4T_TXAL           (*(__IO uint8_t xdata *) BMM_UR4T_TXAL_ADDR)
 
@@ -1986,6 +1999,7 @@ typedef struct{
 #define     BMM_UR4R_STA            (*(__IO uint8_t xdata *) BMM_UR4R_STA_ADDR)
 #define     BMM_UR4R_AMT            (*(__IO uint8_t xdata *) BMM_UR4R_AMT_ADDR)
 #define     BMM_UR4R_DONE           (*(__IO uint8_t xdata *) BMM_UR4R_DONE_ADDR)
+#define     BMM_UR4R_TXA            (*(__IO uint16_t xdata *) BMM_UR4R_TXAH_ADDR)
 #define     BMM_UR4R_TXAH           (*(__IO uint8_t xdata *) BMM_UR4R_TXAH_ADDR)
 #define     BMM_UR4R_TXAL           (*(__IO uint8_t xdata *) BMM_UR4R_TXAL_ADDR)
 
@@ -1994,8 +2008,10 @@ typedef struct{
 #define     BMM_LCM_STA             (*(__IO uint8_t xdata *) BMM_LCM_STA_ADDR)
 #define     BMM_LCM_AMT             (*(__IO uint8_t xdata *) BMM_LCM_AMT_ADDR)
 #define     BMM_LCM_DONE            (*(__IO uint8_t xdata *) BMM_LCM_DONE_ADDR)
+#define     BMM_LCM_TXA             (*(__IO uint16_t xdata *) BMM_LCM_TXAH_ADDR)
 #define     BMM_LCM_TXAH            (*(__IO uint8_t xdata *) BMM_LCM_TXAH_ADDR)
 #define     BMM_LCM_TXAL            (*(__IO uint8_t xdata *) BMM_LCM_TXAL_ADDR)
+#define     BMM_LCM_RXA             (*(__IO uint16_t xdata *) BMM_LCM_RXAH_ADDR)
 #define     BMM_LCM_RXAH            (*(__IO uint8_t xdata *) BMM_LCM_RXAH_ADDR)
 #define     BMM_LCM_RXAL            (*(__IO uint8_t xdata *) BMM_LCM_RXAL_ADDR)
 
@@ -2733,6 +2749,8 @@ typedef struct {
 
 #define     ARCON       (*(__IO uint8_t xdata *)  ARCON_ADDRESS) //! MDU Mode Control Register
 #define     OPCON       (*(__IO uint8_t xdata *)  OPCON_ADDRESS) //! MDU Operation Control Register
+
+
 
 
 /** @} */

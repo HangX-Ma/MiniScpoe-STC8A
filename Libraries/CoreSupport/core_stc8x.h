@@ -62,7 +62,6 @@ typedef enum
   ISR_PR3 = (uint8_t)0x03   //!< Highest priority
 } ISR_PRx;
 
-
 // low voltage detection interrupt
 #define LVD_ISRQ_Handler(void)  LVD_ISR(void) interrupt  6
 
@@ -105,6 +104,35 @@ typedef enum
 // I2C interrupt
 #define I2C_ISRQ_Handler(void)  I2C_ISR(void) interrupt  24
 
+#if (LIB_MCU_MODULE == STC8Hx)
+/** @defgroup NVIC
+ * @{
+ */
+#define     P0INT_VECTOR            37      //012BH
+#define     P1INT_VECTOR            38      //0133H
+#define     P2INT_VECTOR            39      //013BH
+#define     P3INT_VECTOR            40      //0143H
+#define     P4INT_VECTOR            41      //014BH
+#define     P5INT_VECTOR            42      //0153H
+#define     P6INT_VECTOR            43      //015BH
+#define     P7INT_VECTOR            44      //0163H
+#define     M2MDMA_VECTOR           47      //017BH
+#define     ADCDMA_VECTOR           48      //0183H
+#define     SPIDMA_VECTOR           49      //018BH
+#define     U1TXDMA_VECTOR          50      //0193H
+#define     U1RXDMA_VECTOR          51      //019BH
+#define     U2TXDMA_VECTOR          52      //01A3H
+#define     U2RXDMA_VECTOR          53      //01ABH
+#define     U3TXDMA_VECTOR          54      //01B3H
+#define     U3RXDMA_VECTOR          55      //01BBH
+#define     U4TXDMA_VECTOR          56      //01C3H
+#define     U4RXDMA_VECTOR          57      //01CBH
+#define     LCMDMA_VECTOR           58      //01D3H
+#define     LCM_VECTOR              59      //01DBH
+
+/** @} */
+
+#endif
 
 /** @} */
 

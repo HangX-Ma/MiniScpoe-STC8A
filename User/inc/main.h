@@ -29,6 +29,8 @@
 
 #include "stc8x_sysclk.h"
 #include "stc8x_eeprom.h"
+#include "stdio.h"
+#include "stdlib.h"
 
 
 #endif  //!__MAIN__H__
