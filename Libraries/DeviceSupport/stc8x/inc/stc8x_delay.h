@@ -34,13 +34,6 @@
     #include "config_stc8hx.h"
 #endif
 
-#include "core_stc8x.h"
-//* ------------   GLOBAL variables   ------------
-
-//* ------------ developer definitions ------------
-
-//* ------------     functions     ------------
-
 /** @addtogroup STC
  * @{
  */
@@ -48,6 +41,14 @@
 /** @addtogroup Peripheral
  * @{
  */
+
+#include "core_stc8x.h"
+//* ------------   GLOBAL variables   ------------
+
+//* ------------ developer definitions ------------
+
+//* ------------     functions     ------------
+
 
 void delay_nms(uint16_t nms);
 

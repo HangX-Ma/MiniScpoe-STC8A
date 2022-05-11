@@ -714,8 +714,8 @@ sbit P77        =   P7^7;
 #define     P7NCS       (*(__IO uint8_t xdata *) P8NCS_ADDR)            // Extended SFR
 
 #define GPIO_Px(x)  (P##x)
-#define Px_M1(x) 	(P##x##M1)
-#define Px_M0(x) 	(P##x##M0)
+#define Px_M1(x)    (P##x##M1)
+#define Px_M0(x)    (P##x##M0)
 #define Px_PU(x)    (P##x##PU)
 #define Px_SR(x)    (P##x##SR)
 #define Px_DR(x)    (P##x##DR)
@@ -941,23 +941,9 @@ sbit TCON_IE0        =   TCON^1;                         /*!< external interrupt
 sbit TCON_IT0        =   TCON^0;                         /*!< external interrupt 0 trigger ways selection bit */
 
 //! UART peripherals
-/**
- * @brief UART generic I/O definition
- */
-typedef struct {
-    __IO uint8_t SxCON;
-    __IO uint8_t SxBUF;
-}UARTx_TypeDef;
-
 /* UART basic address definition */
-#define     UART_BASE       ((uint8_t)0x98)
-#define     UART1_BASE      (UART_BASE + 0x00)
-#define     UART2_BASE      (UART_BASE + 0x02)
-#define     UART3_BASE      (UART_BASE + 0x04)
-#define     UART4_BASE      (UART_BASE + 0x06)
-
-#define     SCON_ADDR       ((uint8_t)0x98)
-#define     SBUF_ADDR       ((uint8_t)0x99)
+#define     S1CON_ADDR       ((uint8_t)0x98)
+#define     S1BUF_ADDR       ((uint8_t)0x99)
 #define     S2CON_ADDR      ((uint8_t)0x9A)
 #define     S2BUF_ADDR      ((uint8_t)0x9B)
 #define     S3CON_ADDR      ((uint8_t)0xAC)
@@ -977,7 +963,6 @@ typedef struct {
 
 /* Bit definition for S2CON register */
 #define     S2SM0           ((uint8_t)0x80)
-#define     S2ST4           ((uint8_t)0x40)
 #define     S2SM2           ((uint8_t)0x20)
 #define     S2REN           ((uint8_t)0x10)
 #define     S2TB8           ((uint8_t)0x08)
@@ -987,7 +972,7 @@ typedef struct {
 
 /* Bit definition for S3CON register */
 #define     S3SM0           ((uint8_t)0x80)
-#define     S3ST4           ((uint8_t)0x40)
+#define     S3ST3           ((uint8_t)0x40)
 #define     S3SM2           ((uint8_t)0x20)
 #define     S3REN           ((uint8_t)0x10)
 #define     S3TB8           ((uint8_t)0x08)
@@ -1006,8 +991,8 @@ typedef struct {
 #define     S4RI            ((uint8_t)0x01)
 
 /* UART special function registers */
-sfr SCON        =   SCON_ADDR;          //!< serial 1 control register
-sfr SBUF        =   SBUF_ADDR;          //!< serial 1 data register
+sfr S1CON       =   S1CON_ADDR;         //!< serial 1 control register
+sfr S1BUF       =   S1BUF_ADDR;         //!< serial 1 data register
 sfr S2CON       =   S2CON_ADDR;         //!< serial 2 control register
 sfr S2BUF       =   S2BUF_ADDR;         //!< serial 2 data register
 sfr S3CON       =   S3CON_ADDR;         //!< serial 3 control register
@@ -1017,20 +1002,17 @@ sfr S4BUF       =   S4BUF_ADDR;         //!< serial 4 data register
 sfr SADDR       =   SADDR_ADDR;         //!< serial 1 slave address register
 sfr SADEN       =   SADEN_ADDR;         //!< serial 1 slave shielded address register
 
-#define     UART1               ((UARTx_TypeDef idata* xdata *) UART1_BASE)
-#define     UART2               ((UARTx_TypeDef idata* xdata *) UART2_BASE)
-#define     UART3               ((UARTx_TypeDef idata* xdata *) UART3_BASE)
-#define     UART4               ((UARTx_TypeDef idata* xdata *) UART4_BASE)
-
 /* Bit definition for SCON register */
-sbit SCON_SM0        =   SCON^7;
-sbit SCON_SM1        =   SCON^6;
-sbit SCON_SM2        =   SCON^5;
-sbit SCON_REN        =   SCON^4;
-sbit SCON_TB8        =   SCON^3;
-sbit SCON_RB8        =   SCON^2;
-sbit SCON_TI         =   SCON^1;
-sbit SCON_RI         =   SCON^0;
+sbit S1SM0        =   SCON^7;
+sbit S1SM1        =   SCON^6;
+sbit S1SM2        =   SCON^5;
+sbit S1REN        =   SCON^4;
+sbit S1TB8        =   SCON^3;
+sbit S1RB8        =   SCON^2;
+sbit S1TI         =   SCON^1;
+sbit S1RI         =   SCON^0;
+
+#define     SxCON(x)                (S##x##CON)
 
 //! COMP peripherals
 /* COMP basic address definition */

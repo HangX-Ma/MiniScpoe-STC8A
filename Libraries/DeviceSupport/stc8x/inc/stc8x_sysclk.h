@@ -36,11 +36,7 @@
 #endif
 
 #include "core_stc8x.h"
-//* ------------   GLOBAL variables   ------------
 
-//* ------------ developer definitions ------------
-
-//* ------------     functions     ------------
 
 /** @addtogroup STC
  * @{
@@ -49,6 +45,13 @@
 /** @addtogroup Peripheral
  * @{
  */
+
+//* ------------   GLOBAL variables   ------------
+
+//* ------------ developer definitions ------------
+
+//* ------------     functions     ------------
+
 
 /**
  * @brief power on clock setting

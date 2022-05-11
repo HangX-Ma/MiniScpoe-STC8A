@@ -35,11 +35,7 @@
 #endif
 
 #include "core_stc8x.h"
-//* ------------   GLOBAL variables   ------------
 
-//* ------------ developer definitions ------------
-
-//* ------------     functions     ------------
 
 /** @addtogroup STC
  * @{
@@ -48,6 +44,12 @@
 /** @addtogroup Peripheral
  * @{
  */
+
+//* ------------   GLOBAL variables   ------------
+
+//* ------------ developer definitions ------------
+
+//* ------------     functions     ------------
 
 #define EEPROM_START_ADDR   ((uint16_t)0x0000)  //! EEPROM starting address
 #define EEPROM_PAGE_SIZE    ((uint16_t)0x0200)  //! EEPROM page size

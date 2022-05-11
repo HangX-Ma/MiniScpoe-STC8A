@@ -36,6 +36,14 @@
 
 #include "core_stc8x.h"
 
+/** @addtogroup STC
+ * @{
+ */
+
+/** @addtogroup Peripheral
+ * @{
+ */
+
 
 //* ------------   GLOBAL variables   ------------
 extern __IO uint16_t ADC_data;
@@ -49,16 +57,6 @@ extern void delay_nms(uint16_t nms);
 #define ADC_CHx_SEL(x) do { Px_M1((x&0x08)/8) |= (1 << (x & 0x07)); Px_M0((x&0x08)/8) = 0x00; } while(0)
 
 //* ------------     functions     ------------
-
-
-/** @addtogroup STC
- * @{
- */
-
-/** @addtogroup Peripheral
- * @{
- */
-
 
 /**
  * @brief Initialize ADC registers and select ADC conversion speed, alignment type. 
