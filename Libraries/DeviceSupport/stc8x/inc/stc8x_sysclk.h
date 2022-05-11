@@ -27,6 +27,7 @@
 #ifndef __STC8X_SYSCLK__H__
 #define __STC8X_SYSCLK__H__
 
+//* ------------      head files      ------------
 #if (LIB_MCU_MODULE == STC8Ax)
     #include "config_stc8ax.h"
 #elif (LIB_MCU_MODULE == STC8Hx)
@@ -35,6 +36,11 @@
 #endif
 
 #include "core_stc8x.h"
+//* ------------   GLOBAL variables   ------------
+
+//* ------------ developer definitions ------------
+
+//* ------------     functions     ------------
 
 /** @addtogroup STC
  * @{

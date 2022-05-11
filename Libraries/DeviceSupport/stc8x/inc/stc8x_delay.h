@@ -1,7 +1,7 @@
 /**
- * @file stc8x_gpio.h
-* @author MContour (m-contour@qq.com)
- * @brief STC8x GPIO basic function definitions 
+ * @file stc8x_delay.h
+ * @author MContour (m-contour@qq.com)
+ * @brief STC8x delay basic function definitions 
  * @version 0.1
  * @date 2022-05-02
  * 
@@ -24,8 +24,8 @@
  *****************************************************************************
  */
 
-#ifndef __STC8X_GPIO__H__
-#define __STC8X_GPIO__H__
+#ifndef __STC8X_DELAY__H__
+#define __STC8X_DELAY__H__
 
 //* ------------      head files      ------------
 #if (LIB_MCU_MODULE == STC8Ax)
@@ -49,14 +49,11 @@
  * @{
  */
 
-
-void GPIO_DeInit(void);
-
+void delay_nms(uint16_t nms);
 
 
 /** @} */
 
 /** @} */
 
-
-#endif  //!__STC8X_GPIO__H__
+#endif  //!__STC8X_DELAY__H__

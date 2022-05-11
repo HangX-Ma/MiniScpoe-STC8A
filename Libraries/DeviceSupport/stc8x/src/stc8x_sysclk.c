@@ -71,7 +71,6 @@ void RCC_DeInit(void) {
         SYSCLK->RCC_XOSCCR   = 0x7E;
         /* enable 24MHz IRC */
         SYSCLK->RCC_IRC24MCR = 0xFE;
-
         /* wait for oscillator to be stable */
         while (!(SYSCLK->RCC_IRC24MCR & IRC24MCR_IRC24MST)) {
             ;

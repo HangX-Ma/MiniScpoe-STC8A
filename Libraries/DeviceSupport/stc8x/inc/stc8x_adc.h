@@ -1,7 +1,7 @@
 /**
- * @file stc8x_gpio.h
-* @author MContour (m-contour@qq.com)
- * @brief STC8x GPIO basic function definitions 
+ * @file stc8x_adc.h
+ * @author MContour (m-contour@qq.com)
+ * @brief STC8x ADC basic function definitions 
  * @version 0.1
  * @date 2022-05-02
  * 
@@ -24,8 +24,8 @@
  *****************************************************************************
  */
 
-#ifndef __STC8X_GPIO__H__
-#define __STC8X_GPIO__H__
+#ifndef __STC8X_ADC__H__
+#define __STC8X_ADC__H__
 
 //* ------------      head files      ------------
 #if (LIB_MCU_MODULE == STC8Ax)
@@ -35,11 +35,21 @@
 #endif
 
 #include "core_stc8x.h"
+
+
 //* ------------   GLOBAL variables   ------------
+extern __IO uint16_t ADC_data;
+extern void delay_nms(uint16_t nms);
 
 //* ------------ developer definitions ------------
+/**
+ * @brief GPIO - ADC channel selection \c MACRO
+ * @param x ADC channel value from 0~15; Channel \c 15 is internal 1.19V reference voltage
+ */
+#define ADC_CHx_SEL(x) do { Px_M1((x&0x08)/8) |= (1 << (x & 0x07)); Px_M0((x&0x08)/8) = 0x00; } while(0)
 
 //* ------------     functions     ------------
+
 
 /** @addtogroup STC
  * @{
@@ -50,8 +60,30 @@
  */
 
 
-void GPIO_DeInit(void);
+/**
+ * @brief Initialize ADC registers and select ADC conversion speed, alignment type. 
+ * Power on ADC and wait for ADC power source stable.
+ * 
+ * @param _ADC_align alignment types: left or right
+ * @param _ADC_speed ADC conversion speed, less than 800KHz for 12 bits ADC
+ */
+void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed);
 
+
+/**
+ * @brief ADC sampling by enquiring method
+ * 
+ * @param _ADC_CHx select ADC channel for ADC conversion: 0~15
+ */
+void ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx);
+
+/**
+ * @brief ADC sampling by interrupt method
+ * 
+ * @param _ADC_CHx select ADC channel for ADC conversion: 0~15
+ * @param _ADC_NVIC_Priority ADC interrupt priority
+ */
+void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority);
 
 
 /** @} */
@@ -59,4 +91,4 @@ void GPIO_DeInit(void);
 /** @} */
 
 
-#endif  //!__STC8X_GPIO__H__
+#endif  //!__STC8X_ADC__H__

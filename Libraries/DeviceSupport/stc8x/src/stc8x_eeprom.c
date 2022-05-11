@@ -23,3 +23,183 @@
  * limitations under the License.
  *****************************************************************************
  */
+
+#include "stc8x_eeprom.h"
+#include "INTRINS.H"
+
+/**
+ * @brief IAP/EEPROM IDLE mode trigger function
+ */
+void IAP_IDLE(void) {
+    /* disable IAP/EEPROM */
+    IAP_EEPROM->IAP_CONTR &= ~(IAP_CONTR_IAPEN);
+    /* clear command */
+    IAP_EEPROM->IAP_CMD   &= ~(0xFF);
+    /* clear trigger */
+    IAP_EEPROM->IAP_TRIG  &= ~(0xFF);
+    /* change value in address regiseter to non-eeprom address area */
+    IAP_EEPROM->IAP_ADDRH  = 0x80;
+    IAP_EEPROM->IAP_ADDRL  = 0x00;
+}
+
+
+/**
+ * @brief Read a byte from specific address
+ * 
+ * @param addr given address where to retrive data
+ * @return uint8_t returned 1 byte data
+ */
+uint8_t IAP_ReadByte(uint16_t addr) {
+    uint8_t data;
+    /* enable IAP/EEPROM */
+    IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAPEN;
+    if (LIB_MCU_MODULE == STC8Ax) {
+        /* set waiting time for IAP/EEPROM */
+        IAP_EEPROM->IAP_CONTR &= ~(IAP_CONTR_IAP_WT);
+        /* select corresponding register value */
+        switch (LIB_CLK_FREQ) {
+            case 1:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_1MHz;  break;
+            case 2:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_2MHz;  break;
+            case 3:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_3MHz;  break;
+            case 6:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_6MHz;  break;
+            case 12: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_12MHz; break;
+            case 20: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_20MHz; break;
+            case 24: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_24MHz; break;
+            case 30: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_30MHz; break;
+            default: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_24MHz; break;
+        }
+    }
+    else if (LIB_MCU_MODULE == STC8Hx) {
+        /* set waiting time for IAP/EEPROM */
+        IAP_TPS = LIB_CLK_FREQ;
+    }
+    /* set EEPROM read command */
+    IAP_EEPROM->IAP_CMD   = IAP_CMD_CMD_READ;
+    /* set address */
+    IAP_EEPROM->IAP_ADDRH = addr >> 8;
+    IAP_EEPROM->IAP_ADDRL = addr;
+    /* trigger command */
+    IAP_EEPROM->IAP_TRIG  = 0x5A;
+    IAP_EEPROM->IAP_TRIG  = 0xA5;
+    /* wait for EEPROM operation */
+    _nop_();
+    /* get data retrived from EEPROM */
+    data = IAP_EEPROM->IAP_DATA;
+    /* change IAP/EEPROM to IDLE mode */
+    IAP_IDLE();
+
+    return data;
+}
+
+/**
+ * @brief Write a byte to specific address
+ * 
+ * @param addr given address
+ * @param data data needs to be written
+ */
+void IAP_WriteByte(uint16_t addr, uint8_t data) {
+    /* enable IAP/EEPROM */
+    IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAPEN;
+    if (LIB_MCU_MODULE == STC8Ax) {
+        /* set waiting time for IAP/EEPROM */
+        IAP_EEPROM->IAP_CONTR &= ~(IAP_CONTR_IAP_WT);
+        /* select corresponding register value */
+        switch (LIB_CLK_FREQ) {
+            case 1:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_1MHz;  break;
+            case 2:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_2MHz;  break;
+            case 3:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_3MHz;  break;
+            case 6:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_6MHz;  break;
+            case 12: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_12MHz; break;
+            case 20: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_20MHz; break;
+            case 24: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_24MHz; break;
+            case 30: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_30MHz; break;
+            default: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_24MHz; break;
+        }
+    }
+    else if (LIB_MCU_MODULE == STC8Hx) {
+        /* set waiting time for IAP/EEPROM */
+        IAP_TPS = LIB_CLK_FREQ;
+    }
+    /* set EEPROM read command */
+    IAP_EEPROM->IAP_CMD   = IAP_CMD_CMD_READ;
+    /* set address */
+    IAP_EEPROM->IAP_ADDRH = addr >> 8;
+    IAP_EEPROM->IAP_ADDRL = addr;
+    /* get data retrived from EEPROM */
+    IAP_EEPROM->IAP_DATA  = data;
+    /* trigger command */
+    IAP_EEPROM->IAP_TRIG  = 0x5A;
+    IAP_EEPROM->IAP_TRIG  = 0xA5;
+    /* wait for EEPROM operation */
+    _nop_();
+    /* change IAP/EEPROM to IDLE mode */
+    IAP_IDLE();
+}
+
+
+void EEPROM_PageErase(uint16_t addr) {
+    /* enable IAP/EEPROM */
+    IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAPEN;
+    if (LIB_MCU_MODULE == STC8Ax) {
+        /* set waiting time for IAP/EEPROM */
+        IAP_EEPROM->IAP_CONTR &= ~(IAP_CONTR_IAP_WT);
+        /* select corresponding register value */
+        switch (LIB_CLK_FREQ) {
+            case 1:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_1MHz;  break;
+            case 2:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_2MHz;  break;
+            case 3:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_3MHz;  break;
+            case 6:  IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_6MHz;  break;
+            case 12: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_12MHz; break;
+            case 20: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_20MHz; break;
+            case 24: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_24MHz; break;
+            case 30: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_30MHz; break;
+            default: IAP_EEPROM->IAP_CONTR |= IAP_CONTR_IAP_WT_24MHz; break;
+        }
+    }
+    else if (LIB_MCU_MODULE == STC8Hx) {
+        /* set waiting time for IAP/EEPROM */
+        IAP_TPS = LIB_CLK_FREQ;
+    }
+    /* set EEPROM read command */
+    IAP_EEPROM->IAP_CMD   = IAP_CMD_CMD_ERASE;
+    /* set address */
+    IAP_EEPROM->IAP_ADDRH = addr >> 8;
+    IAP_EEPROM->IAP_ADDRL = addr;
+    /* trigger command */
+    IAP_EEPROM->IAP_TRIG  = 0x5A;
+    IAP_EEPROM->IAP_TRIG  = 0xA5;
+    /* wait for EEPROM operation */
+    _nop_();
+    /* change IAP/EEPROM to IDLE mode */
+    IAP_IDLE();
+}
+
+void EEPROM_Read_N_Bytes(uint8_t *str, uint8_t N, uint16_t addr) {
+    int16_t i;
+    for (i = 0; i < N; i++) {
+        *(str+i) = IAP_ReadByte(i+addr)
+    } // read a byte at EEPROM_ADDRESS:(addr+i) and save this byte at RAM_ADDRESS:(str+i)
+}
+
+ErrorStatus EEPROM_Write_N_Bytes(uint8_t *str, uint8_t N, uint16_t addr) {
+    int16_t i;
+    uint16_t start_page_addr = (addr/EEPROM_PAGE_SIZE)*EEPROM_PAGE_SIZE + EEPROM_START_ADDR;
+    EEPROM_PageErase();
+
+    for (i = 0; i < EEPROM_PAGE_SIZE; i++) {
+        if (IAP_ReadByte(start_page_addr + i) != 0xFF) {
+            return ERROR; 
+        }
+    } // check if the erasure operation success
+
+    for (i = 0; i < N; i++) {
+        IAP_WriteByte(start_page_addr, *(str + i));
+    } // write value to EEPROM
+
+    for (i = 0; i < N; i++) {
+        if (IAP_ReadByte(start_page_addr) != *(str + i)) {
+            return ERROR;
+    } // check value in EEPROM
+
+    return SUCCESS;
+}

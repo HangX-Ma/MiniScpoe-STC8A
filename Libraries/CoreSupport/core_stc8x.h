@@ -34,9 +34,7 @@
  * STC8x core definition for low level system
  * @{
  */
-
 typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
-typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
 
 /**
@@ -62,52 +60,35 @@ typedef enum
   ISR_PR3 = (uint8_t)0x03   //!< Highest priority
 } ISR_PRx;
 
-// low voltage detection interrupt
-#define LVD_ISRQ_Handler(void)  LVD_ISR(void) interrupt  6
-
-// UART interrupt
-#define UART1_ISRQ_Handler(void)  UART1_ISR(void) interrupt  4
-#define UART2_ISRQ_Handler(void)  UART2_ISR(void) interrupt  8
-#define UART3_ISRQ_Handler(void)  UART3_ISR(void) interrupt  17
-#define UART4_ISRQ_Handler(void)  UART4_ISR(void) interrupt  18
-
-// external interrupt 
-#define EXTI0_ISRQ_Handler(void)  EXTI0_ISR(void) interrupt  0
-#define EXTI1_ISRQ_Handler(void)  EXTI1_ISR(void) interrupt  2
-#define EXTI2_ISRQ_Handler(void)  EXTI2_ISR(void) interrupt  10
-#define EXTI3_ISRQ_Handler(void)  EXTI3_ISR(void) interrupt  11
-#define EXTI4_ISRQ_Handler(void)  EXTI4_ISR(void) interrupt  16
-
-// timer interrupt
-#define TIMER0_ISRQ_Handler(void)  TIMER0_ISR(void) interrupt  1
-#define TIMER1_ISRQ_Handler(void)  TIMER1_ISR(void) interrupt  3
-#define TIMER2_ISRQ_Handler(void)  TIMER2_ISR(void) interrupt  12
-#define TIMER3_ISRQ_Handler(void)  TIMER3_ISR(void) interrupt  19
-#define TIMER4_ISRQ_Handler(void)  TIMER4_ISR(void) interrupt  20
-
-// ADC interrupt
-#define ADC_ISRQ_Handler(void)  ADC_ISR(void) interrupt  5
-
-// PCA interrupt
-#define PCA_ISRQ_Handler(void)  PCA_ISR(void) interrupt  7
-
-// PWM interrupt
-#define PWM_ISRQ_Handler(void)  PWM_ISR(void) interrupt  22
-#define PWMFD_ISRQ_Handler(void)  PWMFD_ISR(void) interrupt  23
-
-// comparator interrupt
-#define COMP_ISRQ_Handler(void)  COMP_ISR(void) interrupt  21
-
-// SPI interrupt
-#define SPI_ISRQ_Handler(void)  SPI_ISR(void) interrupt  9
-
-// I2C interrupt
-#define I2C_ISRQ_Handler(void)  I2C_ISR(void) interrupt  24
-
-#if (LIB_MCU_MODULE == STC8Hx)
 /** @defgroup NVIC
  * @{
  */
+
+// low voltage detection interrupt
+#define     EXTI0_VECTOR            0       //0003H
+#define     TM0_VECTOR              1       //000BH
+#define     EXTI1_VECTOR            2       //0013H
+#define     TM1_VECTOR              3       //001BH
+#define     UART1_VECTOR            4       //0023H
+#define     ADC_VECTOR              5       //002BH
+#define     LVD_VECTOR              6       //0033H
+#define     PCA_VECTOR              7       //003BH
+#define     UART2_VECTOR            8       //0043H
+#define     SPI_VECTOR              9       //004BH
+#define     EXTI2_VECTOR            10      //0053H
+#define     EXTI3_VECTOR            11      //005BH
+#define     TM2_VECTOR              12      //0063H
+#define     EXTI4_VECTOR            16      //0083H
+#define     UART3_VECTOR            17      //008BH
+#define     UART4_VECTOR            18      //0093H
+#define     TM3_VECTOR              19      //009BH
+#define     TM4_VECTOR              20      //00A3H
+#define     COMP_VECTOR             21      //00ABH
+#define     PWM_VECTOR              22      //00B3H
+#define     PWMFD_VECTOR            23      //00BBH
+#define     I2C_VECTOR              24      //00C3H
+
+#if (LIB_MCU_MODULE == STC8Hx)
 #define     P0INT_VECTOR            37      //012BH
 #define     P1INT_VECTOR            38      //0133H
 #define     P2INT_VECTOR            39      //013BH

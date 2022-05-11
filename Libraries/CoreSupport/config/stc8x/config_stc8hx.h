@@ -440,26 +440,150 @@ sfr WKTCH       =   WKTCH_ADDR;         //! Power down wake up timer high bytes
 #define     P7M1_ADDR       ((uint8_t)0xE1)
 
 /* GPIO pull up resistor control register address definition */
-#define     P0PU_ADDR        (PxPU_BASE + 0x00u)
-#define     P1PU_ADDR        (PxPU_BASE + 0x01u)
-#define     P2PU_ADDR        (PxPU_BASE + 0x02u)
-#define     P3PU_ADDR        (PxPU_BASE + 0x03u)
-#define     P4PU_ADDR        (PxPU_BASE + 0x04u)
-#define     P5PU_ADDR        (PxPU_BASE + 0x05u)
-#define     P6PU_ADDR        (PxPU_BASE + 0x06u)
-#define     P7PU_ADDR        (PxPU_BASE + 0x07u)
+#define     P0PU_ADDR        (PxPU_BASE + 0x00)
+#define     P1PU_ADDR        (PxPU_BASE + 0x01)
+#define     P2PU_ADDR        (PxPU_BASE + 0x02)
+#define     P3PU_ADDR        (PxPU_BASE + 0x03)
+#define     P4PU_ADDR        (PxPU_BASE + 0x04)
+#define     P5PU_ADDR        (PxPU_BASE + 0x05)
+#define     P6PU_ADDR        (PxPU_BASE + 0x06)
+#define     P7PU_ADDR        (PxPU_BASE + 0x07)
 
 /*GPIO schmidt trigger control register address definition */
 
-#define    P0NCS_ADDR       (PxNCS_BASE + 0x00u)
-#define    P1NCS_ADDR       (PxNCS_BASE + 0x01u)
-#define    P2NCS_ADDR       (PxNCS_BASE + 0x02u)
-#define    P3NCS_ADDR       (PxNCS_BASE + 0x03u)
-#define    P4NCS_ADDR       (PxNCS_BASE + 0x04u)
-#define    P5NCS_ADDR       (PxNCS_BASE + 0x05u)
-#define    P6NCS_ADDR       (PxNCS_BASE + 0x06u)
-#define    P7NCS_ADDR       (PxNCS_BASE + 0x07u)
+#define     P0NCS_ADDR       (PxNCS_BASE + 0x00)
+#define     P1NCS_ADDR       (PxNCS_BASE + 0x01)
+#define     P2NCS_ADDR       (PxNCS_BASE + 0x02)
+#define     P3NCS_ADDR       (PxNCS_BASE + 0x03)
+#define     P4NCS_ADDR       (PxNCS_BASE + 0x04)
+#define     P5NCS_ADDR       (PxNCS_BASE + 0x05)
+#define     P6NCS_ADDR       (PxNCS_BASE + 0x06)
+#define     P7NCS_ADDR       (PxNCS_BASE + 0x07)
 
+// I/O ISR registers
+#define     PxINTE_BASE     ((uint16_t)0xFD00)
+#define     PxINTF_BASE     ((uint16_t)0xFD10)
+#define     PxIM0_BASE      ((uint16_t)0xFD20)
+#define     PxIM1_BASE      ((uint16_t)0xFD30)
+#define     PxWKUE_BASE     ((uint16_t)0xFD40)
+
+#define     PINIPL_ADDR     ((uint16_t)0xFD60)
+#define     PINIPH_ADDR     ((uint16_t)0xFD61)
+
+/* PxINTE address definition */
+#define     P0INTE_ADDR     (PxINTE_BASE + 0x0000)
+#define     P1INTE_ADDR     (PxINTE_BASE + 0x0001)
+#define     P2INTE_ADDR     (PxINTE_BASE + 0x0002)
+#define     P3INTE_ADDR     (PxINTE_BASE + 0x0003)
+#define     P4INTE_ADDR     (PxINTE_BASE + 0x0004)
+#define     P5INTE_ADDR     (PxINTE_BASE + 0x0005)
+#define     P6INTE_ADDR     (PxINTE_BASE + 0x0006)
+#define     P7INTE_ADDR     (PxINTE_BASE + 0x0007)
+
+/* PxINTF address definition */
+#define     P0INTF_ADDR     (PxINTF_BASE + 0x0000)
+#define     P1INTF_ADDR     (PxINTF_BASE + 0x0001)
+#define     P2INTF_ADDR     (PxINTF_BASE + 0x0002)
+#define     P3INTF_ADDR     (PxINTF_BASE + 0x0003)
+#define     P4INTF_ADDR     (PxINTF_BASE + 0x0004)
+#define     P5INTF_ADDR     (PxINTF_BASE + 0x0005)
+#define     P6INTF_ADDR     (PxINTF_BASE + 0x0006)
+#define     P7INTF_ADDR     (PxINTF_BASE + 0x0007)
+
+/* PxIM0 address definition */
+#define     P0IM0_ADDR      (PxIM0_BASE + 0x0000)
+#define     P1IM0_ADDR      (PxIM0_BASE + 0x0001)
+#define     P2IM0_ADDR      (PxIM0_BASE + 0x0002)
+#define     P3IM0_ADDR      (PxIM0_BASE + 0x0003)
+#define     P4IM0_ADDR      (PxIM0_BASE + 0x0004)
+#define     P5IM0_ADDR      (PxIM0_BASE + 0x0005)
+#define     P6IM0_ADDR      (PxIM0_BASE + 0x0006)
+#define     P7IM0_ADDR      (PxIM0_BASE + 0x0007)
+
+/* PxIM1 address definition */
+#define     P0IM1_ADDR      (PxIM1_BASE + 0x0000)
+#define     P1IM1_ADDR      (PxIM1_BASE + 0x0001)
+#define     P2IM1_ADDR      (PxIM1_BASE + 0x0002)
+#define     P3IM1_ADDR      (PxIM1_BASE + 0x0003)
+#define     P4IM1_ADDR      (PxIM1_BASE + 0x0004)
+#define     P5IM1_ADDR      (PxIM1_BASE + 0x0005)
+#define     P6IM1_ADDR      (PxIM1_BASE + 0x0006)
+#define     P7IM1_ADDR      (PxIM1_BASE + 0x0007)
+
+/* PxIM1 address definition */
+#define     P0WKUE_ADDR     (PxWKUE_BASE + 0x0000)
+#define     P1WKUE_ADDR     (PxWKUE_BASE + 0x0001)
+#define     P2WKUE_ADDR     (PxWKUE_BASE + 0x0002)
+#define     P3WKUE_ADDR     (PxWKUE_BASE + 0x0003)
+#define     P4WKUE_ADDR     (PxWKUE_BASE + 0x0004)
+#define     P5WKUE_ADDR     (PxWKUE_BASE + 0x0005)
+#define     P6WKUE_ADDR     (PxWKUE_BASE + 0x0006)
+#define     P7WKUE_ADDR     (PxWKUE_BASE + 0x0007)
+
+//* Px port interrupt enabling registers: [0] off; [1] on */
+#define     P0INTE          (*(__IO uint8_t xdata *) P0INTE_ADDR)
+#define     P1INTE          (*(__IO uint8_t xdata *) P1INTE_ADDR)
+#define     P2INTE          (*(__IO uint8_t xdata *) P2INTE_ADDR)
+#define     P3INTE          (*(__IO uint8_t xdata *) P3INTE_ADDR)
+#define     P4INTE          (*(__IO uint8_t xdata *) P4INTE_ADDR)
+#define     P5INTE          (*(__IO uint8_t xdata *) P5INTE_ADDR)
+#define     P6INTE          (*(__IO uint8_t xdata *) P6INTE_ADDR)
+#define     P7INTE          (*(__IO uint8_t xdata *) P7INTE_ADDR)
+
+//* Px port interrupt flag registers: [0] no interrupt request; [1] interrupt requeset, if interrupt is enabled, program will run into interrupt. Software clearance is */
+#define     P0INTF          (*(__IO uint8_t xdata *) P0INTF_ADDR)
+#define     P1INTF          (*(__IO uint8_t xdata *) P1INTF_ADDR)
+#define     P2INTF          (*(__IO uint8_t xdata *) P2INTF_ADDR)
+#define     P3INTF          (*(__IO uint8_t xdata *) P3INTF_ADDR)
+#define     P4INTF          (*(__IO uint8_t xdata *) P4INTF_ADDR)
+#define     P5INTF          (*(__IO uint8_t xdata *) P5INTF_ADDR)
+#define     P6INTF          (*(__IO uint8_t xdata *) P6INTF_ADDR)
+#define     P7INTF          (*(__IO uint8_t xdata *) P7INTF_ADDR)
+
+/**
+ * @note GPIO interrupt mode selection
+ * \verbatim 
+ * | PnIM1.x | PnIM0.x | Pn.x interrupt mode |
+ * |    0    |    0    |     falling edge    |
+ * |    0    |    1    |     rising edge     |
+ * |    1    |    0    |  low elertic level  |
+ * |    1    |    1    |  high elertic level |
+ * \endverbatim
+ */ 
+//* Px port interrupt mode registers 0 */
+#define     P0IM0           (*(__IO uint8_t xdata *) P0IM0_ADDR)
+#define     P1IM0           (*(__IO uint8_t xdata *) P1IM0_ADDR)
+#define     P2IM0           (*(__IO uint8_t xdata *) P2IM0_ADDR)
+#define     P3IM0           (*(__IO uint8_t xdata *) P3IM0_ADDR)
+#define     P4IM0           (*(__IO uint8_t xdata *) P4IM0_ADDR)
+#define     P5IM0           (*(__IO uint8_t xdata *) P5IM0_ADDR)
+#define     P6IM0           (*(__IO uint8_t xdata *) P6IM0_ADDR)
+#define     P7IM0           (*(__IO uint8_t xdata *) P7IM0_ADDR)
+
+//* Px port interrupt mode registers 1 */
+#define     P0IM1           (*(__IO uint8_t xdata *) P0IM1_ADDR)
+#define     P1IM1           (*(__IO uint8_t xdata *) P1IM1_ADDR)
+#define     P2IM1           (*(__IO uint8_t xdata *) P2IM1_ADDR)
+#define     P3IM1           (*(__IO uint8_t xdata *) P3IM1_ADDR)
+#define     P4IM1           (*(__IO uint8_t xdata *) P4IM1_ADDR)
+#define     P5IM1           (*(__IO uint8_t xdata *) P5IM1_ADDR)
+#define     P6IM1           (*(__IO uint8_t xdata *) P6IM1_ADDR)
+#define     P7IM1           (*(__IO uint8_t xdata *) P7IM1_ADDR)
+
+//* Px port interrupt wake up enabling registers: [0] off; [1] on */
+#define     P0WKUE          (*(__IO uint8_t xdata *) P0WKUE_ADDR)
+#define     P1WKUE          (*(__IO uint8_t xdata *) P1WKUE_ADDR)
+#define     P2WKUE          (*(__IO uint8_t xdata *) P2WKUE_ADDR)
+#define     P3WKUE          (*(__IO uint8_t xdata *) P3WKUE_ADDR)
+#define     P4WKUE          (*(__IO uint8_t xdata *) P4WKUE_ADDR)
+#define     P5WKUE          (*(__IO uint8_t xdata *) P5WKUE_ADDR)
+#define     P6WKUE          (*(__IO uint8_t xdata *) P6WKUE_ADDR)
+#define     P7WKUE          (*(__IO uint8_t xdata *) P7WKUE_ADDR)
+
+// PxIPH,PxIP: [00] lowest; [01] low; [10] high; [11] highest 
+//* I/O interrupt priority registers Low/High */
+#define     PINIPL          (*(__IO uint8_t xdata *) PINIPL_ADDR)
+#define     PINIPH          (*(__IO uint8_t xdata *) PINIPH_ADDR)
 
 /* GPIO registers configuration */
 sfr P0          =   P0_ADDR;
@@ -598,6 +722,13 @@ sbit P77        =   P7^7;
 #define Px_IE(x)    (P##x##IE)
 #define Px_NCS(x)   (P##x##NCS)
 
+#define Px_INTE(x)  (P##x##INTE)
+#define Px_INTF(x)  (P##x##INTF)
+#define Px_IM0(x)   (P##x##IM0)
+#define Px_IM1(x)   (P##x##IM1)
+#define Px_WKUE(x)  (P##x##WKUE)
+
+
 //! ISR peripherals
 /* ISR basic address definition */
 #define    IE_ADDR                      ((uint8_t)0xA8)
@@ -608,6 +739,8 @@ sbit P77        =   P7^7;
 #define    IPH_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x02)
 #define    IP2_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x00)
 #define    IP2H_ADDR                    (ISR_PRIORITY_CONTR_BASE + 0x01)
+#define    IP3_ADDR                     ((uint8_t)0xDF)
+#define    IP3H_ADDR                    ((uint8_t)0xEE)
 
 #define    INTCLKO_ADDR                 ((uint8_t)0x8F)
 #define    AUXINTIF_ADDR                ((uint8_t)0xEF)
@@ -658,6 +791,14 @@ sbit P77        =   P7^7;
 #define     IP2H_PPWMH      ((uint8_t)0x04)
 #define     IP2H_PSPIH      ((uint8_t)0x02)
 #define     IP2H_PS2H       ((uint8_t)0x01)
+
+/* Bit definition for IP3 registers */
+#define     IP3_PS4         ((uint8_t)0x02)
+#define     IP3_PS3         ((uint8_t)0x01)
+
+/* Bit definition for IP3H registers */
+#define     IP3H_PS4        ((uint8_t)0x02)
+#define     IP3H_PS3        ((uint8_t)0x01)
 
 /* Bit definition for INTCLKO registers */
 #define     INTCLKO_EX4     ((uint8_t)0x40)             /*!< external interrupt 4 interrupt enabling flag */
@@ -1016,29 +1157,15 @@ typedef struct {
 #define     IAP_CONTR_SWRST         ((uint8_t)0x20)     /*!< software reset control bit: [0], no action; [1], enable software reset */
 #define     IAP_CONTR_CMD_FAIL      ((uint8_t)0x10)     /*!< EEPROM operation failure status bit, requires software reset: [0], right; [1], false */
 
-#define     IAP_CONTR_IAP_WT        ((uint8_t)0x07)     /*!< IAP_WT[2:0], Set the wait time for EEPROM operation */
-#define     IAP_CONTR_IAP_WT_0      ((uint8_t)0x01)     /*!< Bit 0 */
-#define     IAP_CONTR_IAP_WT_1      ((uint8_t)0x02)     /*!< Bit 1 */
-#define     IAP_CONTR_IAP_WT_2      ((uint8_t)0x04)     /*!< Bit 2 */
-
-#define     IAP_CONTR_IAP_WT_VAL7   ((uint8_t)0x07)     /*!< read_t: 2 ticks; write: 7   ticks; erase page: 5k   ticks; clock fq: 1MHz */
-#define     IAP_CONTR_IAP_WT_VAL6   ((uint8_t)0x06)     /*!< read_t: 2 ticks; write: 14  ticks; erase page: 10k  ticks; clock fq: 2MHz */
-#define     IAP_CONTR_IAP_WT_VAL5   ((uint8_t)0x05)     /*!< read_t: 2 ticks; write: 21  ticks; erase page: 15k  ticks; clock fq: 3MHz */
-#define     IAP_CONTR_IAP_WT_VAL4   ((uint8_t)0x04)     /*!< read_t: 2 ticks; write: 42  ticks; erase page: 30k  ticks; clock fq: 6MHz */
-#define     IAP_CONTR_IAP_WT_VAL3   ((uint8_t)0x03)     /*!< read_t: 2 ticks; write: 84  ticks; erase page: 60k  ticks; clock fq: 12MHz */
-#define     IAP_CONTR_IAP_WT_VAL2   ((uint8_t)0x02)     /*!< read_t: 2 ticks; write: 140 ticks; erase page: 100k ticks; clock fq: 20MHz */
-#define     IAP_CONTR_IAP_WT_VAL1   ((uint8_t)0x01)     /*!< read_t: 2 ticks; write: 168 ticks; erase page: 120k ticks; clock fq: 24MHz */
-#define     IAP_CONTR_IAP_WT_VAL0   ((uint8_t)0x00)     /*!< read_t: 2 ticks; write: 301 ticks; erase page: 215k ticks; clock fq: 30MHz */
-
 /* Bit definition for IAP_CMD register */
 #define     IAP_CMD_CMD             ((uint8_t)0x03)     /*!< CMD[1:0], Send EEPROM Operation Command */
 #define     IAP_CMD_CMD_0           ((uint8_t)0x01)     /*!< Bit 0 */
 #define     IAP_CMD_CMD_1           ((uint8_t)0x02)     /*!< Bit 1 */
 
-#define     IAP_CMD_CMD_VAL0        ((uint8_t)0x00)     /*!< nop */
-#define     IAP_CMD_CMD_VAL1        ((uint8_t)0x01)     /*!< read 1 byte at target address */
-#define     IAP_CMD_CMD_VAL2        ((uint8_t)0x02)     /*!< write 1 byte to target address, converting 1 to 0 */
-#define     IAP_CMD_CMD_VAL3        ((uint8_t)0x03)     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
+#define     IAP_CMD_CMD_NOP         ((uint8_t)0x00)     /*!< nop */
+#define     IAP_CMD_CMD_READ        ((uint8_t)0x01)     /*!< read 1 byte at target address */
+#define     IAP_CMD_CMD_WRITE       ((uint8_t)0x02)     /*!< write 1 byte to target address, converting 1 to 0 */
+#define     IAP_CMD_CMD_ERASE       ((uint8_t)0x03)     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
 
 #define     IAP_EEPROM              ((IAP_EEPROM_TypeDef idata* xdata *) IAP_EEPROM_BASE)
 
@@ -1070,10 +1197,15 @@ typedef struct {
 #define     ADC_RESL_ADDR   ((uint8_t)0xBE)
 #define     ADCCFG_ADDR     ((uint8_t)0xDE)
 
+#define     ADCTIM_ADDR     ((uint16_t)0xFEA8)
+#define     ADCEXCFG_ADDR   ((uint16_t)0xFEAD)
+
+
 /* Bit definition for ADC_CONTR register */
 #define     ADC_CONTR_ADC_POWER       ((uint8_t)0x80)           /*!< ADC power control: [0], closed; [1], open */
 #define     ADC_CONTR_ADC_START       ((uint8_t)0x40)           /*!< ADC conversion start control: [0], no action; [1], start ADC, auto firmware clearance for this bit */
 #define     ADC_CONTR_ADC_FLAG        ((uint8_t)0x20)           /*!< ADC conversion over flag: firmware set 1 when conversion finished. interrupt request sent to CPU. Software reset to 0 needed. */
+#define     ADC_CONTR_ADC_EPWMT       ((uint8_t)0x10)           /*!< ADC realtime trigger function enabling */
 
 #define     ADC_CONTR_ADC_CHS         ((uint8_t)0x0F)           /*!< ADC_CHS[3:0], ADC analog channel selection bits */
 #define     ADC_CONTR_ADC_CHS_0       ((uint8_t)0x01)           /*!< Bit 0 */
@@ -1108,24 +1240,100 @@ typedef struct {
 #define     ADCCFG_SPEED_3            ((uint8_t)0x08)          /*!< Bit 3 */
 
 // F_ADC£½SYSclk/2/16/£¨SPEED[3:0]+1£©
-#define     ADCCFG_SPEED_VAL0         ((uint8_t)0x00)          /*!< SYSCLK tick number: 32 ticks*/
-#define     ADCCFG_SPEED_VAL1         ((uint8_t)0x01)          /*!< SYSCLK tick number: 64 ticks*/
-#define     ADCCFG_SPEED_VAL2         ((uint8_t)0x02)          /*!< SYSCLK tick number: 96 ticks*/
-#define     ADCCFG_SPEED_VAL3         ((uint8_t)0x03)          /*!< SYSCLK tick number: 128 ticks*/
-#define     ADCCFG_SPEED_VAL4         ((uint8_t)0x04)          /*!< SYSCLK tick number: 160 ticks*/
-#define     ADCCFG_SPEED_VAL5         ((uint8_t)0x05)          /*!< SYSCLK tick number: 192 ticks*/
-#define     ADCCFG_SPEED_VAL6         ((uint8_t)0x06)          /*!< SYSCLK tick number: 224 ticks*/
-#define     ADCCFG_SPEED_VAL7         ((uint8_t)0x07)          /*!< SYSCLK tick number: 256 ticks*/
-#define     ADCCFG_SPEED_VAL8         ((uint8_t)0x08)          /*!< SYSCLK tick number: 288 ticks*/
-#define     ADCCFG_SPEED_VAL9         ((uint8_t)0x09)          /*!< SYSCLK tick number: 320 ticks*/
-#define     ADCCFG_SPEED_VAL10        ((uint8_t)0x0A)          /*!< SYSCLK tick number: 352 ticks*/
-#define     ADCCFG_SPEED_VAL11        ((uint8_t)0x0B)          /*!< SYSCLK tick number: 384 ticks*/
-#define     ADCCFG_SPEED_VAL12        ((uint8_t)0x0C)          /*!< SYSCLK tick number: 416 ticks*/
-#define     ADCCFG_SPEED_VAL13        ((uint8_t)0x0D)          /*!< SYSCLK tick number: 448 ticks*/
-#define     ADCCFG_SPEED_VAL14        ((uint8_t)0x0E)          /*!< SYSCLK tick number: 480 ticks*/
-#define     ADCCFG_SPEED_VAL15        ((uint8_t)0x0F)          /*!< SYSCLK tick number: 512 ticks*/
+#define     ADCCFG_SPEED_32tk         ((uint8_t)0x00)          /*!< SYSCLK tick number: 32 ticks*/
+#define     ADCCFG_SPEED_64tk         ((uint8_t)0x01)          /*!< SYSCLK tick number: 64 ticks*/
+#define     ADCCFG_SPEED_96tk         ((uint8_t)0x02)          /*!< SYSCLK tick number: 96 ticks*/
+#define     ADCCFG_SPEED_128tk        ((uint8_t)0x03)          /*!< SYSCLK tick number: 128 ticks*/
+#define     ADCCFG_SPEED_160tk        ((uint8_t)0x04)          /*!< SYSCLK tick number: 160 ticks*/
+#define     ADCCFG_SPEED_192tk        ((uint8_t)0x05)          /*!< SYSCLK tick number: 192 ticks*/
+#define     ADCCFG_SPEED_224tk        ((uint8_t)0x06)          /*!< SYSCLK tick number: 224 ticks*/
+#define     ADCCFG_SPEED_256tk        ((uint8_t)0x07)          /*!< SYSCLK tick number: 256 ticks*/
+#define     ADCCFG_SPEED_288tk        ((uint8_t)0x08)          /*!< SYSCLK tick number: 288 ticks*/
+#define     ADCCFG_SPEED_320tk        ((uint8_t)0x09)          /*!< SYSCLK tick number: 320 ticks*/
+#define     ADCCFG_SPEED_352tk        ((uint8_t)0x0A)          /*!< SYSCLK tick number: 352 ticks*/
+#define     ADCCFG_SPEED_384tk        ((uint8_t)0x0B)          /*!< SYSCLK tick number: 384 ticks*/
+#define     ADCCFG_SPEED_416tk        ((uint8_t)0x0C)          /*!< SYSCLK tick number: 416 ticks*/
+#define     ADCCFG_SPEED_448tk        ((uint8_t)0x0D)          /*!< SYSCLK tick number: 448 ticks*/
+#define     ADCCFG_SPEED_480tk        ((uint8_t)0x0E)          /*!< SYSCLK tick number: 480 ticks*/
+#define     ADCCFG_SPEED_512tk        ((uint8_t)0x0F)          /*!< SYSCLK tick number: 512 ticks*/
 
-#define     ADC                       ((ADC_TypeDef idata* xdata *) ADC_BASE)
+/* Bit definition for ADCTIM register */
+#define     ADCTIM_CSSETUP              ((uint8_t)0x80)          /*!< ADC channel selection time control(Number of ADC system clock ticks consumed): [0], 1 tick; [1], 2 ticks */
+
+#define     ADCTIM_CSHOLD               ((uint8_t)0x60)          /*!< CSHOLD[1:0], ADC channel selection hold time control */
+#define     ADCTIM_CSHOLD_0             ((uint8_t)0x20)          /*!< Bit 0 */
+#define     ADCTIM_CSHOLD_1             ((uint8_t)0x40)          /*!< Bit 1 */
+
+// Number of ADC system clock ticks consumed
+#define     ADCTIM_CSHOLD_1tk           ((uint8_t)0x00)
+#define     ADCTIM_CSHOLD_2tk           ((uint8_t)0x20)
+#define     ADCTIM_CSHOLD_3tk           ((uint8_t)0x40)
+#define     ADCTIM_CSHOLD_4tk           ((uint8_t)0x60)
+
+#define     ADCTIM_SMPDUTY              ((uint8_t)0x1F)          /*!< CSHOLD[4:0], Sampling time control of ADC analog signal */
+#define     ADCTIM_SMPDUTY_0            ((uint8_t)0x01)          /*!< Bit 0 */
+#define     ADCTIM_SMPDUTY_1            ((uint8_t)0x02)          /*!< Bit 1 */
+#define     ADCTIM_SMPDUTY_2            ((uint8_t)0x04)          /*!< Bit 2 */
+#define     ADCTIM_SMPDUTY_3            ((uint8_t)0x08)          /*!< Bit 3 */
+#define     ADCTIM_SMPDUTY_4            ((uint8_t)0x10)          /*!< Bit 4 */
+
+// Number of ADC system clock ticks consumed
+#define     ADCTIM_SMPDUT_1tk           ((uint8_t)0x00)
+#define     ADCTIM_SMPDUT_2tk           ((uint8_t)0x01)
+#define     ADCTIM_SMPDUT_3tk           ((uint8_t)0x02)
+#define     ADCTIM_SMPDUT_4tk           ((uint8_t)0x03)
+#define     ADCTIM_SMPDUT_5tk           ((uint8_t)0x04)
+#define     ADCTIM_SMPDUT_6tk           ((uint8_t)0x05)
+#define     ADCTIM_SMPDUT_7tk           ((uint8_t)0x06)
+#define     ADCTIM_SMPDUT_8tk           ((uint8_t)0x07)
+#define     ADCTIM_SMPDUT_9tk           ((uint8_t)0x08)
+#define     ADCTIM_SMPDUT_10tk          ((uint8_t)0x09)
+#define     ADCTIM_SMPDUT_11tk          ((uint8_t)0x0A)
+#define     ADCTIM_SMPDUT_12tk          ((uint8_t)0x0B)
+#define     ADCTIM_SMPDUT_13tk          ((uint8_t)0x0C)
+#define     ADCTIM_SMPDUT_14tk          ((uint8_t)0x0D)
+#define     ADCTIM_SMPDUT_15tk          ((uint8_t)0x0E)
+#define     ADCTIM_SMPDUT_16tk          ((uint8_t)0x0F)
+#define     ADCTIM_SMPDUT_17tk          ((uint8_t)0x10)
+#define     ADCTIM_SMPDUT_18tk          ((uint8_t)0x11)
+#define     ADCTIM_SMPDUT_19tk          ((uint8_t)0x12)
+#define     ADCTIM_SMPDUT_20tk          ((uint8_t)0x13)
+#define     ADCTIM_SMPDUT_21tk          ((uint8_t)0x14)
+#define     ADCTIM_SMPDUT_22tk          ((uint8_t)0x15)
+#define     ADCTIM_SMPDUT_23tk          ((uint8_t)0x16)
+#define     ADCTIM_SMPDUT_24tk          ((uint8_t)0x17)
+#define     ADCTIM_SMPDUT_25tk          ((uint8_t)0x18)
+#define     ADCTIM_SMPDUT_26tk          ((uint8_t)0x19)
+#define     ADCTIM_SMPDUT_27tk          ((uint8_t)0x1A)
+#define     ADCTIM_SMPDUT_28tk          ((uint8_t)0x1B)
+#define     ADCTIM_SMPDUT_29tk          ((uint8_t)0x1C)
+#define     ADCTIM_SMPDUT_30tk          ((uint8_t)0x1D)
+#define     ADCTIM_SMPDUT_31tk          ((uint8_t)0x1E)
+#define     ADCTIM_SMPDUT_32tk          ((uint8_t)0x1F)
+
+/* Bit definition for ADCEXCFG register */
+#define     ADCEXCFG_ADCETRS                        ((uint8_t)0x30)         /*!< ADCETRS[1:0], ADC external trigger pin ADC_ETR control bit */
+#define     ADCEXCFG_ADCETRS_0                      ((uint8_t)0x10)         /*!< Bit 0 */
+#define     ADCEXCFG_ADCETRS_1                      ((uint8_t)0x20)         /*!< Bit 1 */
+
+#define     ADCEXCFG_ADCETRS_DISABLE                ((uint8_t)0x10)         /*!< disable ETR function */
+#define     ADCEXCFG_ADCETRS_ENABLE_RISING_TRIGGER  ((uint8_t)0x20)         /*!< enable ADC_ETR rising trigger mode */
+#define     ADCEXCFG_ADCETRS_ENABLE_FALLING_TRIGGER ((uint8_t)0x30)         /*!< enable ADC_ETR falling trigger mode */
+
+#define     ADCEXCFG_CVTIMESEL                      ((uint8_t)0x07)         /*!< CVTIMESEL[2:0], ADC auto conversion times selection */
+#define     ADCEXCFG_CVTIMESEL_0                    ((uint8_t)0x01)         /*!< Bit 0 */
+#define     ADCEXCFG_CVTIMESEL_1                    ((uint8_t)0x02)         /*!< Bit 1 */
+#define     ADCEXCFG_CVTIMESEL_2                    ((uint8_t)0x04)         /*!< Bit 2 */
+
+#define     ADCEXCFG_CVTIMESEL_1_CONVERSION         ((uint8_t)0x03)
+#define     ADCEXCFG_CVTIMESEL_2_CONVERSION_AVG     ((uint8_t)0x04)
+#define     ADCEXCFG_CVTIMESEL_4_CONVERSION_AVG     ((uint8_t)0x05)
+#define     ADCEXCFG_CVTIMESEL_8_CONVERSION_AVG     ((uint8_t)0x06)
+#define     ADCEXCFG_CVTIMESEL_16_CONVERSION_AVG    ((uint8_t)0x07)
+
+#define     ADCTIM                      (*(__IO uint8_t xdata *) ADCTIM_ADDR)
+#define     ADCEXCFG                    (*(__IO uint8_t xdata *) ADCEXCFG_ADDR)
+#define     ADC                         ((ADC_TypeDef idata* xdata *) ADC_BASE)
 
 /* ADC special function registers */
 sfr ADC_CONTR   =   ADC_CONTR_ADDR;                 //!< ADC control register

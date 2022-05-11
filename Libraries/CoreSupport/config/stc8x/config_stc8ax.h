@@ -422,25 +422,25 @@ sfr WKTCH       =   WKTCH_ADDR;         //! Power down wake up timer high bytes
 #define     P7M1_ADDR       ((uint8_t)0xE1)
 
 /* GPIO pull up resistor control register address definition */
-#define     P0PU_ADDR        (PxPU_BASE + 0x00u)
-#define     P1PU_ADDR        (PxPU_BASE + 0x01u)
-#define     P2PU_ADDR        (PxPU_BASE + 0x02u)
-#define     P3PU_ADDR        (PxPU_BASE + 0x03u)
-#define     P4PU_ADDR        (PxPU_BASE + 0x04u)
-#define     P5PU_ADDR        (PxPU_BASE + 0x05u)
-#define     P6PU_ADDR        (PxPU_BASE + 0x06u)
-#define     P7PU_ADDR        (PxPU_BASE + 0x07u)
+#define     P0PU_ADDR        (PxPU_BASE + 0x00)
+#define     P1PU_ADDR        (PxPU_BASE + 0x01)
+#define     P2PU_ADDR        (PxPU_BASE + 0x02)
+#define     P3PU_ADDR        (PxPU_BASE + 0x03)
+#define     P4PU_ADDR        (PxPU_BASE + 0x04)
+#define     P5PU_ADDR        (PxPU_BASE + 0x05)
+#define     P6PU_ADDR        (PxPU_BASE + 0x06)
+#define     P7PU_ADDR        (PxPU_BASE + 0x07)
 
 /*GPIO schmidt trigger control register address definition */
 
-#define    P0NCS_ADDR       (PxNCS_BASE + 0x00u)
-#define    P1NCS_ADDR       (PxNCS_BASE + 0x01u)
-#define    P2NCS_ADDR       (PxNCS_BASE + 0x02u)
-#define    P3NCS_ADDR       (PxNCS_BASE + 0x03u)
-#define    P4NCS_ADDR       (PxNCS_BASE + 0x04u)
-#define    P5NCS_ADDR       (PxNCS_BASE + 0x05u)
-#define    P6NCS_ADDR       (PxNCS_BASE + 0x06u)
-#define    P7NCS_ADDR       (PxNCS_BASE + 0x07u)
+#define    P0NCS_ADDR       (PxNCS_BASE + 0x00)
+#define    P1NCS_ADDR       (PxNCS_BASE + 0x01)
+#define    P2NCS_ADDR       (PxNCS_BASE + 0x02)
+#define    P3NCS_ADDR       (PxNCS_BASE + 0x03)
+#define    P4NCS_ADDR       (PxNCS_BASE + 0x04)
+#define    P5NCS_ADDR       (PxNCS_BASE + 0x05)
+#define    P6NCS_ADDR       (PxNCS_BASE + 0x06)
+#define    P7NCS_ADDR       (PxNCS_BASE + 0x07)
 
 
 /* GPIO registers configuration */
@@ -1002,24 +1002,24 @@ typedef struct {
 #define     IAP_CONTR_IAP_WT_1      ((uint8_t)0x02)     /*!< Bit 1 */
 #define     IAP_CONTR_IAP_WT_2      ((uint8_t)0x04)     /*!< Bit 2 */
 
-#define     IAP_CONTR_IAP_WT_VAL7   ((uint8_t)0x07)     /*!< read_t: 2 ticks; write: 7   ticks; erase page: 5k   ticks; clock fq: 1MHz */
-#define     IAP_CONTR_IAP_WT_VAL6   ((uint8_t)0x06)     /*!< read_t: 2 ticks; write: 14  ticks; erase page: 10k  ticks; clock fq: 2MHz */
-#define     IAP_CONTR_IAP_WT_VAL5   ((uint8_t)0x05)     /*!< read_t: 2 ticks; write: 21  ticks; erase page: 15k  ticks; clock fq: 3MHz */
-#define     IAP_CONTR_IAP_WT_VAL4   ((uint8_t)0x04)     /*!< read_t: 2 ticks; write: 42  ticks; erase page: 30k  ticks; clock fq: 6MHz */
-#define     IAP_CONTR_IAP_WT_VAL3   ((uint8_t)0x03)     /*!< read_t: 2 ticks; write: 84  ticks; erase page: 60k  ticks; clock fq: 12MHz */
-#define     IAP_CONTR_IAP_WT_VAL2   ((uint8_t)0x02)     /*!< read_t: 2 ticks; write: 140 ticks; erase page: 100k ticks; clock fq: 20MHz */
-#define     IAP_CONTR_IAP_WT_VAL1   ((uint8_t)0x01)     /*!< read_t: 2 ticks; write: 168 ticks; erase page: 120k ticks; clock fq: 24MHz */
-#define     IAP_CONTR_IAP_WT_VAL0   ((uint8_t)0x00)     /*!< read_t: 2 ticks; write: 301 ticks; erase page: 215k ticks; clock fq: 30MHz */
+#define     IAP_CONTR_IAP_WT_1MHz   ((uint8_t)0x07)     /*!< read_t: 2 ticks; write: 7   ticks; erase page: 5k   ticks; clock fq: 1MHz */
+#define     IAP_CONTR_IAP_WT_2MHz   ((uint8_t)0x06)     /*!< read_t: 2 ticks; write: 14  ticks; erase page: 10k  ticks; clock fq: 2MHz */
+#define     IAP_CONTR_IAP_WT_3MHz   ((uint8_t)0x05)     /*!< read_t: 2 ticks; write: 21  ticks; erase page: 15k  ticks; clock fq: 3MHz */
+#define     IAP_CONTR_IAP_WT_6MHz   ((uint8_t)0x04)     /*!< read_t: 2 ticks; write: 42  ticks; erase page: 30k  ticks; clock fq: 6MHz */
+#define     IAP_CONTR_IAP_WT_12MHz  ((uint8_t)0x03)     /*!< read_t: 2 ticks; write: 84  ticks; erase page: 60k  ticks; clock fq: 12MHz */
+#define     IAP_CONTR_IAP_WT_20MHz  ((uint8_t)0x02)     /*!< read_t: 2 ticks; write: 140 ticks; erase page: 100k ticks; clock fq: 20MHz */
+#define     IAP_CONTR_IAP_WT_24MHz  ((uint8_t)0x01)     /*!< read_t: 2 ticks; write: 168 ticks; erase page: 120k ticks; clock fq: 24MHz */
+#define     IAP_CONTR_IAP_WT_30MHz  ((uint8_t)0x00)     /*!< read_t: 2 ticks; write: 301 ticks; erase page: 215k ticks; clock fq: 30MHz */
 
 /* Bit definition for IAP_CMD register */
 #define     IAP_CMD_CMD             ((uint8_t)0x03)     /*!< CMD[1:0], Send EEPROM Operation Command */
 #define     IAP_CMD_CMD_0           ((uint8_t)0x01)     /*!< Bit 0 */
 #define     IAP_CMD_CMD_1           ((uint8_t)0x02)     /*!< Bit 1 */
 
-#define     IAP_CMD_CMD_VAL0        ((uint8_t)0x00)     /*!< nop */
-#define     IAP_CMD_CMD_VAL1        ((uint8_t)0x01)     /*!< read 1 byte at target address */
-#define     IAP_CMD_CMD_VAL2        ((uint8_t)0x02)     /*!< write 1 byte to target address, converting 1 to 0 */
-#define     IAP_CMD_CMD_VAL3        ((uint8_t)0x03)     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
+#define     IAP_CMD_CMD_NOP         ((uint8_t)0x00)     /*!< nop */
+#define     IAP_CMD_CMD_READ        ((uint8_t)0x01)     /*!< read 1 byte at target address */
+#define     IAP_CMD_CMD_WRITE       ((uint8_t)0x02)     /*!< write 1 byte to target address, converting 1 to 0 */
+#define     IAP_CMD_CMD_ERASE       ((uint8_t)0x03)     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
 
 #define     IAP_EEPROM              ((IAP_EEPROM_TypeDef idata* xdata *) IAP_EEPROM_BASE)
 
@@ -1049,6 +1049,8 @@ typedef struct {
 #define     ADC_RESH_ADDR   ((uint8_t)0xBD)
 #define     ADC_RESL_ADDR   ((uint8_t)0xBE)
 #define     ADCCFG_ADDR     ((uint8_t)0xDE)
+
+#define     ADCTIM_ADDR     ((uint16_t)0xFEA8)
 
 /* Bit definition for ADC_CONTR register */
 #define     ADC_CONTR_ADC_POWER       ((uint8_t)0x80)           /*!< ADC power control: [0], closed; [1], open */
@@ -1088,22 +1090,78 @@ typedef struct {
 #define     ADCCFG_SPEED_3            ((uint8_t)0x08)          /*!< Bit 3 */
 
 // F_ADC SYSclk/2/16/SPEED[3:0]+1
-#define     ADCCFG_SPEED_VAL0         ((uint8_t)0x00)          /*!< SYSCLK tick number: 32 ticks*/
-#define     ADCCFG_SPEED_VAL1         ((uint8_t)0x01)          /*!< SYSCLK tick number: 64 ticks*/
-#define     ADCCFG_SPEED_VAL2         ((uint8_t)0x02)          /*!< SYSCLK tick number: 96 ticks*/
-#define     ADCCFG_SPEED_VAL3         ((uint8_t)0x03)          /*!< SYSCLK tick number: 128 ticks*/
-#define     ADCCFG_SPEED_VAL4         ((uint8_t)0x04)          /*!< SYSCLK tick number: 160 ticks*/
-#define     ADCCFG_SPEED_VAL5         ((uint8_t)0x05)          /*!< SYSCLK tick number: 192 ticks*/
-#define     ADCCFG_SPEED_VAL6         ((uint8_t)0x06)          /*!< SYSCLK tick number: 224 ticks*/
-#define     ADCCFG_SPEED_VAL7         ((uint8_t)0x07)          /*!< SYSCLK tick number: 256 ticks*/
-#define     ADCCFG_SPEED_VAL8         ((uint8_t)0x08)          /*!< SYSCLK tick number: 288 ticks*/
-#define     ADCCFG_SPEED_VAL9         ((uint8_t)0x09)          /*!< SYSCLK tick number: 320 ticks*/
-#define     ADCCFG_SPEED_VAL10        ((uint8_t)0x0A)          /*!< SYSCLK tick number: 352 ticks*/
-#define     ADCCFG_SPEED_VAL11        ((uint8_t)0x0B)          /*!< SYSCLK tick number: 384 ticks*/
-#define     ADCCFG_SPEED_VAL12        ((uint8_t)0x0C)          /*!< SYSCLK tick number: 416 ticks*/
-#define     ADCCFG_SPEED_VAL13        ((uint8_t)0x0D)          /*!< SYSCLK tick number: 448 ticks*/
-#define     ADCCFG_SPEED_VAL14        ((uint8_t)0x0E)          /*!< SYSCLK tick number: 480 ticks*/
-#define     ADCCFG_SPEED_VAL15        ((uint8_t)0x0F)          /*!< SYSCLK tick number: 512 ticks*/
+#define     ADCCFG_SPEED_32tk         ((uint8_t)0x00)          /*!< SYSCLK tick number: 32 ticks*/
+#define     ADCCFG_SPEED_64tk         ((uint8_t)0x01)          /*!< SYSCLK tick number: 64 ticks*/
+#define     ADCCFG_SPEED_96tk         ((uint8_t)0x02)          /*!< SYSCLK tick number: 96 ticks*/
+#define     ADCCFG_SPEED_128tk         ((uint8_t)0x03)          /*!< SYSCLK tick number: 128 ticks*/
+#define     ADCCFG_SPEED_160tk         ((uint8_t)0x04)          /*!< SYSCLK tick number: 160 ticks*/
+#define     ADCCFG_SPEED_192tk        ((uint8_t)0x05)          /*!< SYSCLK tick number: 192 ticks*/
+#define     ADCCFG_SPEED_224tk        ((uint8_t)0x06)          /*!< SYSCLK tick number: 224 ticks*/
+#define     ADCCFG_SPEED_256tk        ((uint8_t)0x07)          /*!< SYSCLK tick number: 256 ticks*/
+#define     ADCCFG_SPEED_288tk        ((uint8_t)0x08)          /*!< SYSCLK tick number: 288 ticks*/
+#define     ADCCFG_SPEED_320tk        ((uint8_t)0x09)          /*!< SYSCLK tick number: 320 ticks*/
+#define     ADCCFG_SPEED_352tk        ((uint8_t)0x0A)          /*!< SYSCLK tick number: 352 ticks*/
+#define     ADCCFG_SPEED_384tk        ((uint8_t)0x0B)          /*!< SYSCLK tick number: 384 ticks*/
+#define     ADCCFG_SPEED_416tk        ((uint8_t)0x0C)          /*!< SYSCLK tick number: 416 ticks*/
+#define     ADCCFG_SPEED_448tk        ((uint8_t)0x0D)          /*!< SYSCLK tick number: 448 ticks*/
+#define     ADCCFG_SPEED_480tk        ((uint8_t)0x0E)          /*!< SYSCLK tick number: 480 ticks*/
+#define     ADCCFG_SPEED_512tk        ((uint8_t)0x0F)          /*!< SYSCLK tick number: 512 ticks*/
+
+/* Bit definition for ADCTIM register */
+#define     ADCTIM_CSSETUP              ((uint8_t)0x80)          /*!< ADC channel selection time control(Number of ADC system clock ticks consumed): [0], 1 tick; [1], 2 ticks */
+
+#define     ADCTIM_CSHOLD               ((uint8_t)0x60)          /*!< CSHOLD[1:0], ADC channel selection hold time control */
+#define     ADCTIM_CSHOLD_0             ((uint8_t)0x20)          /*!< Bit 0 */
+#define     ADCTIM_CSHOLD_1             ((uint8_t)0x40)          /*!< Bit 1 */
+
+// Number of ADC system clock ticks consumed
+#define     ADCTIM_CSHOLD_1tk           ((uint8_t)0x00)
+#define     ADCTIM_CSHOLD_2tk           ((uint8_t)0x20)
+#define     ADCTIM_CSHOLD_3tk           ((uint8_t)0x40)
+#define     ADCTIM_CSHOLD_4tk           ((uint8_t)0x60)
+
+#define     ADCTIM_SMPDUTY              ((uint8_t)0x1F)          /*!< CSHOLD[4:0], Sampling time control of ADC analog signal */
+#define     ADCTIM_SMPDUTY_0            ((uint8_t)0x01)          /*!< Bit 0 */
+#define     ADCTIM_SMPDUTY_1            ((uint8_t)0x02)          /*!< Bit 1 */
+#define     ADCTIM_SMPDUTY_2            ((uint8_t)0x04)          /*!< Bit 2 */
+#define     ADCTIM_SMPDUTY_3            ((uint8_t)0x08)          /*!< Bit 3 */
+#define     ADCTIM_SMPDUTY_4            ((uint8_t)0x10)          /*!< Bit 4 */
+
+// Number of ADC system clock ticks consumed
+#define     ADCTIM_SMPDUT_1tk           ((uint8_t)0x00)
+#define     ADCTIM_SMPDUT_2tk           ((uint8_t)0x01)
+#define     ADCTIM_SMPDUT_3tk           ((uint8_t)0x02)
+#define     ADCTIM_SMPDUT_4tk           ((uint8_t)0x03)
+#define     ADCTIM_SMPDUT_5tk           ((uint8_t)0x04)
+#define     ADCTIM_SMPDUT_6tk           ((uint8_t)0x05)
+#define     ADCTIM_SMPDUT_7tk           ((uint8_t)0x06)
+#define     ADCTIM_SMPDUT_8tk           ((uint8_t)0x07)
+#define     ADCTIM_SMPDUT_9tk           ((uint8_t)0x08)
+#define     ADCTIM_SMPDUT_10tk          ((uint8_t)0x09)
+#define     ADCTIM_SMPDUT_11tk          ((uint8_t)0x0A)
+#define     ADCTIM_SMPDUT_12tk          ((uint8_t)0x0B)
+#define     ADCTIM_SMPDUT_13tk          ((uint8_t)0x0C)
+#define     ADCTIM_SMPDUT_14tk          ((uint8_t)0x0D)
+#define     ADCTIM_SMPDUT_15tk          ((uint8_t)0x0E)
+#define     ADCTIM_SMPDUT_16tk          ((uint8_t)0x0F)
+#define     ADCTIM_SMPDUT_17tk          ((uint8_t)0x10)
+#define     ADCTIM_SMPDUT_18tk          ((uint8_t)0x11)
+#define     ADCTIM_SMPDUT_19tk          ((uint8_t)0x12)
+#define     ADCTIM_SMPDUT_20tk          ((uint8_t)0x13)
+#define     ADCTIM_SMPDUT_21tk          ((uint8_t)0x14)
+#define     ADCTIM_SMPDUT_22tk          ((uint8_t)0x15)
+#define     ADCTIM_SMPDUT_23tk          ((uint8_t)0x16)
+#define     ADCTIM_SMPDUT_24tk          ((uint8_t)0x17)
+#define     ADCTIM_SMPDUT_25tk          ((uint8_t)0x18)
+#define     ADCTIM_SMPDUT_26tk          ((uint8_t)0x19)
+#define     ADCTIM_SMPDUT_27tk          ((uint8_t)0x1A)
+#define     ADCTIM_SMPDUT_28tk          ((uint8_t)0x1B)
+#define     ADCTIM_SMPDUT_29tk          ((uint8_t)0x1C)
+#define     ADCTIM_SMPDUT_30tk          ((uint8_t)0x1D)
+#define     ADCTIM_SMPDUT_31tk          ((uint8_t)0x1E)
+#define     ADCTIM_SMPDUT_32tk          ((uint8_t)0x1F)
+
+#define     ADCTIM                      (*(__IO uint8_t xdata *) ADCTIM_ADDR)
 
 #define     ADC                       ((ADC_TypeDef idata* xdata *) ADC_BASE)
 

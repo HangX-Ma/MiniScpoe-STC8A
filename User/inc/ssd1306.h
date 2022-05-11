@@ -1,9 +1,9 @@
 /**
- * @file stc8x_gpio.h
-* @author MContour (m-contour@qq.com)
- * @brief STC8x GPIO basic function definitions 
+ * @file ssd1306.h
+ * @author MContour (m-contour@qq.com)
+ * @brief SSD1306 OLED driver basic function definitions
  * @version 0.1
- * @date 2022-05-02
+ * @date 2022-05-10
  * 
  * @copyright Apache 2.0 LICENSE
  * 
@@ -24,39 +24,10 @@
  *****************************************************************************
  */
 
-#ifndef __STC8X_GPIO__H__
-#define __STC8X_GPIO__H__
-
-//* ------------      head files      ------------
-#if (LIB_MCU_MODULE == STC8Ax)
-    #include "config_stc8ax.h"
-#elif (LIB_MCU_MODULE == STC8Hx)
-    #include "config_stc8hx.h"
-#endif
-
-#include "core_stc8x.h"
-//* ------------   GLOBAL variables   ------------
-
-//* ------------ developer definitions ------------
-
-//* ------------     functions     ------------
-
-/** @addtogroup STC
- * @{
- */
-
-/** @addtogroup Peripheral
- * @{
- */
-
-
-void GPIO_DeInit(void);
+#ifndef __SSD1306__H__
+#define __SSD1306__H__
 
 
 
-/** @} */
 
-/** @} */
-
-
-#endif  //!__STC8X_GPIO__H__
+#endif  //!__SSD1306__H__

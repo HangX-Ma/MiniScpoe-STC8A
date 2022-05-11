@@ -1,7 +1,7 @@
 /**
- * @file stc8x_gpio.h
-* @author MContour (m-contour@qq.com)
- * @brief STC8x GPIO basic function definitions 
+ * @file stc8x_delay.c
+ * @author MContour (m-contour@qq.com)
+ * @brief STC8x delay basic function realization 
  * @version 0.1
  * @date 2022-05-02
  * 
@@ -23,40 +23,12 @@
  * limitations under the License.
  *****************************************************************************
  */
+#include "stc8x_delay.h"
 
-#ifndef __STC8X_GPIO__H__
-#define __STC8X_GPIO__H__
-
-//* ------------      head files      ------------
-#if (LIB_MCU_MODULE == STC8Ax)
-    #include "config_stc8ax.h"
-#elif (LIB_MCU_MODULE == STC8Hx)
-    #include "config_stc8hx.h"
-#endif
-
-#include "core_stc8x.h"
-//* ------------   GLOBAL variables   ------------
-
-//* ------------ developer definitions ------------
-
-//* ------------     functions     ------------
-
-/** @addtogroup STC
- * @{
- */
-
-/** @addtogroup Peripheral
- * @{
- */
-
-
-void GPIO_DeInit(void);
-
-
-
-/** @} */
-
-/** @} */
-
-
-#endif  //!__STC8X_GPIO__H__
+void delay_nms(uint16_t nms) {
+    uint16_t i;
+    for(; nms > 0; nms--) {
+        i = LIB_CLK_FREQ/LIB_DELAY_COUNT;
+        while(--i);
+    }
+}
