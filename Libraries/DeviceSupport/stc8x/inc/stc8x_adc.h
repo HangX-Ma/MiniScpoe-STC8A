@@ -28,13 +28,13 @@
 #define __STC8X_ADC__H__
 
 //* ------------      head files      ------------
+#include "core_stc8x.h"
+
 #if (LIB_MCU_MODULE == STC8Ax)
     #include "config_stc8ax.h"
 #elif (LIB_MCU_MODULE == STC8Hx)
     #include "config_stc8hx.h"
 #endif
-
-#include "core_stc8x.h"
 
 /** @addtogroup STC
  * @{
@@ -50,11 +50,6 @@ extern __IO uint16_t ADC_data;
 extern void delay_nms(uint16_t nms);
 
 //* ------------ developer definitions ------------
-/**
- * @brief GPIO - ADC channel selection \c MACRO
- * @param x ADC channel value from 0~15; Channel \c 15 is internal 1.19V reference voltage
- */
-#define ADC_CHx_SEL(x) do { Px_M1((x&0x08)/8) |= (1 << (x & 0x07)); Px_M0((x&0x08)/8) = 0x00; } while(0)
 
 //* ------------     functions     ------------
 
@@ -83,6 +78,11 @@ void ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx);
  */
 void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority);
 
+/**
+ * @brief GPIO - ADC channel selection \c MACRO
+ * @param _ADC_CHx ADC channel value from 0~15; Channel \c 15 is internal 1.19V reference voltage
+ */
+void ADC_CHx_SEL(uint8_t _ADC_CHx);
 
 /** @} */
 

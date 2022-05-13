@@ -149,7 +149,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>12</TargetSelection>
+          <TargetSelection>9</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -322,9 +322,9 @@
             <InterruptVectorAddress>0</InterruptVectorAddress>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>__CX51__</Define>
+              <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CoreSupport;.\inc;..\Libraries\CoreSupport\config\stc8x;..\Libraries\DeviceSupport\stc8x\inc</IncludePath>
+              <IncludePath>..\Libraries;..\Libraries\CoreSupport;..\Libraries\CoreSupport\startup;..\Libraries\CoreSupport\config;..\Libraries\CoreSupport\config\stc8x;..\Libraries\DeviceSupport;..\Libraries\DeviceSupport\stc8x\inc;..\Libraries\DeviceSupport\stc8x\src;.\inc</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -380,6 +380,21 @@
               <FileName>startup_stc8a.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Libraries\CoreSupport\startup\stc8x\startup_stc8a.s</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>lib/core</GroupName>
+          <Files>
+            <File>
+              <FileName>base_stc8x.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Libraries\CoreSupport\base_stc8x.h</FilePath>
+            </File>
+            <File>
+              <FileName>core_stc8x.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Libraries\CoreSupport\core_stc8x.h</FilePath>
             </File>
           </Files>
         </Group>

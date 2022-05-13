@@ -42,18 +42,17 @@ void RCC_DeInit(void) {
     SYSCLK->RCC_CLKDIV = 0x00;
     /* clear CKSEL */
     SYSCLK->RCC_CKSEL &= ~(0xFF);
-    if (LIB_MCU_MODULE == STC8Ax) {
+    #if (LIB_MCU_MODULE == STC8Ax)
         IRTRIM = T24M_RAM;
         /* MCLK no output */
         SYSCLK->RCC_CKSEL |= CKSEL_MCLKODIV_DIV0;
-    } 
-    else if (LIB_MCU_MODULE == STC8Hx) {
+    #elif (LIB_MCU_MODULE == STC8Hx)
         SYSCLK->RCC_MCLKOCR = 0x00;
         IRCBAND = IRCBAND_SEL_27MHz;
         IRTRIM  = T24M_CHIPID;
         VRTRIM  = VRT27M_CHIPID;
 
-    }
+    #endif
     /* select 24MHz IRC */
     SYSCLK->RCC_CKSEL |= CKSEL_MCKSEL_IRC24MCR;
 }

@@ -26,6 +26,8 @@
 #ifndef __CORE_STC8X__H__
 #define __CORE_STC8X__H__
 
+#include "procfg_stc8x.h"
+
 /** @addtogroup STC
  * @{
  */
@@ -42,10 +44,10 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
  */
 typedef enum
 {
-	SW_G1 = (uint8_t)0x00,  //!< switch to the group 1
-	SW_G2 = (uint8_t)0x01,  //!< switch to the group 2
-	SW_G3 = (uint8_t)0x02,  //!< switch to the group 3
-	SW_G4 = (uint8_t)0x03   //!< switch to the group 4
+	SW_G1 = 0x00,  //!< switch to the group 1
+	SW_G2 = 0x01,  //!< switch to the group 2
+	SW_G3 = 0x02,  //!< switch to the group 3
+	SW_G4 = 0x03   //!< switch to the group 4
 } GPIO_SWG;
 
 
@@ -54,11 +56,13 @@ typedef enum
  */
 typedef enum
 {
-  ISR_PR0 = (uint8_t)0x00,  //!< Lowest  priority
-  ISR_PR1 = (uint8_t)0x01,  //!< Lower   priority
-  ISR_PR2 = (uint8_t)0x02,  //!< Higher  priority
-  ISR_PR3 = (uint8_t)0x03   //!< Highest priority
+  ISR_PR0 = 0x00,  //!< Lowest  priority
+  ISR_PR1 = 0x01,  //!< Lower   priority
+  ISR_PR2 = 0x02,  //!< Higher  priority
+  ISR_PR3 = 0x03   //!< Highest priority
 } ISR_PRx;
+
+extern void      _nop_     (void);
 
 /** @defgroup NVIC
  * @{

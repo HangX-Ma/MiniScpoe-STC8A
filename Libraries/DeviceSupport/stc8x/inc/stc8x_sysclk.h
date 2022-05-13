@@ -28,15 +28,14 @@
 #define __STC8X_SYSCLK__H__
 
 //* ------------      head files      ------------
+#include "core_stc8x.h"
+
 #if (LIB_MCU_MODULE == STC8Ax)
     #include "config_stc8ax.h"
 #elif (LIB_MCU_MODULE == STC8Hx)
     #include "config_stc8hx.h"
     sfr VRTRIM = 0xA6;
 #endif
-
-#include "core_stc8x.h"
-
 
 /** @addtogroup STC
  * @{
@@ -78,9 +77,7 @@ void RCC_DeInit(void);
      */
     void STC8Ax_RCC_UserIRC(uint8_t _irtrim, uint8_t _clkdiv, uint8_t _mclk_div_val, uint8_t _mclk_output_pin);
 
-#endif
-
-#if  (LIB_MCU_MODULE == STC8Hx) 
+#elif  (LIB_MCU_MODULE == STC8Hx) 
     // * read from CHIPID
     #define CPUIDBASE       ((uint16_t)0xFDE0)
     #define ID_CHIPID       (*(__IO uint8_t  xdata *)(CPUIDBASE + 0x00))

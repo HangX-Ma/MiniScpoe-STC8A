@@ -36,18 +36,6 @@
  * @{
  */
 
-//* MCU MODULE Definitions
-#define STC8Ax          (0)
-#define STC8Hx          (1)
-
-
-// #define LIB_MCU_MODULE  STC8Ax
-#define LIB_MCU_MODULE  STC8Hx
-
-//* Clock frequency Definition beforehand
-#define LIB_CLK_FREQ    ((uint32_t)0x00)    // clock frequency acquirement
-#define LIB_DELAY_COUNT ((uint16_t)11000)   // accurate delay base
-
 //! integer types
 typedef signed char int8_t;
 typedef signed int  int16_t;
@@ -95,8 +83,6 @@ typedef volatile uint32_t vuint32_t;
 #define MODIFY_REG(REG, CLEARMASK, SETMASK)  WRITE_REG((REG), (((READ_REG(REG)) & (~(CLEARMASK))) | (SETMASK)))
 
 /** @} */
-
-
 
 /** @} */
 

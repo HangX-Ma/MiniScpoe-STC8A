@@ -28,6 +28,8 @@
 #define __STC8X_DELAY__H__
 
 //* ------------      head files      ------------
+#include "core_stc8x.h"
+
 #if (LIB_MCU_MODULE == STC8Ax)
     #include "config_stc8ax.h"
 #elif (LIB_MCU_MODULE == STC8Hx)
@@ -42,7 +44,6 @@
  * @{
  */
 
-#include "core_stc8x.h"
 //* ------------   GLOBAL variables   ------------
 
 //* ------------ developer definitions ------------

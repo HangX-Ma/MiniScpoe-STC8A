@@ -1,9 +1,9 @@
 /**
- * @file stc8x_gpio.h
-* @author MContour (m-contour@qq.com)
- * @brief STC8x GPIO basic function definitions 
+ * @file procfg_stc8x.h
+ * @author MContour (m-contour@qq.com)
+ * @brief project configuration file
  * @version 0.1
- * @date 2022-05-02
+ * @date 2022-05-13
  * 
  * @copyright Apache 2.0 LICENSE
  * 
@@ -24,40 +24,22 @@
  *****************************************************************************
  */
 
-#ifndef __STC8X_GPIO__H__
-#define __STC8X_GPIO__H__
+#ifndef __PROCFG_STC8X__H__
+#define __PROCFG_STC8X__H__
 
-//* ------------      head files      ------------
-#include "core_stc8x.h"
+//* MCU MODULE Definitions
+#define STC8Ax          (0)
+#define STC8Hx          (1)
 
-#if (LIB_MCU_MODULE == STC8Ax)
-    #include "config_stc8ax.h"
-#elif (LIB_MCU_MODULE == STC8Hx)
-    #include "config_stc8hx.h"
+#define LIB_MCU_MODULE  STC8Ax
+// #define LIB_MCU_MODULE  STC8Hx
+
+#ifndef LIB_MCU_MODULE
+    #define LIB_MCU_MODULE STC8Ax
 #endif
 
-/** @addtogroup STC
- * @{
- */
+//* Clock frequency Definition beforehand
+#define LIB_CLK_FREQ    ((uint32_t)0x00)    // clock frequency acquirement
+#define LIB_DELAY_COUNT ((uint16_t)11000)   // accurate delay base
 
-/** @addtogroup Peripheral
- * @{
- */
-//* ------------   GLOBAL variables   ------------
-
-//* ------------ developer definitions ------------
-
-//* ------------     functions     ------------
-
-
-
-void GPIO_DeInit(void);
-
-
-
-/** @} */
-
-/** @} */
-
-
-#endif  //!__STC8X_GPIO__H__
+#endif  //!__PROCFG_STC8X__H__

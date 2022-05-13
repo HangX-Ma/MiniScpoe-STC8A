@@ -28,13 +28,13 @@
 #define __STC8X_EEPROM__H__
 
 //* ------------      head files      ------------
+#include "core_stc8x.h"
+
 #if (LIB_MCU_MODULE == STC8Ax)
     #include "config_stc8ax.h"
 #elif (LIB_MCU_MODULE == STC8Hx)
     #include "config_stc8hx.h"
 #endif
-
-#include "core_stc8x.h"
 
 
 /** @addtogroup STC
