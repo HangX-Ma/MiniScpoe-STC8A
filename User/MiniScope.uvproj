@@ -149,7 +149,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>9</TargetSelection>
+          <TargetSelection>12</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define>__CX51__</Define>
               <Undefine></Undefine>
-              <IncludePath>.\include</IncludePath>
+              <IncludePath>..\Libraries\CoreSupport;.\inc;..\Libraries\CoreSupport\config\stc8x;..\Libraries\DeviceSupport\stc8x\inc</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -379,15 +379,39 @@
             <File>
               <FileName>startup_stc8a.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\Libraries\Core\Startup\STC8x\startup_stc8a.s</FilePath>
+              <FilePath>..\Libraries\CoreSupport\startup\stc8x\startup_stc8a.s</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>lib/core</GroupName>
-        </Group>
-        <Group>
           <GroupName>lib/peripherals</GroupName>
+          <Files>
+            <File>
+              <FileName>stc8x_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\DeviceSupport\stc8x\src\stc8x_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stc8x_delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\DeviceSupport\stc8x\src\stc8x_delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>stc8x_eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\DeviceSupport\stc8x\src\stc8x_eeprom.c</FilePath>
+            </File>
+            <File>
+              <FileName>stc8x_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\DeviceSupport\stc8x\src\stc8x_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>stc8x_sysclk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\DeviceSupport\stc8x\src\stc8x_sysclk.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>user</GroupName>
@@ -395,7 +419,7 @@
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\user\main.c</FilePath>
+              <FilePath>.\src\main.c</FilePath>
             </File>
           </Files>
         </Group>

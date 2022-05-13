@@ -78,7 +78,7 @@ sbit P          =   PSW^0;                              /*!< party check flag bi
 
 //! system management special function register setting 
 /* bus speed control register setting */
-#define     BUS_SPEED_ADDR              ((uint8_t)0xA1)
+#define     BUS_SPEED_ADDR              0xA1
 
 /* Bit definition for BUS_SPEED register */
 // * RW_S configuration
@@ -113,8 +113,8 @@ sfr BUS_SPEED   =   BUS_SPEED_ADDR; //! bus speed control register
 sfr AUXR        =   AUXR_ADDR;      //! auxiliary register
 
 /* peripheral port switch register setting */
-#define     PERIPHERAL_PORT_SW1_ADDR    ((uint8_t)0xA2)
-#define     PERIPHERAL_PORT_SW2_ADDR    ((uint8_t)0xBA)
+#define     PERIPHERAL_PORT_SW1_ADDR    0xA2
+#define     PERIPHERAL_PORT_SW2_ADDR    0xBA
 
 /* Bit definition for P_SW1 register */
 // * S1_S configuration
@@ -193,9 +193,9 @@ typedef struct
 
 // * system clock special function register setting in internal expansion RAM 
 /* internel oscillator frequency control and adjustment registers*/
-#define     IRCBAND_ADDR                ((uint8_t)0x9D)
-#define     LIRTRIM_ADDR                ((uint8_t)0x9E)
-#define     IRTRIM_ADDR                 ((uint8_t)0x9F)
+#define     IRCBAND_ADDR                0x9D
+#define     LIRTRIM_ADDR                0x9E
+#define     IRTRIM_ADDR                 0x9F
 
 /* Bit definition for IRCBAND register */
 #define     IRCBAND_SEL                 ((uint8_t)0x03) /*!< SEL[1:0], IRC band selection */
@@ -310,8 +310,8 @@ sfr LIRTRIM     =   LIRTRIM_ADDR;   //! internal IRC frequency subtle adjustment
 
 //! system power special function register setting
 /* power control base address */
-#define     PCON_ADDR                   ((uint8_t)0x87)
-#define     VOCTRL_ADDR                 ((uint8_t)0xBB)
+#define     PCON_ADDR                   0x87
+#define     VOCTRL_ADDR                 0xBB
 
 /* Bit definition for PCON register */
 // * LVDF configuration
@@ -335,9 +335,9 @@ sfr VOCTRL      =   VOCTRL_ADDR;        //! voltage level control register
 
 //! system reset special function register control
 /* reset control base address */
-#define     WDT_CONTR_ADDR              ((uint8_t)0xC1)
+#define     WDT_CONTR_ADDR              0xC1
 // #define     IAP_ADDR      0xC7u
-#define     RSTCFG_ADDR                 ((uint8_t)0xFF)
+#define     RSTCFG_ADDR                 0xFF
 
 /* Bit definition for WDT_CONTR register */
 // * WDT_FLAG configuration
@@ -392,9 +392,9 @@ sfr WDT_CONTR   =   WDT_CONTR_ADDR;     //! Watch dog control register
 sfr RSTCFG      =   RSTCFG_ADDR;        //! Reset configuration register
 
 /* wake up timer base address */
-#define     WKT_BASE                    ((uint8_t)0xAA)
-#define     WKTCL_ADDR                  (WKT_BASE + 0x0000u)
-#define     WKTCH_ADDR                  (WKT_BASE + 0x0001u)
+#define     WKT_BASE                    0xAA
+#define     WKTCL_ADDR                  (WKT_BASE + 0x00)
+#define     WKTCH_ADDR                  (WKT_BASE + 0x01)
 
 /* WKTCH offset */
 #define WKTEN       0x80
@@ -731,19 +731,19 @@ sbit P77        =   P7^7;
 
 //! ISR peripherals
 /* ISR basic address definition */
-#define    IE_ADDR                      ((uint8_t)0xA8)
-#define    IE2_ADDR                     ((uint8_t)0xAF)
-#define    ISR_PRIORITY_CONTR_BASE      ((uint8_t)0xB5)
+#define    IE_ADDR                      0xA8
+#define    IE2_ADDR                     0xAF
+#define    ISR_PRIORITY_CONTR_BASE      0xB5
 
 #define    IP_ADDR                      (ISR_PRIORITY_CONTR_BASE + 0x03)
 #define    IPH_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x02)
 #define    IP2_ADDR                     (ISR_PRIORITY_CONTR_BASE + 0x00)
 #define    IP2H_ADDR                    (ISR_PRIORITY_CONTR_BASE + 0x01)
-#define    IP3_ADDR                     ((uint8_t)0xDF)
-#define    IP3H_ADDR                    ((uint8_t)0xEE)
+#define    IP3_ADDR                     0xDF
+#define    IP3H_ADDR                    0xEE
 
-#define    INTCLKO_ADDR                 ((uint8_t)0x8F)
-#define    AUXINTIF_ADDR                ((uint8_t)0xEF)
+#define    INTCLKO_ADDR                 0x8F
+#define    AUXINTIF_ADDR                0xEF
 
 /* Bit definition for IE2 registers [0] off; [1] on */
 #define     IE2_ET4         ((uint8_t)0x40)             /*!< Timer T4 overflow interrupt enabling bit */
@@ -820,8 +820,10 @@ sfr IE          =   IE_ADDR;                            //! interrupt enabling r
 sfr IE2         =   IE2_ADDR;                           //! interrupt enabling register 2
 sfr IP          =   IP_ADDR;                            //! interrupt priority control register IP
 sfr IP2         =   IP2_ADDR;                           //! interrupt priority control register IP2
+sfr IP3         =   IP3_ADDR;                           //! interrupt priority control register IP3
 sfr IPH         =   IPH_ADDR;                           //! interrupt priority control register IPH
 sfr IP2H        =   IP2H_ADDR;                          //! interrupt priority control register IP2H
+sfr IP3H        =   IP3H_ADDR;                          //! interrupt priority control register IP3H
 sfr INTCLKO     =   INTCLKO_ADDR;                       //! external interrupt and clock output control registers
 sfr AUXINTIF    =   AUXINTIF_ADDR;                      //! interrupt flag auxiliary register
 
