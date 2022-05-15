@@ -8,7 +8,7 @@
  * @copyright Apache 2.0 LICENSE
  * 
  *****************************************************************************
- * Copyright (c) [2022-04-27] [MContour m-contour@qq.com]
+ * Copyright (c) 2022 MContour m-contour@qq.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,101 @@
 #ifndef __SSD1306__H__
 #define __SSD1306__H__
 
+//* ------------      head files      ------------
+#include "core_stc8x.h"
 
+#if (LIB_MCU_MODULE == STC8Ax)
+    #include "config_stc8ax.h"
+#elif (LIB_MCU_MODULE == STC8Hx)
+    #include "config_stc8hx.h"
+#endif
+
+
+//* ------------   GLOBAL variables   ------------
+
+//* ------------ developer definitions ------------
+#define _SET_SBIT(x) do {x = 1;} while(0)
+#define _RESET_SBIT(x) do {x = 0;} while(0)
+
+/*  OLED Pixel */
+#define WIDTH  128
+#define HEIGHT 64
+#define PAGES  8
+
+#define Max_Column 128
+#define Max_Row 64
+
+/*  OLED Pins */
+sbit OLED_SCLK = P2^7;   // clock(D0/SCLK)
+sbit OLED_SDIN = P2^6;   // data(D1/MOSI)
+sbit OLED_RST  = P2^5;   // reset(RES)
+sbit OLED_DC   = P2^4;   // data/cmd(DC)
+sbit OLED_CS   = P2^3;   // chip select(CS)
+//* ------------     functions     ------------
+
+void OLED_Init(void);
+
+void OLED_WR_CMD(uint8_t cmd);
+
+void OLED_WR_data(uint8_t dat);
+
+void OLED_ClearScreen(void);
+
+void OLED_Display(void);
+
+void OLED_SetPos(uint8_t x, uint8_t y);
+
+/**
+ * @brief Draw a byte to buffer
+ * @details If the byte 1111 1111 we want to write cross two pages 0001 1111 1110 0000.
+ * In redraw mode, to avoid affect adjacent content. Set offset=3, reserve_hl=1,
+ * when write 0001 1111. Set offset=5, reserve_hl=0 when write 1110 0000.
+ * @param pBuf buffer pointer
+ * @param mask ASCII characters' mask
+ * @param offset offset of a byte
+ * @param resv_hl reserve High or Low
+ */
+void OLED_ShowByte(uint8_t *pBuf, uint8_t mask, uint8_t offset, bit resv_hl);
+
+void OLED_ShowChar(uint8_t x, uint8_t y, uint8_t chr);
+
+void OLED_ShowString(uint8_t *str);
+
+/**
+ * @brief Show digit number on screen
+ * 
+ * @param digit number 
+ * @param len length of the number
+ */
+void OLED_ShowNum(uint32_t digit, uint8_t len);
+
+void OLED_ShowChinese_16x16(uint8_t loc);
+
+void OLED_ShowPixel(uint8_t x, uint8_t y);
+
+/**
+ * @brief Draw a line on the screen
+ * 
+ * @param x0 start coordinate x value
+ * @param y0 start coordinate y value
+ * @param x1 end coordinate x value
+ * @param y1 end coordinate y value
+ */
+void OLED_ShowLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
+
+/**
+ * @brief Reverse mode selection
+ * 
+ * @param n 1: reverse; 0: normal
+ */
+void OLED_Reverse(bit n);
+
+/**
+ * @brief Overlap mode selection
+ * 
+ * @param n 1: overlap; 0: override
+ */
+void OLED_Overlap(bit n);
 
 
 #endif  //!__SSD1306__H__

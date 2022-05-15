@@ -8,7 +8,7 @@
  * @copyright Apache 2.0 LICENSE
  * 
  *****************************************************************************
- * Copyright (c) [2022-04-27] [MContour m-contour@qq.com]
+ * Copyright (c) 2022 MContour m-contour@qq.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,24 +37,57 @@
  */
 
 //! integer types
-typedef signed char int8_t;
-typedef signed int  int16_t;
-typedef signed long int32_t;
+#ifndef int8_t 
+    #define int8_t signed char
+#endif
+
+#ifndef int16_t 
+    #define int16_t signed int
+#endif
+
+#ifndef int32_t 
+    #define int32_t signed long
+#endif
 
 //! unsigned integer types
-typedef unsigned char uint8_t;
-typedef unsigned int  uint16_t;
-typedef unsigned long uint32_t;
+#ifndef uint8_t 
+    #define uint8_t unsigned char
+#endif
+
+#ifndef uint16_t 
+    #define uint16_t unsigned int
+#endif
+
+#ifndef uint32_t 
+    #define uint32_t unsigned long
+#endif
 
 //! volatile signed integer types
-typedef volatile int8_t  vint8_t;
-typedef volatile int16_t vint16_t;
-typedef volatile int32_t vint32_t;
+#ifndef vint8_t 
+    #define vint8_t volatile int8_t
+#endif
+
+#ifndef vint16_t 
+    #define vint16_t volatile int16_t
+#endif
+
+#ifndef vint32_t 
+    #define vint32_t volatile int32_t
+#endif
 
 //! volatile unsigned integer types
-typedef volatile uint8_t  vuint8_t;
-typedef volatile uint16_t vuint16_t;
-typedef volatile uint32_t vuint32_t;
+#ifndef vuint8_t 
+    #define vuint8_t volatile uint8_t
+#endif
+
+#ifndef vuint16_t 
+    #define vuint16_t volatile uint16_t
+#endif
+
+#ifndef vuint32_t 
+    #define vuint32_t volatile uint32_t
+#endif
+
 
 /**
  * @brief IO definitions

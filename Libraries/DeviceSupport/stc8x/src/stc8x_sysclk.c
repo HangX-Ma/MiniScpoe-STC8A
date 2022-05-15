@@ -8,7 +8,7 @@
  * @copyright Apache 2.0 LICENSE
  * 
  *****************************************************************************
- * Copyright (c) [2022-04-27] [MContour m-contour@qq.com]
+ * Copyright (c) 2022 MContour m-contour@qq.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,6 @@ void RCC_DeInit(void) {
         SYSCLK->RCC_CKSEL |= _mclk_div_val;
         /* MCLK output pin */
         SYSCLK->RCC_CKSEL  = _mclk_output_pin;
-
         /* select 24MHz IRC */
         SYSCLK->RCC_CKSEL |= CKSEL_MCKSEL_IRC24MCR;
         /* disable external special registers */

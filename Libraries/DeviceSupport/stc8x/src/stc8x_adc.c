@@ -8,7 +8,7 @@
  * @copyright Apache 2.0 LICENSE
  * 
  *****************************************************************************
- * Copyright (c) [2022-04-27] [MContour m-contour@qq.com]
+ * Copyright (c) 2022 MContour m-contour@qq.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@
 __IO uint16_t ADC_data;  //!< ADC data container
 
 void ADC_CHx_SEL(uint8_t _ADC_CHx) {
-    uint8_t var = (_ADC_CHx&0x08)/8;
+    uint8_t var = (_ADC_CHx&0x08) >> 3;
     if (var == 0) {
         P0M1 |= (1 << (_ADC_CHx & 0x07));
         P0M0 = 0x00;

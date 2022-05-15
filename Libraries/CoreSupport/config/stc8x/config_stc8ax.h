@@ -10,7 +10,7 @@
  * @copyright Apache 2.0 LICENSE
  * 
  *****************************************************************************
- * Copyright (c) [2022-04-27] [MContour m-contour@qq.com]
+ * Copyright (c) 2022 MContour m-contour@qq.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -999,7 +999,7 @@ typedef struct {
 #define     IAP_CMD_CMD_WRITE       ((uint8_t)0x02)     /*!< write 1 byte to target address, converting 1 to 0 */
 #define     IAP_CMD_CMD_ERASE       ((uint8_t)0x03)     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
 
-#define     IAP_EEPROM              ((IAP_EEPROM_TypeDef xdata*) IAP_EEPROM_BASE)
+#define     IAP_EEPROM              (*((IAP_EEPROM_TypeDef idata* xdata*) IAP_EEPROM_BASE))
 
 /* IAP special function registers */
 sfr IAP_DATA    =   IAP_DATA_ADDR;                      //!< IAP data regiseter
@@ -1139,9 +1139,9 @@ typedef struct {
 #define     ADCTIM_SMPDUT_31tk          ((uint8_t)0x1E)
 #define     ADCTIM_SMPDUT_32tk          ((uint8_t)0x1F)
 
-#define     ADCTIM                      (*(__IO uint8_t xdata *) ADCTIM_ADDR)
+#define     ADCTIM                      (*(__IO uint8_t xdata *)ADCTIM_ADDR)
 
-#define     ADC                         ((ADC_TypeDef xdata*) ADC_BASE)
+#define     ADC                         (*((ADC_TypeDef idata* xdata*)ADC_BASE))
 
 /* ADC special function registers */
 sfr ADC_CONTR   =   ADC_CONTR_ADDR;                 //!< ADC control register
@@ -1280,10 +1280,10 @@ sfr PCA_PWM2    =   PCA_PWM2_ADDR;              //!< PCA2 PWM mode register
 sfr PCA_PWM3    =   PCA_PWM3_ADDR;              //!< PCA3 PWM mode register
 
 // PCA generic struct type definitions
-#define     PCA0                    ((PCAx_TypeDef xdata *) PCA0_BASE)
-#define     PCA1                    ((PCAx_TypeDef xdata *) PCA1_BASE)
-#define     PCA2                    ((PCAx_TypeDef xdata *) PCA2_BASE)
-#define     PCA3                    ((PCAx_TypeDef xdata *) PCA3_BASE)
+#define     PCA0                    (*((PCAx_TypeDef idata* xdata *) PCA0_BASE))
+#define     PCA1                    (*((PCAx_TypeDef idata* xdata *) PCA1_BASE))
+#define     PCA2                    (*((PCAx_TypeDef idata* xdata *) PCA2_BASE))
+#define     PCA3                    (*((PCAx_TypeDef idata* xdata *) PCA3_BASE))
 
 /* Bit definition for CCON register */
 sbit CCON_CF         =   CCON^7;                /*!< PCA counter overflow interrupt flag */
@@ -1606,7 +1606,7 @@ typedef struct {
  * \code{.c} (SPI_TypeDef idata *) var \endcode, in witch the
  * \c var is \b SPI_TypeDef .
  */
-#define     SPI             ((SPI_TypeDef xdata* ) SPI_BASE)    //!< SPI generic struct type definition
+#define     SPI             (*((SPI_TypeDef idata* xdata* ) SPI_BASE))    //!< SPI generic struct type definition
 
 /* SPI special function registers */
 sfr SPSTAT      =   SPSTAT_ADDR;        //!< SPI State Register
