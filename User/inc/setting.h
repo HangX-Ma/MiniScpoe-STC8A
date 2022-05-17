@@ -1,9 +1,9 @@
 /**
- * @file chart.h
+ * @file setting.h
  * @author MContour (m-contour@qq.com)
- * @brief Wave diplay function definitions
+ * @brief Waveform setting options basic function definitions
  * @version 0.1
- * @date 2022-05-15
+ * @date 2022-05-17
  * 
  * @copyright Apache 2.0 LICENSE
  * 
@@ -24,8 +24,8 @@
  *****************************************************************************
  */
 
-#ifndef __CHART__H__
-#define __CHART__H__
+#ifndef __SETTING__H__
+#define __SETTING__H__
 
 //* ------------      head files      ------------
 #include "core_stc8x.h"
@@ -36,30 +36,44 @@
     #include "config_stc8hx.h"
 #endif
 
-#include "adc.h"
-#include "ssd1306.h"
 
 //* ------------   GLOBAL variables   ------------
 
 //* ------------ developer definitions ------------
+#define SVin_ratio_MAX          750 
+#define SVin_ratio_MIN          10
+
+#define CHX_Vin_ratio_MAX       750
+#define CHX_Vin_ratio_MIN       10
+
+#define OLED_BRIGHTNESS_MAX     25
+#define OLED_BRIGHTNESS_MIN     1
 
 //* ------------     functions     ------------
 
+
+
 /**
- * @brief main interface 
+ * @brief interval validation checker
+ * @details MCU speed limitation result in the Single Sweep 
+ * and Normal Sweep calculations could not complete in 100us time interval.
  */
-void PlotChart(void);
+void CheckMinTimeInterval(void);
 
-void PlotSettings(void);
+void Change_ScaleH(bit ifNext);
 
-void PlotSaveStatus(bit _saveStatus);
+void Change_SVin_ratio(bit ifNext);
 
-void GetWaveData(void);
+void Change_TriggerMode(bit ifNext);
 
-bit GetTriggerPos(uint16_t d1, uint16_t d2, uint16_t dTrigger, bit triSlope);
+void Change_TriggerPosOffset(bit ifNext);
 
-void AnalyseData();
+void Change_OptionInChart(bit ifNext);
 
-void PlotWave();
+void Change_OptionInSetting(bit ifNext);
 
-#endif  //!__CHART__H__
+void Change_OLED_Brightness(bit ifNext);
+
+void Change_PlotMode(void);
+
+#endif  //!__SETTING__H__

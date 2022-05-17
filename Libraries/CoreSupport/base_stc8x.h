@@ -53,15 +53,15 @@
         sfr(int){};
         sfr(){};
         ~sfr(){};
-        bool operator ^ (uint16_t data);
-        bool operator ^ (int data);
-        sfr& operator=(const sfr& other);
-        sfr& operator=(const int other);
-        int operator ^= (int data);
-        int operator &= (int data);
-        int operator |= (int data);
-        int operator | (int data);
-        int operator & (int data);
+        bool operator ^ (uint16_t _data);
+        bool operator ^ (int _data);
+        sfr& operator=(const sfr& _other);
+        sfr& operator=(const int _other);
+        int operator ^= (int _data);
+        int operator &= (int _data);
+        int operator |= (int _data);
+        int operator | (int _data);
+        int operator & (int _data);
         operator int(){};
     };
     #define sbit bool

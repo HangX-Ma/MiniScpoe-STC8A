@@ -42,20 +42,48 @@
 //* ------------   GLOBAL variables   ------------
 
 //* ------------ developer definitions ------------
-#define BGV_HByte       (*(uint8_t idata *)0xEF)   //!< internal 1.344V reference voltage high byte
-#define BGV_LByte       (*(uint8_t idata *)0xF0)   //!< internal 1.344V reference voltage low byte
-
-#define Vol_DIVIDED_RATIO   20  //!< 'voltage divided ratio' * 100, (2K)/(2K+8K)*100=0.2*100=20
-
+#define BGV_HByte       (*(uint8_t idata *)0xEF)    //!< internal 1.344V reference voltage high byte
+#define BGV_LByte       (*(uint8_t idata *)0xF0)    //!< internal 1.344V reference voltage low byte
 
 //* ------------     functions     ------------
 
+void Wave_ADC_Init(ScaleSel_TypeDef scale_h);
+/**
+ * @brief Get ADC channel x conversion result
+ * 
+ * @param chx ADC channel x
+ * @return 16 bits ADC conversion result 
+ */
 uint16_t GetADC_CHx(uint8_t chx);
 
+/**
+ * @brief Get REFV
+ * 
+ * @return Reference voltage value stroed in RAM 
+ */
 uint16_t Get_RAM_REFV(void);
 
+/**
+ * @brief Get battery voltage or CHx channel ADC input voltage
+ * 
+ * @param chx ADC channel x
+ * @param ratio voltage division ratio, ratio = ratio_origin x 100
+ * @return V 
+ */
 uint16_t Get_BATV(uint8_t chx, uint8_t ratio);
 
+int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t _ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio);
+
+int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t _ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio);
+
+/**
+ * @brief Get the Wave ADC
+ * 
+ * @note The screen is divided to 4 girds, in each grid deploying 25 sampling points
+ * @param chx ADC channel x 
+ * @param scale_h scale ratio
+ * @return ADC sampling result 
+ */
 uint16_t *GetWaveADC(uint8_t chx, uint8_t scale_h);
 
 
