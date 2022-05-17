@@ -36,7 +36,11 @@
  * STC8x core definition for low level system
  * @{
  */
-typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
+
+#define SETBIT 1
+#define CLRBIT 0
+
+
 typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
 
 /**
@@ -61,8 +65,6 @@ typedef enum
   ISR_PR2 = 0x02,  //!< Higher  priority
   ISR_PR3 = 0x03   //!< Highest priority
 } ISR_PRx;
-
-extern void      _nop_     (void);
 
 /** @defgroup NVIC
  * @{

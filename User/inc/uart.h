@@ -1,9 +1,9 @@
 /**
- * @file main.c
+ * @file uart.h
  * @author MContour (m-contour@qq.com)
- * @brief main program
+ * @brief UART basic function definitions
  * @version 0.1
- * @date 2022-05-06
+ * @date 2022-05-15
  * 
  * @copyright Apache 2.0 LICENSE
  * 
@@ -24,8 +24,30 @@
  *****************************************************************************
  */
 
-#include "main.h"
+#ifndef __UART__H__
+#define __UART__H__
 
-int main (void) {
-    return 0;
-}
+//* ------------      head files      ------------
+#include "core_stc8x.h"
+
+#if (LIB_MCU_MODULE == STC8Ax)
+    #include "config_stc8ax.h"
+#elif (LIB_MCU_MODULE == STC8Hx)
+    #include "config_stc8hx.h"
+#endif
+
+
+//* ------------   GLOBAL variables   ------------
+
+//* ------------ developer definitions ------------
+
+//* ------------     functions     ------------
+
+typedef struct uart
+{
+    
+} UARTx_TypeDef;
+
+
+
+#endif  //!__UART__H__

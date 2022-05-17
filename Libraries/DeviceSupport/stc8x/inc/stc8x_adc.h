@@ -46,7 +46,7 @@
 
 
 //* ------------   GLOBAL variables   ------------
-extern __IO uint16_t ADC_data;
+extern __IO uint16_t G_ADC_data;
 extern void delay_nms(uint16_t nms);
 
 //* ------------ developer definitions ------------

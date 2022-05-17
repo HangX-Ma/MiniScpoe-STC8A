@@ -1,9 +1,9 @@
 /**
- * @file main.c
+ * @file chart.c
  * @author MContour (m-contour@qq.com)
- * @brief main program
+ * @brief Wave diplay functions realization
  * @version 0.1
- * @date 2022-05-06
+ * @date 2022-05-15
  * 
  * @copyright Apache 2.0 LICENSE
  * 
@@ -24,8 +24,8 @@
  *****************************************************************************
  */
 
-#include "main.h"
+#include "chart.h"
 
-int main (void) {
-    return 0;
+void PlotChart(void) {
+    
 }

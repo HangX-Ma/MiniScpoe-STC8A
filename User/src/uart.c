@@ -1,9 +1,9 @@
 /**
- * @file main.c
+ * @file uart.c
  * @author MContour (m-contour@qq.com)
- * @brief main program
+ * @brief UART functions realization
  * @version 0.1
- * @date 2022-05-06
+ * @date 2022-05-15
  * 
  * @copyright Apache 2.0 LICENSE
  * 
@@ -24,8 +24,4 @@
  *****************************************************************************
  */
 
-#include "main.h"
-
-int main (void) {
-    return 0;
-}
+#include "uart.h"

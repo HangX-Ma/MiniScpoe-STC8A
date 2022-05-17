@@ -27,7 +27,7 @@
 #include "stc8x_adc.h"
 #include "stc8x_delay.h"
 
-__IO uint16_t ADC_data;  //!< ADC data container
+__IO uint16_t G_ADC_data;  //!< ADC data container
 
 void ADC_CHx_SEL(uint8_t _ADC_CHx) {
     uint8_t var = (_ADC_CHx&0x08) >> 3;
@@ -79,7 +79,7 @@ void ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx) {
     /* clear ADC flag for next conversion */
     ADC->ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
 
-    ADC_data = ((uint16_t)(ADC->ADC_RESH) << 8) | (uint16_t)(ADC->ADC_RESL);
+    G_ADC_data = ((uint16_t)(ADC->ADC_RESH) << 8) | (uint16_t)(ADC->ADC_RESL);
 }
 
 
@@ -90,9 +90,9 @@ void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority) {
     /* select GPIO for ADC function */
     ADC_CHx_SEL(_ADC_CHx);
     /* enable ADC interrupt */
-    EADC = SET;
+    EADC = SETBIT;
     /* enable interrupt system */
-    EA      = SET;
+    EA   = CLRBIT;
     /* set interrupt priority */
     IP  = (IPH & 0xDF) | (((uint8_t)_ADC_NVIC_Priority & 0x01) << 5);
     IPH = (IPH & 0xDF) | (((uint8_t)_ADC_NVIC_Priority & 0x02) << 4);
@@ -103,14 +103,14 @@ void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority) {
 }
 
 
-void ADC_ISR_Handler(void) interrupt ADC_VECTOR using 3 {
+void ADC_ISR_Handler(void) interrupt(ADC_VECTOR) using(3) {
     /* disable interrupt system to protect value */
-    EA      = RESET;
-    ADC_data = ((uint16_t)(ADC->ADC_RESH) << 8) | (uint16_t)(ADC->ADC_RESL);
+    EA      = SETBIT;
+    G_ADC_data = ((uint16_t)(ADC->ADC_RESH) << 8) | (uint16_t)(ADC->ADC_RESL);
     /* ensure interrupt flag cleared */
     ADC->ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
     /* enable interrupt system */
-    EA      = SET;
+    EA      = CLRBIT;
     /* start conversion */
     ADC->ADC_CONTR |= ADC_CONTR_ADC_START;
 }

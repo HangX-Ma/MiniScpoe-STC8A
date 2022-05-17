@@ -99,6 +99,10 @@ void OLED_ShowChinese_16x16(uint8_t loc);
 
 void OLED_ShowPixel(uint8_t x, uint8_t y);
 
+void OLED_ShowVerticalLine(uint8_t x, uint8_t y, uint8_t h);
+
+void OLED_ShowHorizontalLine(uint8_t x, uint8_t y, uint8_t w);
+
 /**
  * @brief Draw a line on the screen
  * 

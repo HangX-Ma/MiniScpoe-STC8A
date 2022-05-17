@@ -36,6 +36,47 @@
  * @{
  */
 
+
+
+#ifndef __VS_CODE_H__
+#define __VS_CODE_H__
+
+#ifdef VSCODE
+    #define _nop_() (void*)0;
+    #define interrupt(x)
+    #define using(x)
+    #include <stdbool.h>
+    #include <stdint.h>
+    typedef bool bit;
+    class sfr{
+    public:
+        sfr(int){};
+        sfr(){};
+        ~sfr(){};
+        bool operator ^ (uint16_t data);
+        bool operator ^ (int data);
+        sfr& operator=(const sfr& other);
+        sfr& operator=(const int other);
+        int operator ^= (int data);
+        int operator &= (int data);
+        int operator |= (int data);
+        int operator | (int data);
+        int operator & (int data);
+        operator int(){};
+    };
+    #define sbit bool
+    #define idata
+    #define xdata
+    #define bdata
+    #define data
+    #define code
+#else
+    #define interrupt(x) interrupt x
+    #define using(x) using x
+#endif
+
+#endif
+
 //! integer types
 #ifndef int8_t 
     #define int8_t signed char

@@ -287,11 +287,68 @@ void OLED_ShowPixel(uint8_t x, uint8_t y) {
     mask = 1 << (y & 7);
 
     if (ReverseMode) {
-        *pBuf++ &= ~mask;
+        *pBuf &= ~mask;
     }
     else {
-        *pBuf++ |= mask;
+        *pBuf |= mask;
     }
+}
+
+void OLED_ShowVerticalLine(uint8_t x, uint8_t y, uint8_t h) {
+    uint8_t *pBuf;
+    uint8_t mask;
+
+    // coordinate 'y' boundary check
+    if (y + h > HEIGHT) {
+        h = HEIGHT - y;
+    }
+
+    // coordinate 'x' boundary check
+    if (x > WIDTH - 1) {
+        x = WIDTH - 1;
+    }
+
+    pBuf = pixel_buf + (y >> 3) * WIDTH + x + 1;
+    mask = 1 << (y & 0x07);
+
+    while (h--) {
+        if (ReverseMode) {
+            *pBuf++ &= ~mask;
+        } 
+        else {
+            *pBuf++ |= mask;
+        }
+        y++;
+    }
+}
+
+
+void OLED_ShowHorizontalLine(uint8_t x, uint8_t y, uint8_t w) {
+    uint8_t *pBuf;
+    uint8_t mask;
+
+    // coordinate 'x' boundary check
+    if (x + w > WIDTH) {
+        w = WIDTH - x;
+    }
+
+    // coordinate 'y' boundary check
+    if (y > HEIGHT - 1) {
+        y = HEIGHT - 1;
+    }
+
+    pBuf = pixel_buf + (y >> 3) * WIDTH + x + 1;
+    mask = 1 << (y & 0x07);
+
+    while (w--) {
+        if (ReverseMode) {
+            *pBuf++ &= ~mask;
+        } 
+        else {
+            *pBuf++ |= mask;
+        }
+    }
+
 }
 
 
