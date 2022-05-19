@@ -117,7 +117,7 @@ void OLED_ShowByte(uint8_t *pBuf, uint8_t mask, uint8_t offset, bit resv_hl);
  */
 void OLED_ShowChar(uint8_t x, uint8_t y, uint8_t chr);
 
-void OLED_ShowString(uint8_t *str);
+void OLED_ShowString(const uint8_t *str);
 
 /**
  * @brief Show digit number on screen

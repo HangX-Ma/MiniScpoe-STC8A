@@ -224,7 +224,7 @@ void OLED_ShowChar(uint8_t x, uint8_t y, uint8_t chr) {
 }
 
 
-void OLED_ShowString(uint8_t *str) {
+void OLED_ShowString(const uint8_t *str) {
     while (*str) {
         if (_locX > WIDTH - _font_width) {
             _locX = 0;

@@ -24,8 +24,10 @@
  *****************************************************************************
  */
 #include "adc.h"
-#include "STRING.H"
 #include "global_var.h"
+#include "stc8x_delay.h"
+#include "INTRINS.H"
+#include "STRING.H"
 
 void Wave_ADC_Init(ScaleSel_TypeDef scale_h) {
     uint8_t ADC_SPEED;
@@ -116,18 +118,140 @@ uint16_t* GetWaveADC(uint8_t chx, uint8_t scale_h) {
     /* single trigger buffer, effective sampling point is PRE_BUF_NUM, the additional position copy the last position value, creating a loop */
     uint16_t ADCSingleTriggerSampling[ADC_SINGLE_TRIGGER_BUF_SIZE + 1];
 
-    if (G_ADC_Interrupt) {
+    if (G_ADC_Interrupt_FLAG) {
         return ADCSampling;
     }
 
     memset(ADCSampling, 0x00, sizeof(ADCSampling));
     memset(ADCSingleTriggerSampling, 0x00, sizeof(ADCSingleTriggerSampling));
 
-    ADC_RAM_Bandgap     = Get_RAM_REFV();
-    ADC_Sampled_Bandgap = GetADC_CHx(ADC_CONTR_ADC_CHS_VAL15);
-    G_TriggerADCx       = ConvertUnit_ADC2mV(G_TriggerLevel_mV, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
+    ADC_RAM_Bandgap     = Get_RAM_REFV(); // Read Bandgap voltage value stored in RAM
+    ADC_Sampled_Bandgap = GetADC_CHx(ADC_CONTR_ADC_CHS_VAL15); // Get sampled Bandgap voltage value from ADC
+    /* Convert trigger voltage set by user to ADC value */
+    G_TriggerADCx       = ConvertUnit_mV2ADC(G_TriggerLevel_mV, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
 
+    Wave_ADC_Init(scale_h);
+
+    /* Read initial two ADC sampled values but discarded */
+    ADC_GetSampleVal_Enquiry(chx);
+    ADC_GetSampleVal_Enquiry(chx);
     
+    /* 100us time scale mode cannot support single trigger function */
+    if (scale_h == Scale_100us) {
+        /* ADC sampling indicator */
+        ADC_Sample_Ready_LED = SETBIT;
+        for (i = 0; i < ADC_SAMPLE_BUF_SIZE; i++) {
+            if (G_ADC_Interrupt_FLAG) {
+                return ADCSampling;
+            }
+            ADC_GetSampleVal_Enquiry(chx);
+            ADCSampling[i] = G_ADC_data;
+        }
+        ADC_Sample_Ready_LED = CLRBIT;
+    }
+    else if (G_TriggerMode) {
+        ADC_Sample_Ready_LED = CLRBIT;
+        for (j = 1; j <= ADC_SINGLE_TRIGGER_BUF_SIZE; j++) {
+            if (G_ADC_Interrupt_FLAG) {
+                return ADCSampling;
+            }
+            delay_nus(3);
+            SwitchDelay(scale_h);
+            ADC_GetSampleVal_Enquiry(chx);
+            ADCSampling[i] = G_ADC_data;
+        }
+        ADC_Sample_Ready_LED = SETBIT;
 
+        while (1) {
+            if (G_ADC_Interrupt_FLAG) {
+                return ADCSampling;
+            }
+            if (j > ADC_SINGLE_TRIGGER_BUF_SIZE) {
+                j = 1;
+                ADCSingleTriggerSampling[0] = ADCSingleTriggerSampling[ADC_SINGLE_TRIGGER_BUF_SIZE];
+            }
+            SwitchDelay(scale_h); 
+            ADC_GetSampleVal_Enquiry(chx);
+            ADCSingleTriggerSampling[i] = G_ADC_data;
+            if (GetTriggerPos(ADCSingleTriggerSampling[j - 1], ADCSingleTriggerSampling[j], G_TriggerADCx, G_TriggerSlope_FLAG)) {
+                ADC_Sample_Ready_LED = CLRBIT;
+                break;
+            }
+            j++;
+        }
 
+        //继续采样AFT_BUF_NUM个采样点
+        for (i = 0; i < ADC_SAMPLE_BUF_SIZE - ADC_SINGLE_TRIGGER_BUF_SIZE; i++)
+        {
+            if (G_ADC_Interrupt_FLAG) {
+                return ADCSampling;
+            }
+
+            delay_nus(3);
+            SwitchDelay(scale_h);
+            ADC_GetSampleVal_Enquiry(chx);
+            ADCSampling[i + ADC_SINGLE_TRIGGER_BUF_SIZE] = G_ADC_data;
+        }
+
+        //将前PRE_BUF_NUM个和后PRE_BUF_NUM个采样点组合成完整波形
+        for (i = 0; i < ADC_SINGLE_TRIGGER_BUF_SIZE; i++) //预缓存中第一个和最后一个采样值相等，舍掉第一个值，将剩余PRE_BUF_NUM-1个采样点按采样顺序排序，作为ADCSampling的前PRE_BUF_NUM-1个采样点
+        {
+            if (G_ADC_Interrupt_FLAG) {
+                return ADCSampling;
+            }
+            if (++j > ADC_SINGLE_TRIGGER_BUF_SIZE) {
+                j = 1;
+            }
+            ADCSampling[i] = ADCSingleTriggerSampling[j];
+        }
+    } // Single or Normal Trigger Mode
+    else
+    {
+        ADC_Sample_Ready_LED = SETBIT;
+        for (i = 0; i < ADC_SAMPLE_BUF_SIZE; i++)
+        {
+            if (G_ADC_Interrupt_FLAG) {
+                return ADCSampling;
+            }
+            ADC_GetSampleVal_Enquiry(chx);
+            ADCSampling[i] = G_ADC_data;
+            delay_nus(3);
+            SwitchDelay(scale_h);
+        }
+        ADC_Sample_Ready_LED = CLRBIT;
+    }
+    G_ADC_Complete_FLAG = SETBIT; //置位采样完成标志
+    return ADCSampling;
+}
+
+bit GetTriggerPos(uint16_t d1, uint16_t d2, uint16_t dTrigger, bit _triggerSlope) {
+    if (_triggerSlope) {
+        if (d1 <= dTrigger && d2 >= dTrigger) {
+            return 1;
+        }
+    } // Rising edge trigger
+    else {
+        if (d1 >= dTrigger && d2 <= dTrigger) {
+            return 1;
+        }
+    } // Falling edge trigger
+
+    return 0;
+}
+
+void SwitchDelay(uint8_t scale_h) { 
+    switch (scale_h)
+    {
+    case Scale_500ms: delay_nus(19971); break;
+    case Scale_200ms: delay_nus(7971); break;
+    case Scale_100ms: delay_nus(3971); break;
+    case Scale_50ms: delay_nus(1971); break;
+    case Scale_20ms: delay_nus(771); break;
+    case Scale_10ms: delay_nus(371); break;
+    case Scale_5ms: delay_nus(171); break;
+    case Scale_2ms: delay_nus(51); break;
+    case Scale_1ms: delay_nus(18); break;
+    case Scale_500us: delay_nus(6); break;
+    case Scale_200us: delay_nus(1); break;
+    case Scale_100us: delay_nus(0); break;
 }

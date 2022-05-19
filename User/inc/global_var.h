@@ -50,12 +50,14 @@
 
 extern uint16_t VBAT;                               //!< Battery voltage
 extern uint16_t SVin_ratio;                         //!< Sampling port voltage division ratio
-
+extern uint8_t  G_WaveLength;                       //!< Waveform length
+extern uint32_t G_WaveFreq;                         //!< Waveform frequency
 extern uint16_t G_WaveAvgLengthSumNum;              //!< Average wave length sum counts
 extern uint32_t G_WaveAvgLengthSum;                 //!< Average wave length sum
 
 extern bit      G_ADC_Complete_FLAG;                //!< ADC sampling complete flag
 extern bit      G_ADC_Interrupt_FLAG;               //!< ADC sampling interrupt flag
+extern bit      G_ADC_Running_FLAG;                 //!< ADC running flag
 
 extern bit      G_EC11PressWithRotate_FLAG;         //!< press and rotate EC11 flag
 
@@ -82,6 +84,8 @@ extern bit      G_TriggerSlope_FLAG;                //!< Trigger direction: 1: r
 extern bit      G_TriggerFail_FLAG;                 
 
 extern int8_t   G_ScaleH;                           //!< time interval: 500ms ~ 100us
+extern int8_t   G_ScaleH_tmp;                       //!< The time interval at which the temporary record sample is completed
+
 extern int32_t  G_VolV_Min;                         //!< Minimum voltage on vertical axis
 extern int32_t  G_VolV_Max;                         //!< Maximum voltage on vertical axis
 extern int32_t  G_VolV_Min_Modified;                //!< Minimum voltage on vertical axis (Modified)
@@ -93,12 +97,17 @@ extern int32_t  G_VMax_Modified;                    //!< Modified maximum wavefo
 extern int32_t  G_Voltage_Modified;                 //!< The modified measured voltages are positive and negative, divided into DC and AC.
 extern int32_t  G_Bias_Voltage;                     //!< Bias voltage
 
-
 extern int8_t   G_OptionInSettings;                 //!< setting options interface[ 0:PlotMode, 1:SVin_ratio, 2:OLED_Brightness ]
 extern int8_t   G_OptionInChart;                    //!< main screen options interface[ 0:ScaleH, 1:ScaleV, 2:TriggerLevel, 3:TriggerSlope, 4:TriggerMode 5 MeasureWay ]
 
 extern bit      G_State_Settings_FLAG;              //!< Setting interface state flag
 extern bit      G_State_OptionChanged_FLAG;         //!< Options changed state flag
+
+extern uint16_t ADCbuf[ADC_SAMPLE_BUF_SIZE];
+extern const uint8_t code *PlotModeTxt[];
+extern const uint8_t code *TriModeTxt[];
+extern const uint8_t code *ScaleHTxt[];
+
 
 /* Time scale: 500ms, 200ms, 100ms, 50ms, 20ms, 10ms, 5ms, 2ms, 1ms, 500us, 200us, 100us */
 typedef enum {
@@ -136,5 +145,20 @@ typedef enum {
     SettingSel_SVin_ratio,
     SettingSel_OLED_Brightness,
 } OptionInSettingSel_TypeDef;
+
+typedef enum {
+    FallingEdgeTrigger = 0x00,
+    RisingEdgeTrigger = 0x01,
+} TriggerSlopeSel_Typedef;
+
+typedef enum {
+    MeasureWay_DC = 0x00,
+    MeasureWay_AC = 0x01,
+} MeasureWaySel_Typedef;
+
+typedef enum {
+    PlotMode_Vector = 0x00,
+    PlotMode_Dot    = 0x01,
+} PlotModeSel_Typedef;
 
 #endif  //!__GLOBAL_VAR__H__

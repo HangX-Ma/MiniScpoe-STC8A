@@ -36,14 +36,14 @@
 #endif
 
 #include "stc8x_adc.h"
-#include "stc8x_delay.h"
-#include "INTRINS.H"
 
 //* ------------   GLOBAL variables   ------------
 
 //* ------------ developer definitions ------------
 #define BGV_HByte       (*(uint8_t idata *)0xEF)    //!< internal 1.344V reference voltage high byte
 #define BGV_LByte       (*(uint8_t idata *)0xF0)    //!< internal 1.344V reference voltage low byte
+
+sbit ADC_Sample_Ready_LED = P1^1;
 
 //* ------------     functions     ------------
 
@@ -86,5 +86,15 @@ int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t _ADC_RAM_Bandgap, uint16_t _A
  */
 uint16_t *GetWaveADC(uint8_t chx, uint8_t scale_h);
 
+/**
+ * @brief Get the Trigger position
+ * 
+ * @param d1 
+ * @param d2 
+ * @param dTrigger 
+ * @param _triggerSlope 
+ * @return bit 
+ */
+bit GetTriggerPos(uint16_t d1, uint16_t d2, uint16_t dTrigger, bit _triggerSlope);
 
 #endif  //!__ADC__H__

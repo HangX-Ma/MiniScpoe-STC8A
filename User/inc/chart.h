@@ -46,20 +46,34 @@
 //* ------------     functions     ------------
 
 /**
- * @brief main interface 
+ * @brief Get the Waveform Data
+ */
+void GetWaveData(void);
+
+/**
+ * @brief Analyze sampled data
+ */
+void AnalyzeData(void);
+
+/**
+ * @brief Plot waveform
+ */
+void PlotWave(void);
+/**
+ * @brief Plot main interface 
  */
 void PlotChart(void);
 
+/**
+ * @brief Plot Setting Interface
+ */
 void PlotSettings(void);
 
+/**
+ * @brief Plot Saving Status
+ * 
+ * @param _saveStatus 
+ */
 void PlotSaveStatus(bit _saveStatus);
-
-void GetWaveData(void);
-
-bit GetTriggerPos(uint16_t d1, uint16_t d2, uint16_t dTrigger, bit triSlope);
-
-void AnalyseData();
-
-void PlotWave();
 
 #endif  //!__CHART__H__

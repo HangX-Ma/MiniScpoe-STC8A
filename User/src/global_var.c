@@ -28,11 +28,14 @@
 uint16_t VBAT;
 uint16_t SVin_ratio;
 
+uint8_t  G_WaveLength;
+uint32_t G_WaveFreq;
 uint16_t G_WaveAvgLengthSumNum;
 uint32_t G_WaveAvgLengthSum;
 
 bit      G_ADC_Complete_FLAG;
 bit      G_ADC_Interrupt_FLAG;
+bit      G_ADC_Running_FLAG;
 
 bit      G_EC11PressWithRotate_FLAG;
 
@@ -60,6 +63,8 @@ bit      G_TriggerSlope_FLAG;
 bit      G_TriggerFail_FLAG;
 
 int8_t   G_ScaleH = Scale_100ms;
+int8_t   G_ScaleH_tmp;
+
 int32_t  G_VolV_Min;
 int32_t  G_VolV_Max;
 int32_t  G_VolV_Min_Modified;

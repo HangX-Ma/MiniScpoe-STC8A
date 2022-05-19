@@ -53,6 +53,7 @@
 
 void delay_nms(uint16_t nms);
 
+void delay_nus(uint16_t nus);
 
 /** @} */
 
