@@ -28,15 +28,26 @@
 uint16_t VBAT;
 uint16_t SVin_ratio;
 
-bit      G_ADC_Complete;
-bit      G_ADC_Interrupt;
+uint16_t G_WaveAvgLengthSumNum;
+uint32_t G_WaveAvgLengthSum;
 
-bit      G_EC11PressWithRotate;
+bit      G_ADC_Complete_FLAG;
+bit      G_ADC_Interrupt_FLAG;
 
-bit      G_PlotMode;
+bit      G_EC11PressWithRotate_FLAG;
+
+bit      G_PlotModeSel;
+bit      G_MeasureWaySel;
+
+bit      G_Scale_Auto_FLAG;
+bit      G_WaveScroll_FLAG;
+bit      G_WaveUpdate_FLAG;
+bit      G_DisplayUpdate_FLAG;
+bit      G_ClearDisplay_FLAG;
+bit      G_ClearWave_FLAG;
 
 int8_t   G_OLED_Brightness;
-bit      G_OLED_BrightnessChanged;
+bit      G_OLED_BrightnessChanged_FLAG;
 
 
 uint16_t G_TriggerLevel_mV;
@@ -45,8 +56,39 @@ uint16_t G_TriggerADCx;
 int8_t   G_TriggerPosOffset;
 int8_t   G_TriggerPos;
 int8_t   G_TriggerMode;
+bit      G_TriggerSlope_FLAG;
+bit      G_TriggerFail_FLAG;
 
 int8_t   G_ScaleH = Scale_100ms;
+int32_t  G_VolV_Min;
+int32_t  G_VolV_Max;
+int32_t  G_VolV_Min_Modified;
+int32_t  G_VolV_Max_Modified;
+int32_t  G_VMax;
+int32_t  G_VMin;
+int32_t  G_Bias_Voltage = 0;
+
 int8_t   G_OptionInSettings;
 int8_t   G_OptionInChart;
 
+bit      G_State_Settings_FLAG;
+bit      G_State_OptionChanged_FLAG;
+
+
+uint16_t ADCbuf[ADC_SAMPLE_BUF_SIZE];                                   //!< Original sampled data in buffer
+const uint8_t code *PlotModeTxt[] = {"Vect", "Dots"};                   //!< Plot mode characters
+const uint8_t code *TriggerModeTxt[] = {"Auto  ", "Normal", "Single"};  //!< Trigger mode characters
+const uint8_t code *ScaleHTxt[] = {                                     //!< Horizontal scaling characters 
+    "500ms", //0
+    "200ms", //1
+    "100ms", //2
+    " 50ms", //3
+    " 20ms", //4
+    " 10ms", //5
+    "  5ms", //6
+    "  2ms", //7
+    "  1ms", //8
+    "500us", //9
+    "200us", //10
+    "100us"  //11
+};

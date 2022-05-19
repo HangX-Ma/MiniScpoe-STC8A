@@ -40,18 +40,22 @@
 //* ------------   GLOBAL variables   ------------
 
 //* ------------ developer definitions ------------
-#define SVin_ratio_MAX          750 
+/* voltage division ratio = [for instance] (2K+8K)/(2K)*100 = 500 
+   Algorithm limitation: STC8A8K maximum integer is 2^32, 
+   SVin_ratio maximum value is (2^32/2^12/1344 = 780)
+   [12 bits ADC:2^12][BGV:1344mV]  */
+#define SVin_ratio_MAX          750
 #define SVin_ratio_MIN          10
 
 #define CHX_Vin_ratio_MAX       750
 #define CHX_Vin_ratio_MIN       10
 
-#define OLED_BRIGHTNESS_MAX     25
-#define OLED_BRIGHTNESS_MIN     1
+#define OLED_BRIGHTNESS_MAX     25      //!< Maximum OLED brightness degree
+#define OLED_BRIGHTNESS_MIN     1       //!< Minimum OLED brightness degree
 
+#define MAX_VOLTAGE_V           30000   //!< Vertical axis maximum voltage (mV)
+#define MIN_VOLTAGE_V           -11000  //!< Vertical axis minimum voltage (mV)
 //* ------------     functions     ------------
-
-
 
 /**
  * @brief interval validation checker
@@ -60,20 +64,98 @@
  */
 void CheckMinTimeInterval(void);
 
+/**
+ * @brief Change interval for wave time scale (Horizontal Grid)
+ * @details Time scale: 500ms, 200ms, 100ms, 50ms, 20ms, 10ms, 5ms, 2ms, 1ms, 500us, 200us, 100us 
+ * @param ifNext Next scale or last scale
+ */
 void Change_ScaleH(bit ifNext);
 
+/**
+ * @brief Change wave sampling port voltage division ratio
+ * @details ratio value has maximum and minimum limitation
+ * @param ifNext Next or last ratio value
+ */
 void Change_SVin_ratio(bit ifNext);
 
+/**
+ * @brief Change trigger value
+ * 
+ * @param ifNext Increase or decrease
+ */
+void Change_TriggerVal(bit ifNext);
+
+/**
+ * @brief Select suitable trigger mode (loop)
+ * @details 2: Single(stop sampling after triggering, manually waiting for next triggering), 
+ * 1: Normal(stop sampling after triggering, automatically waiting for next triggering), 
+ * 0: Auto(continuously sample, manually stop)
+ * @param ifNext Next or last trigger mode
+ */
 void Change_TriggerMode(bit ifNext);
 
+/**
+ * @brief Change trigger position offset
+ * 
+ * @param ifNext Increate or decrease position offset
+ */
 void Change_TriggerPosOffset(bit ifNext);
 
+/**
+ * @brief Change chart options
+ * @details 0:ScaleH, 1:ScaleV, 2:TriggerLevel, 3:TriggerSlope, 4:TriggerMode 5 MeasureWay
+ * @param ifNext Next or last option
+ */
 void Change_OptionInChart(bit ifNext);
 
+/**
+ * @brief Change setting options
+ * @details 0:PlotMode, 1:SVin_ratio, 2:OLED_Brightness
+ * @param ifNext Next or last option
+ */
 void Change_OptionInSetting(bit ifNext);
 
+/**
+ * @brief Change OLED brightness
+ * @details 1~254 but divided artificially to ten degrees,
+ * numerically increasing or decreasing 10 per step.
+ * @param ifNext Next or last brightness value
+ */
 void Change_OLED_Brightness(bit ifNext);
 
+/**
+ * @brief Change Plot Mode
+ * @details 0: vector, 1: dot
+ */
 void Change_PlotMode(void);
+
+void Change_VoltageV_Max(bit ifNext);
+
+void Change_VoltageV(bit ifNext);
+
+/**
+ * @brief Select options
+ * 
+ * @param ifNext Next or last option
+ */
+void Select_Option(bit ifNext);
+
+/**
+ * @brief Read options from EEPROM
+ */
+void Read_Options(void);
+
+/**
+ * @brief Check options read from EEPROM
+ */
+void Check_Options(void);
+
+
+/**
+ * @brief Save options to EEPROM and return the saving result
+ * @return ErrorStatus, indicate whether saving process success
+ */
+ErrorStatus Save_Options(void);
+
 
 #endif  //!__SETTING__H__

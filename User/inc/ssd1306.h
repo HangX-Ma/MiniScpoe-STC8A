@@ -59,16 +59,41 @@ sbit OLED_DC   = P2^4;   // data/cmd(DC)
 sbit OLED_CS   = P2^3;   // chip select(CS)
 //* ------------     functions     ------------
 
+/**
+ * @brief OLED initialization
+ */
 void OLED_Init(void);
 
+/**
+ * @brief Write command to screen cache
+ * 
+ * @param cmd command
+ */
 void OLED_WR_CMD(uint8_t cmd);
 
+/**
+ * @brief Write data to screen cache
+ * 
+ * @param dat data
+ */
 void OLED_WR_data(uint8_t dat);
 
+/**
+ * @brief Clear OLED screen
+ */
 void OLED_ClearScreen(void);
 
+/**
+ * @brief OLED buffer data display
+ */
 void OLED_Display(void);
 
+/**
+ * @brief Set start point x, y value
+ * 
+ * @param x start point coordinate x value
+ * @param y start point coordinate y value
+ */
 void OLED_SetPos(uint8_t x, uint8_t y);
 
 /**
@@ -83,6 +108,13 @@ void OLED_SetPos(uint8_t x, uint8_t y);
  */
 void OLED_ShowByte(uint8_t *pBuf, uint8_t mask, uint8_t offset, bit resv_hl);
 
+/**
+ * @brief Show an ASCII character 
+ * 
+ * @param x start point coordinate x value
+ * @param y start point coordinate y value
+ * @param chr ASCII character
+ */
 void OLED_ShowChar(uint8_t x, uint8_t y, uint8_t chr);
 
 void OLED_ShowString(uint8_t *str);
@@ -95,12 +127,33 @@ void OLED_ShowString(uint8_t *str);
  */
 void OLED_ShowNum(uint32_t digit, uint8_t len);
 
+
 void OLED_ShowChinese_16x16(uint8_t loc);
 
+/**
+ * @brief Show a pixel at (x,y)
+ * 
+ * @param x start point coordinate x value
+ * @param y start point coordinate y value
+ */
 void OLED_ShowPixel(uint8_t x, uint8_t y);
 
+/**
+ * @brief Show a vertical line on screen start from (x,y), length 'h'
+ * 
+ * @param x start point coordinate x value
+ * @param y start point coordinate y value
+ * @param w line height
+ */
 void OLED_ShowVerticalLine(uint8_t x, uint8_t y, uint8_t h);
 
+/**
+ * @brief Show a horizontal line on screen start from (x,y), length 'w'
+ * 
+ * @param x start point coordinate x value
+ * @param y start point coordinate y value
+ * @param w line width
+ */
 void OLED_ShowHorizontalLine(uint8_t x, uint8_t y, uint8_t w);
 
 /**

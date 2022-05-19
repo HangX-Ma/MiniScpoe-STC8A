@@ -35,7 +35,9 @@
     #include "config_stc8hx.h"
 #endif
 
+#define VBAT_UPDATE_FREQ            40              //!< Battery voltage information updating frequency VBAT_UPDATE_FREQ*25ms
 #define VBAT_RATIO                  500             //!< 'battery voltage ratio' * 100,(2K+8K)/(2K)*100=5*100=500
+#define CHX_VBAT_RATIO              500             //!< 'battery voltage ratio'
 #define ADC_SAMPLE_BUF_SIZE         220             //!< ADC sampling point buffer size
 #define ADC_SINGLE_TRIGGER_BUF_SIZE 62              //!< ADC single trigger sampling point buffer size
 
@@ -49,15 +51,26 @@
 extern uint16_t VBAT;                               //!< Battery voltage
 extern uint16_t SVin_ratio;                         //!< Sampling port voltage division ratio
 
-extern bit      G_ADC_Complete;                     //!< ADC sampling complete flag
-extern bit      G_ADC_Interrupt;                    //!< ADC sampling interrupt flag
+extern uint16_t G_WaveAvgLengthSumNum;              //!< Average wave length sum counts
+extern uint32_t G_WaveAvgLengthSum;                 //!< Average wave length sum
 
-extern bit      G_EC11PressWithRotate;              //!< press and rotate EC11 flag
+extern bit      G_ADC_Complete_FLAG;                //!< ADC sampling complete flag
+extern bit      G_ADC_Interrupt_FLAG;               //!< ADC sampling interrupt flag
 
-extern bit      G_PlotMode;                         //!< Plot mode selection, 0: vector, 1: dot
+extern bit      G_EC11PressWithRotate_FLAG;         //!< press and rotate EC11 flag
+
+extern bit      G_PlotModeSel;                      //!< Plot mode selection, 0: vector, 1: dot
+extern bit      G_MeasureWaySel;                    //!< Waveform measurement way selection, 0: DC, 1: AC
+
+extern bit      G_Scale_Auto_FLAG;                  //!< Auto Scale flag
+extern bit      G_WaveScroll_FLAG;                  //!< Waveform scrolling flag
+extern bit      G_WaveUpdate_FLAG;                  //!< Waveform updating flag
+extern bit      G_DisplayUpdate_FLAG;               //!< Screen display updated flag
+extern bit      G_ClearDisplay_FLAG;                //!< Clear screen flag
+extern bit      G_ClearWave_FLAG;                   //!< Clear waveform flag
 
 extern int8_t   G_OLED_Brightness;                  //!< OLED brightness 1~254
-extern bit      G_OLED_BrightnessChanged;           //!< OLED brightness modified flag
+extern bit      G_OLED_BrightnessChanged_FLAG;      //!< OLED brightness modified flag
 
 extern uint16_t G_TriggerLevel_mV;                  //!< User setting trigger voltage level (mV)
 extern uint16_t G_TriggerLevel_mV_Modified;         //!< User setting trigger voltage level (mV) [modified]
@@ -65,10 +78,27 @@ extern uint16_t G_TriggerADCx;                      //!< Trigger voltage level A
 extern int8_t   G_TriggerPosOffset;                 //!< Trigger position offset
 extern int8_t   G_TriggerPos;                       //!< Trigger Position
 extern int8_t   G_TriggerMode;                      //!< Trigger Mode: 2: Single(stop sampling after triggering, manually waiting for next triggering), 1: Normal(stop sampling after triggering, automatically waiting for next triggering), 0: Auto(continuously sample, manually stop)
+extern bit      G_TriggerSlope_FLAG;                //!< Trigger direction: 1: rising edge trigger, 0: falling edge trigger
+extern bit      G_TriggerFail_FLAG;                 
 
 extern int8_t   G_ScaleH;                           //!< time interval: 500ms ~ 100us
-extern int8_t   G_OptionInSettings;                 //!< setting options interface[ 0:PlotMode, 1:LSB, 2:OLED_Brightness ]
-extern int8_t   G_OptionInChart;                    //!< main screen options interface[ 0:ScaleH, 1:ScaleV, 2:TriggerLevel, 3:TriggerSlope, 4:TriggerMode 5 MeaWay ]
+extern int32_t  G_VolV_Min;                         //!< Minimum voltage on vertical axis
+extern int32_t  G_VolV_Max;                         //!< Maximum voltage on vertical axis
+extern int32_t  G_VolV_Min_Modified;                //!< Minimum voltage on vertical axis (Modified)
+extern int32_t  G_VolV_Max_Modified;                //!< Maximum voltage on vertical axis (Modified)
+extern int32_t  G_VMin;                             //!< Minimum waveform voltage on screen
+extern int32_t  G_VMax;                             //!< Maximum waveform voltage on screen (65535mV MAX)
+extern int32_t  G_VMin_Modified;                    //!< Modified minimum waveform voltage on screen (-327675mV MIN)
+extern int32_t  G_VMax_Modified;                    //!< Modified maximum waveform voltage on screen (+327675mV MAX)
+extern int32_t  G_Voltage_Modified;                 //!< The modified measured voltages are positive and negative, divided into DC and AC.
+extern int32_t  G_Bias_Voltage;                     //!< Bias voltage
+
+
+extern int8_t   G_OptionInSettings;                 //!< setting options interface[ 0:PlotMode, 1:SVin_ratio, 2:OLED_Brightness ]
+extern int8_t   G_OptionInChart;                    //!< main screen options interface[ 0:ScaleH, 1:ScaleV, 2:TriggerLevel, 3:TriggerSlope, 4:TriggerMode 5 MeasureWay ]
+
+extern bit      G_State_Settings_FLAG;              //!< Setting interface state flag
+extern bit      G_State_OptionChanged_FLAG;         //!< Options changed state flag
 
 /* Time scale: 500ms, 200ms, 100ms, 50ms, 20ms, 10ms, 5ms, 2ms, 1ms, 500us, 200us, 100us */
 typedef enum {
@@ -103,10 +133,8 @@ typedef enum {
 
 typedef enum {
     SettingSel_PlotMode = 0x00,
-    SettingSel_LSB,
+    SettingSel_SVin_ratio,
     SettingSel_OLED_Brightness,
 } OptionInSettingSel_TypeDef;
-
-
 
 #endif  //!__GLOBAL_VAR__H__
