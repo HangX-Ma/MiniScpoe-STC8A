@@ -40,9 +40,6 @@
 //* ------------   GLOBAL variables   ------------
 
 //* ------------ developer definitions ------------
-#define _SET_SBIT(x) do {x = 1;} while(0)
-#define _RESET_SBIT(x) do {x = 0;} while(0)
-
 /*  OLED Pixel */
 #define WIDTH  128
 #define HEIGHT 64

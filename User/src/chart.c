@@ -377,17 +377,15 @@ void AnalyzeData()
     int32_t adcMin     = 4095;
     int32_t adcMid     = 0;
     int32_t plotADCMid = 0;
-
+    static int32_t Avg_Modified_Voltage    = 0;
+    static int32_t Modified_Voltage_Buffer = 0;
+    static int8_t  Avg_Cnt = 0;
     uint16_t ADC_Sampled_Bandgap, ADC_RAM_Bandgap;
     /* get internal 1.344V REFV average value by ADC */
     ADC_GetSampleVal_Enquiry(ADC_CONTR_ADC_CHS_VAL15);
     ADC_Sampled_Bandgap = G_ADC_data;
     /* read internal 1.344V REFV */
     ADC_RAM_Bandgap = Get_RAM_REFV();
-
-    static int32_t Avg_Modified_Voltage    = 0;
-    static int32_t Modified_Voltage_Buffer = 0;
-    static int8_t Aver_Cnt = 0;
 
     if (G_ADC_Complete_FLAG) {
         G_ScaleH_tmp = G_ScaleH; 
@@ -457,8 +455,8 @@ void AnalyzeData()
     {
         Avg_Modified_Voltage += (G_VMax_Modified + G_VMin_Modified) >> 1;
         
-        if(++Aver_Cnt >= 8) {
-            Aver_Cnt = 0;
+        if(++Avg_Cnt >= 8) {
+            Avg_Cnt = 0;
             
             G_Voltage_Modified = (float)Avg_Modified_Voltage / 8.0f;
             Avg_Modified_Voltage = 0;
@@ -472,8 +470,8 @@ void AnalyzeData()
         
         Avg_Modified_Voltage   += Modified_Voltage_Buffer;
         
-        if(++Aver_Cnt >= 8) {
-            Aver_Cnt = 0;
+        if(++Avg_Cnt >= 8) {
+            Avg_Cnt = 0;
             
             G_Voltage_Modified   = (float)Avg_Modified_Voltage / 8.0f;
             Avg_Modified_Voltage = 0;

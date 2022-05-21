@@ -47,11 +47,11 @@ static  int8_t _locX, _locY;
 
 
 void OLED_Init(void) {
-    _SET_SBIT(OLED_RST);
+    OLED_RST = SETBIT;
     delay_nms(50);
-    _RESET_SBIT(OLED_RST);
+    OLED_RST = CLRBIT;
     delay_nms(50);
-    _SET_SBIT(OLED_RST);
+    OLED_RST = SETBIT;
     delay_nms(1);
 
     OLED_WR_CMD(0xAE); // set display off (sleep mode)
@@ -105,37 +105,37 @@ void OLED_Init(void) {
 void OLED_WR_CMD(uint8_t cmd) {
     uint8_t i;
     /* write command mode */
-    _RESET_SBIT(OLED_DC);
+    OLED_DC = SETBIT;
     /* select device */
-    _RESET_SBIT(OLED_CS);
+    OLED_CS = CLRBIT;
     for (i = 0; i < 8; i++) {
         if (cmd & 0x80) {
-            _SET_SBIT(OLED_SDIN);
+            OLED_SDIN = SETBIT;
         } else {
-            _RESET_SBIT(OLED_SDIN);
+            OLED_SDIN = CLRBIT;
         }
         cmd <<= 1;
     }
-    _SET_SBIT(OLED_CS);
+    OLED_CS = SETBIT;
 }
 
 
 void OLED_WR_data(uint8_t dat) {
     uint8_t i;
     /* write data mode */
-    _SET_SBIT(OLED_DC);
+    OLED_DC = SETBIT;
     /* select device */
-    _RESET_SBIT(OLED_CS);
+    OLED_CS = CLRBIT;
     for (i = 0; i < 8; i++) {
         if (dat & 0x80) {
-            _SET_SBIT(OLED_SDIN);
+            OLED_SDIN = SETBIT;
         } 
         else {
-            _RESET_SBIT(OLED_SDIN);
+            OLED_SDIN = CLRBIT;
         }
         dat <<= 1;
     }
-    _SET_SBIT(OLED_CS);
+    OLED_CS = SETBIT;
 }
 
 void OLED_SetPos(uint8_t x, uint8_t y) {

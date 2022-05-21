@@ -43,11 +43,12 @@
 
 //* ------------     functions     ------------
 
-typedef struct uart
-{
-    
-} UARTx_TypeDef;
 
+/**
+ * @brief UART1, Mode1, Timer2, 1T, 9600bps@24.000MHz,Reload Value: 65536-(SYSclk)/(4*bund_rate)=0xFD8FH
+ */
+void UART1_Init(void);
 
+void UARTx_Send_String(uint8_t *str);
 
 #endif  //!__UART__H__

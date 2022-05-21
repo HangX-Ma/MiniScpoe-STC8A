@@ -436,6 +436,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>global_var.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\global_var.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -445,6 +450,26 @@
               <FileName>ssd1306.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\ssd1306.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>chart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\chart.c</FilePath>
+            </File>
+            <File>
+              <FileName>setting.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\setting.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\uart.c</FilePath>
             </File>
           </Files>
         </Group>

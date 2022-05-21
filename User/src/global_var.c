@@ -71,6 +71,9 @@ int32_t  G_VolV_Min_Modified;
 int32_t  G_VolV_Max_Modified;
 int32_t  G_VMax;
 int32_t  G_VMin;
+int32_t  G_VMax_Modified;
+int32_t  G_VMin_Modified;
+int32_t  G_Voltage_Modified;
 int32_t  G_Bias_Voltage = 0;
 
 int8_t   G_OptionInSettings;
@@ -80,10 +83,10 @@ bit      G_State_Settings_FLAG;
 bit      G_State_OptionChanged_FLAG;
 
 
-uint16_t ADCbuf[ADC_SAMPLE_BUF_SIZE];                                   //!< Original sampled data in buffer
-const uint8_t code *PlotModeTxt[] = {"Vect", "Dots"};                   //!< Plot mode characters
-const uint8_t code *TriggerModeTxt[] = {"Auto  ", "Normal", "Single"};  //!< Trigger mode characters
-const uint8_t code *ScaleHTxt[] = {                                     //!< Horizontal scaling characters 
+uint16_t ADCbuf[ADC_SAMPLE_BUF_SIZE];
+const uint8_t code *PlotModeTxt[] = {"Vect", "Dots"};
+const uint8_t code *TriggerModeTxt[] = {"Auto  ", "Normal", "Single"};
+const uint8_t code *ScaleHTxt[] = {
     "500ms", //0
     "200ms", //1
     "100ms", //2

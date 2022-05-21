@@ -103,10 +103,10 @@ extern int8_t   G_OptionInChart;                    //!< main screen options int
 extern bit      G_State_Settings_FLAG;              //!< Setting interface state flag
 extern bit      G_State_OptionChanged_FLAG;         //!< Options changed state flag
 
-extern uint16_t ADCbuf[ADC_SAMPLE_BUF_SIZE];
-extern const uint8_t code *PlotModeTxt[];
-extern const uint8_t code *TriModeTxt[];
-extern const uint8_t code *ScaleHTxt[];
+extern uint16_t ADCbuf[ADC_SAMPLE_BUF_SIZE];        //!< Original sampled data in buffer
+extern const uint8_t code *PlotModeTxt[];           //!< Plot mode characters
+extern const uint8_t code *TriModeTxt[];            //!< Trigger mode characters
+extern const uint8_t code *ScaleHTxt[];             //!< Horizontal scaling characters
 
 
 /* Time scale: 500ms, 200ms, 100ms, 50ms, 20ms, 10ms, 5ms, 2ms, 1ms, 500us, 200us, 100us */

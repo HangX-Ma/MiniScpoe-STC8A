@@ -26,6 +26,7 @@
 
 #include "stc8x_adc.h"
 #include "stc8x_delay.h"
+#include "INTRINS.H"
 
 __IO uint16_t G_ADC_data;  //!< ADC data container
 

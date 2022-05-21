@@ -24,7 +24,6 @@
  *****************************************************************************
  */
 #include "adc.h"
-#include "global_var.h"
 #include "stc8x_delay.h"
 #include "INTRINS.H"
 #include "STRING.H"
@@ -32,7 +31,7 @@
 void Wave_ADC_Init(ScaleSel_TypeDef scale_h) {
     uint8_t ADC_SPEED;
 
-    switch (scale_h) {
+    switch ((uint8_t)scale_h) {
         case 0:  ADC_SPEED = ADCCFG_SPEED_512tk; break; //500ms
         case 1:  ADC_SPEED = ADCCFG_SPEED_512tk; break; //200ms
         case 2:  ADC_SPEED = ADCCFG_SPEED_512tk; break; //100ms
@@ -111,6 +110,24 @@ int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t _ADC_RAM_Bandgap, uint16_t _A
 }
 
 
+void SwitchDelay(uint8_t scale_h) { 
+    switch (scale_h)
+    {
+        case Scale_500ms: delay_nus(19971); break;
+        case Scale_200ms: delay_nus(7971); break;
+        case Scale_100ms: delay_nus(3971); break;
+        case Scale_50ms: delay_nus(1971); break;
+        case Scale_20ms: delay_nus(771); break;
+        case Scale_10ms: delay_nus(371); break;
+        case Scale_5ms: delay_nus(171); break;
+        case Scale_2ms: delay_nus(51); break;
+        case Scale_1ms: delay_nus(18); break;
+        case Scale_500us: delay_nus(6); break;
+        case Scale_200us: delay_nus(1); break;
+        case Scale_100us: delay_nus(0); break;
+    }
+}
+
 uint16_t* GetWaveADC(uint8_t chx, uint8_t scale_h) {
     uint8_t i, j;
     uint16_t ADC_Sampled_Bandgap, ADC_RAM_Bandgap;
@@ -130,7 +147,7 @@ uint16_t* GetWaveADC(uint8_t chx, uint8_t scale_h) {
     /* Convert trigger voltage set by user to ADC value */
     G_TriggerADCx       = ConvertUnit_mV2ADC(G_TriggerLevel_mV, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
 
-    Wave_ADC_Init(scale_h);
+    Wave_ADC_Init((ScaleSel_TypeDef)scale_h);
 
     /* Read initial two ADC sampled values but discarded */
     ADC_GetSampleVal_Enquiry(chx);
@@ -237,21 +254,4 @@ bit GetTriggerPos(uint16_t d1, uint16_t d2, uint16_t dTrigger, bit _triggerSlope
     } // Falling edge trigger
 
     return 0;
-}
-
-void SwitchDelay(uint8_t scale_h) { 
-    switch (scale_h)
-    {
-    case Scale_500ms: delay_nus(19971); break;
-    case Scale_200ms: delay_nus(7971); break;
-    case Scale_100ms: delay_nus(3971); break;
-    case Scale_50ms: delay_nus(1971); break;
-    case Scale_20ms: delay_nus(771); break;
-    case Scale_10ms: delay_nus(371); break;
-    case Scale_5ms: delay_nus(171); break;
-    case Scale_2ms: delay_nus(51); break;
-    case Scale_1ms: delay_nus(18); break;
-    case Scale_500us: delay_nus(6); break;
-    case Scale_200us: delay_nus(1); break;
-    case Scale_100us: delay_nus(0); break;
 }

@@ -36,6 +36,7 @@
 #endif
 
 #include "stc8x_adc.h"
+#include "global_var.h"
 
 //* ------------   GLOBAL variables   ------------
 
@@ -48,6 +49,7 @@ sbit ADC_Sample_Ready_LED = P1^1;
 //* ------------     functions     ------------
 
 void Wave_ADC_Init(ScaleSel_TypeDef scale_h);
+
 /**
  * @brief Get ADC channel x conversion result
  * 
