@@ -1879,86 +1879,90 @@ struct BMM_General{
     __IO uint8_t STA;
     __IO uint8_t AMT;
     __IO uint8_t DONE;
-    __IO uint8_t TXAH;
-    __IO uint8_t TXAL;
+    __IO uint16_t TXA;
 };
 
 /**
  * @brief M2M_BMM I/O configuration
  */
-typedef struct{
+struct M2M_BMM_struct{
     struct BMM_General* BMM;
-    __IO uint8_t RXAH;
-    __IO uint8_t RXAL;
-} M2M_BMM_TypeDef;
+    __IO uint16_t RXA;
+};
+#define M2M_BMM_TypeDef struct M2M_BMM_struct
 
 /**
  * @brief ADC_BMM I/O configuration
  */
-typedef struct{
+struct ADC_BMM_struct{
     struct BMM_General* BMM;
-    __IO uint8_t RXAH;
-    __IO uint8_t RXAL;
+    __IO uint16_t RXA;
     __IO uint8_t CFG2;
     __IO uint8_t CHSW0;
     __IO uint8_t CHSW1;
-} ADC_BMM_TypeDef; 
+}; 
+#define ADC_BMM_TypeDef struct ADC_BMM_struct
 
 /**
  * @brief SPI_BMM I/O configuration
  */
-typedef struct{
+struct SPI_BMM_struct{
     struct BMM_General* BMM;
-    struct BMM_General* BMM;
-    __IO uint8_t RXAH;
-    __IO uint8_t RXAL;
+    __IO uint16_t RXA;
     __IO uint8_t CFG2;
-} ADC_BMM_TypeDef; 
+}; 
+#define SPI_BMM_TypeDef struct SPI_BMM_struct
 
 /**
  * @brief UR1T_BMM I/O configuration
  */
-typedef struct BMM_General UR1T_BMM_TypeDef;
+#define UR1T_BMM_TypeDef struct BMM_General
 
 
 /**
  * @brief UR1R_BMM I/O configuration
  */
-typedef struct BMM_General UR1R_BMM_TypeDef;
+#define UR1R_BMM_TypeDef struct BMM_General
 
 /**
  * @brief UR2T_BMM I/O configuration
  */
-typedef struct BMM_General UR2T_BMM_TypeDef;
+#define UR2T_BMM_TypeDef struct BMM_General
 
 /**
  * @brief UR2R_BMM I/O configuration
  */
-typedef struct BMM_General UR2R_BMM_TypeDef;
+#define UR2R_BMM_TypeDef struct BMM_General
 
 /**
  * @brief UR3T_BMM I/O configuration
  */
-typedef struct BMM_General UR3T_BMM_TypeDef;
+#define UR3T_BMM_TypeDef struct BMM_General
 
 /**
  * @brief UR3R_BMM I/O configuration
  */
-typedef struct BMM_General UR4R_BMM_TypeDef;
+#define UR3R_BMM_TypeDef struct BMM_General
 
 /**
  * @brief UR4T_BMM I/O configuration
  */
-typedef struct BMM_General UR4T_BMM_TypeDef;
+#define UR4T_BMM_TypeDef struct BMM_General
+
+/**
+ * @brief UR4R_BMM I/O configuration
+ */
+#define UR4R_BMM_TypeDef struct BMM_General
+
 
 /**
  * @brief LCM_BMM I/O configuration
  */
-typedef struct{
+struct LCM_BMM_struct{
     struct BMM_General* BMM;
-    __IO uint8_t RXAH;
-    __IO uint8_t RXAL;
-}LCM_BMM_TypeDef;
+    __IO uint16_t RXA;
+};
+#define LCM_BMM_TypeDef struct LCM_BMM_struct
 
 /* Basic address */
 #define     M2M_BMM_BASE            0xFA00
@@ -1987,7 +1991,7 @@ typedef struct{
 #define     BMM_ADC_CHSW1_ADDR      (ADC_BMM_BASE + 0x000B)
 
 #define     SPI_BMM_BASE            0xFA20
-#define     SPI_M2M_CFG_ADDR        (SPI_BMM_BASE + 0x0000)
+#define     BMM_SPI_CFG_ADDR        (SPI_BMM_BASE + 0x0000)
 #define     BMM_SPI_CR_ADDR         (SPI_BMM_BASE + 0x0001)
 #define     BMM_SPI_STA_ADDR        (SPI_BMM_BASE + 0x0002)
 #define     BMM_SPI_AMT_ADDR        (SPI_BMM_BASE + 0x0003)
@@ -2208,18 +2212,18 @@ typedef struct{
 #define     BMM_LCM_RXAL            (*(__IO uint8_t xdata *) BMM_LCM_RXAL_ADDR)
 
 /* general structure I/O */
-#define     M2M_BMM                 ((M2M_BMM_TypeDef *) M2M_BMM_BASE)
-#define     ADC_BMM                 ((ADC_BMM_TypeDef *) ADC_BMM_BASE)
-#define     SPI_BMM                 ((SPI_BMM_TypeDef *) SPI_BMM_BASE)
-#define     UR1T_BMM                ((UR1T_BMM_TypeDef *) UR1T_BMM_BASE)
-#define     UR1R_BMM                ((UR1R_BMM_TypeDef *) UR1R_BMM_BASE)
-#define     UR2T_BMM                ((UR2T_BMM_TypeDef *) UR2T_BMM_BASE)
-#define     UR2R_BMM                ((UR2R_BMM_TypeDef *) UR2R_BMM_BASE)
-#define     UR3T_BMM                ((UR3T_BMM_TypeDef *) UR3T_BMM_BASE)
-#define     UR3R_BMM                ((UR3R_BMM_TypeDef *) UR3R_BMM_BASE)
-#define     UR4T_BMM                ((UR4T_BMM_TypeDef *) UR4T_BMM_BASE)
-#define     UR4R_BMM                ((UR4R_BMM_TypeDef *) UR4R_BMM_BASE)
-#define     LCM_BMM                 ((LCM_BMM_TypeDef *) LCM_BMM_BASE)
+#define     M2M_BMM                 ((M2M_BMM_TypeDef xdata *) M2M_BMM_BASE)
+#define     ADC_BMM                 ((ADC_BMM_TypeDef xdata *) ADC_BMM_BASE)
+#define     SPI_BMM                 ((SPI_BMM_TypeDef xdata *) SPI_BMM_BASE)
+#define     UR1T_BMM                ((UR1T_BMM_TypeDef xdata *) UR1T_BMM_BASE)
+#define     UR1R_BMM                ((UR1R_BMM_TypeDef xdata *) UR1R_BMM_BASE)
+#define     UR2T_BMM                ((UR2T_BMM_TypeDef xdata *) UR2T_BMM_BASE)
+#define     UR2R_BMM                ((UR2R_BMM_TypeDef xdata *) UR2R_BMM_BASE)
+#define     UR3T_BMM                ((UR3T_BMM_TypeDef xdata *) UR3T_BMM_BASE)
+#define     UR3R_BMM                ((UR3R_BMM_TypeDef xdata *) UR3R_BMM_BASE)
+#define     UR4T_BMM                ((UR4T_BMM_TypeDef xdata *) UR4T_BMM_BASE)
+#define     UR4R_BMM                ((UR4R_BMM_TypeDef xdata *) UR4R_BMM_BASE)
+#define     LCM_BMM                 ((LCM_BMM_TypeDef xdata *) LCM_BMM_BASE)
 
 /* Bit definition for BMM_M2M_CFG register */
 #define     BMM_M2M_CFG_M2MIE           0x80         /*!< Interrupt enable control bit: [0], disable; [1], enable */

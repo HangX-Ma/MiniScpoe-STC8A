@@ -35,6 +35,11 @@
     #include "config_stc8hx.h"
 #endif
 
+/* Setup EC11 Encoder Pin */
+sbit EC11_KEY   = P3 ^ 3;   // Encoder key connects to External Interrupt 1
+sbit EC11_A     = P3 ^ 2;   // Encoder A impulse connects to External Interrupt 0
+sbit EC11_B     = P3 ^ 4;   // Encoder B impulse connect to normal GPIO
+
 #define VBAT_UPDATE_FREQ            40              //!< Battery voltage information updating frequency VBAT_UPDATE_FREQ*25ms
 #define VBAT_RATIO                  500             //!< 'battery voltage ratio' * 100,(2K+8K)/(2K)*100=5*100=500
 #define CHX_VBAT_RATIO              500             //!< 'battery voltage ratio'
@@ -46,7 +51,6 @@
 #define CHART_H_MIN 32
 #define CHART_V_MAX 53
 #define CHART_V_MIN 10
-
 
 extern uint16_t VBAT;                               //!< Battery voltage
 extern uint16_t SVin_ratio;                         //!< Sampling port voltage division ratio

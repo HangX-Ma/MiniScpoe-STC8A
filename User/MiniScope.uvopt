@@ -120,7 +120,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>STCMON51</Key>
-          <Name>-S1 -B115200 -O0</Name>
+          <Name>-S1 -B9600 -O0</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>

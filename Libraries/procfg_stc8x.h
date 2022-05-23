@@ -31,15 +31,15 @@
 #define STC8Ax          (0)
 #define STC8Hx          (1)
 
-#define LIB_MCU_MODULE  STC8Ax
-// #define LIB_MCU_MODULE  STC8Hx
+// #define LIB_MCU_MODULE  STC8Ax
+#define LIB_MCU_MODULE  STC8Hx
 
 #ifndef LIB_MCU_MODULE
     #define LIB_MCU_MODULE STC8Ax
 #endif
 
 //* Clock frequency Definition beforehand
-#define LIB_CLK_FREQ    ((uint32_t)0x00)    // clock frequency acquirement
-#define LIB_DELAY_COUNT ((uint16_t)11000)   // accurate delay base
+#define LIB_CLK_FREQ    ((uint32_t)24000000)    // clock frequency acquirement
+#define LIB_DELAY_COUNT ((uint16_t)11000)       // accurate delay base
 
 #endif  //!__PROCFG_STC8X__H__

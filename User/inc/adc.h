@@ -44,7 +44,7 @@
 #define BGV_HByte       (*(uint8_t idata *)0xEF)    //!< internal 1.344V reference voltage high byte
 #define BGV_LByte       (*(uint8_t idata *)0xF0)    //!< internal 1.344V reference voltage low byte
 
-sbit ADC_Sample_Ready_LED = P1^1;
+sbit ADC_Sample_Ready_LED = P1^7;
 
 //* ------------     functions     ------------
 

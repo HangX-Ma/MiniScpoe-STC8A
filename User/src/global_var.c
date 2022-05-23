@@ -100,3 +100,4 @@ const uint8_t code *ScaleHTxt[] = {
     "200us", //10
     "100us"  //11
 };
+
