@@ -863,6 +863,10 @@ sbit PX0        =   IP^0;
 #define     T2H_ADDR        0xD6
 #define     T2L_ADDR        0xD7
 
+#define     TM2PS_ADDR      0xFEA2
+#define     TM3PS_ADDR      0xFEA3
+#define     TM4PS_ADDR      0xFEA4
+
 /* Bit definition for TMOD register */
 #define     TMOD_T1_GATE    0x80        /*!< Timer/Counter T1 control. T1 works when TR1=1 and INT1 is high. */
 #define     TMOD_T1_CT      0x40        /*!< Timer/Counter T1 function selection: [0] timer-internal SYSCLK input; [1] counter-P3.5 input */
@@ -927,6 +931,11 @@ sfr T3H         =   T3H_ADDR;                       //!< Timer T3 high 8 bytes r
 sfr T3L         =   T3L_ADDR;                       //!< Timer T3 low 8 bytes regiseter
 sfr T2H         =   T2H_ADDR;                       //!< Timer T2 high 8 bytes regiseter
 sfr T2L         =   T2L_ADDR;                       //!< Timer T2 low 8 bytes regiseter
+
+#define     TM2PS      (*(__IO uint8_t xdata *) TM2PS_ADDR)
+#define     TM3PS      (*(__IO uint8_t xdata *) TM3PS_ADDR)
+#define     TM4PS      (*(__IO uint8_t xdata *) TM4PS_ADDR)
+
 
 /* Bit definition for TCON register */
 sbit TCON_TF1        =   TCON^7;                         /*!< timer T1 overflow interrupt flag */

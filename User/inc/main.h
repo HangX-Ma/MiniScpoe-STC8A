@@ -28,8 +28,8 @@
 #define __MAIN__H__
 
 #include "stc8x_sysclk.h"
-#include "stdio.h"
-#include "stdlib.h"
+#include "STDIO.H"
+#include "STDLIB.H"
 
 
 

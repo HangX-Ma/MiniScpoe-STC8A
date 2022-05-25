@@ -15,5 +15,9 @@ The address in language C is a constant value.
 
 ## DataType
 ### Special Function Register
-#### sbit 
+#### 1. sbit 
 The sbit type defines a bit within a special function register (SFR). Only those SFRs whose address is evenly divisible by 8 are bit-addressable. The lower nibble of the SFR's address must be 0 or 8.
+
+## Functions
+### Standard C differ from C51
+#### 2. sprintf()

@@ -25,12 +25,17 @@
  */
 
 #include "uart.h"
-#include "STRING.H"
+#include "fifo.h"
 #include "global_var.h"
+#include "STRING.H"
 
-bit UART1_Tx_Busy;
-// UARTx_struct xdata UART1_Tx;
-UARTx_struct xdata UART1_Rx;
+
+bit isUART1_Tx_IDLE;
+bit isUART1_Rx_IDLE;
+FIFO_struct xdata UART1_Tx;
+FIFO_struct xdata UART1_Rx;
+uint8_t UARTx_Rx_NmsTimeout;
+bit isUARTx_Rx_Timeout;
 
 #if (UARTx_MODE == UARTx_DMA_MODE)
 DMABuf_TypeDef CurrFreeBuf;
@@ -38,37 +43,23 @@ uint8_t xdata UART1_Tx_DMABuffer[UART1_DMA_BUF_LENGTH];
 uint8_t xdata UART1_Rx_DMABuffer[2][UART1_DMA_BUF_LENGTH];
 #endif
 
-stateFIFO FIFO_Init(UARTx_struct *UARTx_FIFO) {
-    memset(UARTx_FIFO->FIFOBuf, 0, FIFO_SIZE);
-    UARTx_FIFO->frontPtr = 0;
-    UARTx_FIFO->rearPtr = 0;
-    
-    return FIFO_succ;
+void Timer3_Init(void) {
+    T4T3M |= T4T3M_T3R;     // Disable TM3 until it is enabled in UARTx interrupt
+    T4T3M &= ~T4T3M_T3_CT;  // Select TM3 as timer
+    T4T3M &= ~T4T3M_T3CLKO; // Disable clock ticks output
+    T4T3M |= T4T3M_T3x12;   // 1T
+    /* 1ms Timer setting */
+    #if (LIB_MCU_MODULE == STC8Hx)
+        TM3PS = 0x00;
+        T3H = (65536 - LIB_CLK_FREQ/(TM3PS+1)/1000) / 256 ;
+        T3L = (65536 - LIB_CLK_FREQ/(TM3PS+1)/1000) % 256 ;
+    #elif (LIB_MCU_MODULE == STC8Ax) 
+        T3H = (65536 - LIB_CLK_FREQ/1000) / 256 ;
+        T3L = (65536 - LIB_CLK_FREQ/1000) % 256 ;
+    #endif
+    IE2  |= IE2_ET3; // Enable TM3 interrupt
 }
 
-
-stateFIFO FIFO_Out(UARTx_struct *UARTx_FIFO, uint8_t* _Buf) {
-    if (UARTx_FIFO->frontPtr == UARTx_FIFO->rearPtr) {
-        return FIFO_empty;
-    } // if frontPtr touch the rearPtr, the FIFO queue
-    else {
-        *_Buf = UARTx_FIFO->FIFOBuf[UARTx_FIFO->frontPtr];
-        UARTx_FIFO->frontPtr = (UARTx_FIFO->frontPtr+1) % FIFO_SIZE;
-    }
-    return FIFO_succ;
-}
-
-stateFIFO FIFO_In(UARTx_struct *UARTx_FIFO, const uint8_t _dat) {
-    if ((UARTx_FIFO->rearPtr+1) % FIFO_SIZE == UARTx_FIFO->frontPtr) {
-        return FIFO_full;
-    } // Queue full
-    else {
-        UARTx_FIFO->FIFOBuf[UARTx_FIFO->rearPtr] = _dat;
-        UARTx_FIFO->rearPtr = (UARTx_FIFO->rearPtr+1) % FIFO_SIZE;
-    }
-
-    return FIFO_succ;
-}
 
 void UART1_Init(void) {
     /* TM2 16 bits automatically reloading mode */
@@ -85,22 +76,67 @@ void UART1_Init(void) {
     S1REN  = SETBIT;        // Enable UART1 receiver
     // PS     = SETBIT;        // Interrupt Level 1
     P_SW1  = (~P_SW1_S1_S) | P_SW1_S1_S_GROUP1; // P3.0 RxD, P3.1 TxD
-    UART1_Tx_Busy = CLRBIT;
+    isUART1_Tx_IDLE = SETBIT;
+    isUART1_Rx_IDLE = SETBIT;
     FIFO_Init(&UART1_Rx);
-    // FIFO_Init(&UART1_Tx);
+    FIFO_Init(&UART1_Tx);
+    isUARTx_Rx_Timeout = CLRBIT;
+    FIFO_Threshold = FIFO_Threshold_15; // default threshold value
 }
 
-void UARTx_Send(int8_t chr) {
-    S1BUF = chr;                    // Add data to S1BUF
-    UART1_Tx_Busy  = SETBIT;
-    while (UART1_Tx_Busy) {
-        ;
-    } // wait until the serial port has sent the data in S1BUF
+void UARTx_Send(uint8_t chr, uint8_t SendLength) {
+    uint8_t currDataLength, counter = 0;
+
+    if (FIFO_succ == FIFO_In(&UART1_Tx, chr)) {
+        currDataLength = Get_FIFO_UsedSpace(&UART1_Tx);
+        /* This process consider the scenario that input string size is greater than FIFO_SIZE */
+        if (currDataLength < FIFO_Threshold && counter*(FIFO_SIZE-1)+currDataLength < SendLength) {
+            return;
+        }
+        else if (currDataLength == FIFO_Threshold && counter*(FIFO_SIZE-1)+currDataLength <= SendLength) {
+            counter++;
+            isUART1_Tx_IDLE = CLRBIT;
+        }
+        else if (currDataLength < FIFO_Threshold && counter*(FIFO_SIZE-1)+currDataLength == SendLength) {
+            isUART1_Tx_IDLE = CLRBIT;
+        }
+        else {
+            return;
+        }
+    } // We can guarantee the sending process before the Tx buffer full
+
+    if (!isUART1_Tx_IDLE) {
+        S1TI = SETBIT;
+    } // If Tx buffer reach the threshold and isUART1_Tx_IDLE flag is cleared, we need to send data using interrupt
 }
 
-void UARTx_Send_String(uint8_t *str) {
+void UARTx_Send_String(uint8_t *str, uint8_t SendLength) {
     while (*str) {
-        UARTx_Send(*str++);
+        UARTx_Send(*str++, SendLength);
+    }
+}
+
+ErrorStatus UARTx_Receive(uint8_t *strPtr) {
+    uint8_t tmpData;
+
+    if (isUART1_Rx_IDLE) {
+        return ERROR;
+    } // Rx FIFO buffer is empty. No data is retrieved.
+
+    /* Prepare receiving data from FIFO buffer */
+    UARTx_Rx_NmsTimeout = UARTx_RX_Nms_TIMEOUT_VAL; // Set timeout (nms) value
+    isUARTx_Rx_Timeout  = CLRBIT; // clear Timeout flag
+    T4T3M |= T4T3M_T3R; // Start TM3 
+
+    while (!isUARTx_Rx_Timeout) {
+        if (FIFO_empty == FIFO_Out(&UART1_Rx, &tmpData)) {
+            continue;
+        } // If UART1_Rx has no data, continue listening to FIFO
+        else {
+            /* If UART1_Rx buffer has data, we update the receiving timeout value */
+            UARTx_Rx_NmsTimeout = UARTx_RX_Nms_TIMEOUT_VAL; 
+            *strPtr++ = tmpData;
+        } // FIFO buffer has data
     }
 }
 
@@ -109,16 +145,40 @@ void UARTx_Send_String(uint8_t *str) {
  */
 void UART1_ISR_Handler(void) interrupt(UART1_VECTOR) using(1) {
     if(S1TI) {
-        S1TI = CLRBIT; // prepare for next interrupt
-        UART1_Tx_Busy = CLRBIT; // data has been sent
+        uint8_t tmpDat;
+        while (FIFO_succ == FIFO_Out(&UART1_Tx, &tmpDat)) {
+            S1TI = CLRBIT; // prepare for sending FIFO_Out data
+            S1BUF = tmpDat;
+            while (!S1TI) {
+                ;
+            } // wait for the data in S1BUF sent
+        }
+        S1TI            = CLRBIT; // prepare for next interrupt
+        isUART1_Tx_IDLE = SETBIT; // data has been sent, Rx buffer become IDLE again
     }
 
     if (S1RI) {
-        S1RI = CLRBIT; // prepare for next interrupt
-        FIFO_In(&UART1_Rx, S1BUF); // store data
+        if (FIFO_succ == FIFO_In(&UART1_Rx, S1BUF)) {
+            if (Get_FIFO_UsedSpace(&UART1_Rx) == (uint8_t)FIFO_Threshold) {
+                isUART1_Rx_IDLE = CLRBIT; // Rx buffer has data now
+            } // Indicate serial port has received enough data, otherwise continuing receiving data.
+        } // Store data. if returned value is FIFO_full, indicating additional data has lost
+        else {
+            isUART1_Rx_IDLE = CLRBIT; // Rx buffer has data now
+        } // FIFO buffer is FULL
+        S1RI = CLRBIT;          // prepare for next interrupt
+    } // This design guarantees the instantaneity of UART receiving process and protect the data by using buffer.
+}
+
+
+void TM3_ISR_Handler(void) interrupt(TM3_VECTOR) using(2) {
+    if (UARTx_Rx_NmsTimeout > 0) {
+        UARTx_Rx_NmsTimeout--;
     }
-
-
+    else if (UARTx_Rx_NmsTimeout == 0) {
+        T4T3M &= ~T4T3M_T3R; // stop TM3
+        isUARTx_Rx_Timeout = SETBIT;
+    }
 }
 
 #if (UARTx_MODE == UARTx_DMA_MODE)

@@ -37,7 +37,6 @@
 #endif
 
 //* ------------ developer definitions ------------
-
 #define UARTx_INTERRUPT_MODE (0)
 #define UARTx_DMA_MODE       (1)
 
@@ -47,18 +46,7 @@
     #define UARTx_MODE UARTx_INTERRUPT_MODE
 #endif
 
-#define FIFO_SIZE 128
-typedef struct {
-    uint8_t frontPtr;
-    uint8_t rearPtr;
-    uint8_t FIFOBuf[FIFO_SIZE];
-} UARTx_struct;
-
-typedef enum {
-    FIFO_succ = 0x00,
-    FIFO_full,
-    FIFO_empty,
-} stateFIFO;
+#define UARTx_RX_Nms_TIMEOUT_VAL 5
 
 #if (UARTx_MODE == UARTx_DMA_MODE)
 #define UART1_DMA_BUF_LENGTH 256
@@ -74,6 +62,7 @@ extern uint8_t xdata UART1_Rx_DMABuffer[2][UART1_DMA_BUF_LENGTH];
 
 extern DMABuf_TypeDef CurrFreeBuf;
 #endif
+
 //* ------------     functions     ------------
 
 /**
@@ -81,9 +70,12 @@ extern DMABuf_TypeDef CurrFreeBuf;
  */
 void UART1_Init(void);
 
-void UARTx_Send(int8_t chr);
+void UARTx_Send(uint8_t chr, uint8_t SendLength);
 
-void UARTx_Send_String(uint8_t *str);
+void UARTx_Send_String(uint8_t *str, uint8_t SendLength);
+
+ErrorStatus UARTx_Receive(uint8_t *strPtr);
+
 
 #if (UARTx_MODE == UARTx_DMA_MODE)
 /**

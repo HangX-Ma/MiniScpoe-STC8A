@@ -28,38 +28,20 @@
 #include "uart.h"
 #include "stc8x_gpio.h"
 #include "stc8x_delay.h"
-
-#if (UARTx_MODE == UARTx_INTERRUPT_MODE)
-/**
- * @brief Rewrite 'putchar' function, remapped to UARTx output
- * 
- * @param c input character
- * @return char 
- */
-char putchar (char c) {
-    UARTx_Send(c);
-
-    return c;
-}
-#endif
+#include "STRING.H"
 
 int main (void) {
-    uint8_t i;
-
-    // for(i=0; i<256; i++) {
-    //     UART1_Tx_DMABuffer[i] = i;
-    // } // set initial value for DMA Tx Buffer
+    uint8_t i = 12;
+    uint8_t str[256];
 
     GPIO_DeInit();
     UART1_Init();
-    // UART1_BMM_Config();
 
     EA = SETBIT;
 
-    printf("STC8A8K64D4 UART1 BMM Test Programme!\r\n");
-
+    sprintf((char*)str, "STC8A8K64D4 UART1 BMM Test Programme! %bd \r\n", i);
     while (1) {
-
+        UARTx_Send_String(str, strlen((char*)str));
         delay_nms(500);
     }
 
