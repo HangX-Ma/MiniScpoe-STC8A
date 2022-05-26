@@ -32,7 +32,6 @@
 
 bit isUART1_Tx_IDLE;
 bit isUART1_Rx_IDLE;
-FIFO_struct xdata UART1_Tx;
 FIFO_struct xdata UART1_Rx;
 uint8_t UARTx_Rx_NmsTimeout;
 bit isUARTx_Rx_Timeout;
@@ -79,40 +78,21 @@ void UART1_Init(void) {
     isUART1_Tx_IDLE = SETBIT;
     isUART1_Rx_IDLE = SETBIT;
     FIFO_Init(&UART1_Rx);
-    FIFO_Init(&UART1_Tx);
     isUARTx_Rx_Timeout = CLRBIT;
     FIFO_Threshold = FIFO_Threshold_15; // default threshold value
 }
 
-void UARTx_Send(uint8_t chr, uint8_t SendLength) {
-    uint8_t currDataLength, counter = 0;
-
-    if (FIFO_succ == FIFO_In(&UART1_Tx, chr)) {
-        currDataLength = Get_FIFO_UsedSpace(&UART1_Tx);
-        /* This process consider the scenario that input string size is greater than FIFO_SIZE */
-        if (currDataLength < FIFO_Threshold && counter*(FIFO_SIZE-1)+currDataLength < SendLength) {
-            return;
-        }
-        else if (currDataLength == FIFO_Threshold && counter*(FIFO_SIZE-1)+currDataLength <= SendLength) {
-            counter++;
-            isUART1_Tx_IDLE = CLRBIT;
-        }
-        else if (currDataLength < FIFO_Threshold && counter*(FIFO_SIZE-1)+currDataLength == SendLength) {
-            isUART1_Tx_IDLE = CLRBIT;
-        }
-        else {
-            return;
-        }
-    } // We can guarantee the sending process before the Tx buffer full
-
-    if (!isUART1_Tx_IDLE) {
-        S1TI = SETBIT;
-    } // If Tx buffer reach the threshold and isUART1_Tx_IDLE flag is cleared, we need to send data using interrupt
+void UARTx_Send(uint8_t chr) {
+    S1BUF = chr;
+    isUART1_Tx_IDLE = CLRBIT;
+    while (!isUART1_Tx_IDLE) {
+        ;
+    }
 }
 
-void UARTx_Send_String(uint8_t *str, uint8_t SendLength) {
+void UARTx_Send_String(uint8_t *str) {
     while (*str) {
-        UARTx_Send(*str++, SendLength);
+        UARTx_Send(*str++);
     }
 }
 
@@ -138,6 +118,8 @@ ErrorStatus UARTx_Receive(uint8_t *strPtr) {
             *strPtr++ = tmpData;
         } // FIFO buffer has data
     }
+
+    return SUCCESS;
 }
 
 /**
@@ -145,14 +127,6 @@ ErrorStatus UARTx_Receive(uint8_t *strPtr) {
  */
 void UART1_ISR_Handler(void) interrupt(UART1_VECTOR) using(1) {
     if(S1TI) {
-        uint8_t tmpDat;
-        while (FIFO_succ == FIFO_Out(&UART1_Tx, &tmpDat)) {
-            S1TI = CLRBIT; // prepare for sending FIFO_Out data
-            S1BUF = tmpDat;
-            while (!S1TI) {
-                ;
-            } // wait for the data in S1BUF sent
-        }
         S1TI            = CLRBIT; // prepare for next interrupt
         isUART1_Tx_IDLE = SETBIT; // data has been sent, Rx buffer become IDLE again
     }

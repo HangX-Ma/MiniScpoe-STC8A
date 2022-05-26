@@ -70,9 +70,9 @@ extern DMABuf_TypeDef CurrFreeBuf;
  */
 void UART1_Init(void);
 
-void UARTx_Send(uint8_t chr, uint8_t SendLength);
+void UARTx_Send(uint8_t chr);
 
-void UARTx_Send_String(uint8_t *str, uint8_t SendLength);
+void UARTx_Send_String(uint8_t *str);
 
 ErrorStatus UARTx_Receive(uint8_t *strPtr);
 

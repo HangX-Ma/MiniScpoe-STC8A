@@ -471,6 +471,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\uart.c</FilePath>
             </File>
+            <File>
+              <FileName>fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\fifo.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

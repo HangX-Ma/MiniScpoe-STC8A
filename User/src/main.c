@@ -30,18 +30,28 @@
 #include "stc8x_delay.h"
 #include "STRING.H"
 
+/**
+ * @brief Rewrite 'putchar' function, remapped to UARTx output
+ * 
+ * @param c input character
+ * @return char 
+ */
+char putchar (char c) {
+    UARTx_Send(c);
+
+    return c;
+}
+
 int main (void) {
     uint8_t i = 12;
-    uint8_t str[256];
 
     GPIO_DeInit();
     UART1_Init();
 
     EA = SETBIT;
 
-    sprintf((char*)str, "STC8A8K64D4 UART1 BMM Test Programme! %bd \r\n", i);
     while (1) {
-        UARTx_Send_String(str, strlen((char*)str));
+        printf("STC8A8K64D4 UART1 BMM Test Programme! %bd \r\n", i);
         delay_nms(500);
     }
 

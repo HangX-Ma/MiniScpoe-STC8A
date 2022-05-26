@@ -70,6 +70,7 @@
     #define bdata
     #define data
     #define code
+    #define reentrant
 #else
     #define interrupt(x) interrupt x
     #define using(x) using x
