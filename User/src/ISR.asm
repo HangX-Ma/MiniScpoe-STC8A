@@ -69,5 +69,5 @@ U4TXBMM_ISR:
 U4RXBMM_ISR:
 LCMBMM_ISR:
 LCMIF_ISR:
-    JMP 006BH
+    JMP 006BH ; Jump to interrupt vector 13 entry address
     END

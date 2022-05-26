@@ -405,6 +405,10 @@ sfr WKTCH       =   WKTCH_ADDR;         //! Power down wake up timer high bytes
 #define     PxM1_BASE       0x93
 #define     PxPU_BASE       0xFE10
 #define     PxNCS_BASE      0xFE18
+#define     PxSR_BASE       0xFE20
+#define     PxDR_BASE       0xFE28
+#define     PxIE_BASE       0xFE30
+
 
 /* GPIO address definition */
 #define     P0_ADDR         GPIO_BASE
@@ -456,6 +460,36 @@ sfr WKTCH       =   WKTCH_ADDR;         //! Power down wake up timer high bytes
 #define     P5NCS_ADDR       (PxNCS_BASE + 0x05)
 #define     P6NCS_ADDR       (PxNCS_BASE + 0x06)
 #define     P7NCS_ADDR       (PxNCS_BASE + 0x07)
+
+/* Register level conversion rate Address */
+#define     P0SR_ADDR       (PxSR_BASE + 0x00)
+#define     P1SR_ADDR       (PxSR_BASE + 0x01)
+#define     P2SR_ADDR       (PxSR_BASE + 0x02)
+#define     P3SR_ADDR       (PxSR_BASE + 0x03)
+#define     P4SR_ADDR       (PxSR_BASE + 0x04)
+#define     P5SR_ADDR       (PxSR_BASE + 0x05)
+#define     P6SR_ADDR       (PxSR_BASE + 0x06)
+#define     P7SR_ADDR       (PxSR_BASE + 0x07)
+
+/* Drive current control register Address */
+#define     P0DR_ADDR       (PxDR_BASE + 0x00)
+#define     P1DR_ADDR       (PxDR_BASE + 0x01)
+#define     P2DR_ADDR       (PxDR_BASE + 0x02)
+#define     P3DR_ADDR       (PxDR_BASE + 0x03)
+#define     P4DR_ADDR       (PxDR_BASE + 0x04)
+#define     P5DR_ADDR       (PxDR_BASE + 0x05)
+#define     P6DR_ADDR       (PxDR_BASE + 0x06)
+#define     P7DR_ADDR       (PxDR_BASE + 0x07)
+
+/* Input enable control register Address */
+#define     P0IE_ADDR       (PxIE_BASE + 0x00)
+#define     P1IE_ADDR       (PxIE_BASE + 0x01)
+#define     P2IE_ADDR       (PxIE_BASE + 0x02)
+#define     P3IE_ADDR       (PxIE_BASE + 0x03)
+#define     P4IE_ADDR       (PxIE_BASE + 0x04)
+#define     P5IE_ADDR       (PxIE_BASE + 0x05)
+#define     P6IE_ADDR       (PxIE_BASE + 0x06)
+#define     P7IE_ADDR       (PxIE_BASE + 0x07)
 
 // I/O ISR registers
 #define     PxINTE_BASE     0xFD00
@@ -701,14 +735,44 @@ sbit P77        =   P7^7;
 #define     P7PU        (*(__IO uint8_t xdata *) P7PU_ADDR)             // Extended SFR
 
 // * GPIO Schmitt trigger control registers: [0] off; [1] on */
-#define     P0NCS       (*(__IO uint8_t xdata *) P1NCS_ADDR)            // Extended SFR
-#define     P1NCS       (*(__IO uint8_t xdata *) P2NCS_ADDR)            // Extended SFR
-#define     P2NCS       (*(__IO uint8_t xdata *) P3NCS_ADDR)            // Extended SFR
-#define     P3NCS       (*(__IO uint8_t xdata *) P4NCS_ADDR)            // Extended SFR
-#define     P4NCS       (*(__IO uint8_t xdata *) P5NCS_ADDR)            // Extended SFR
-#define     P5NCS       (*(__IO uint8_t xdata *) P6NCS_ADDR)            // Extended SFR
-#define     P6NCS       (*(__IO uint8_t xdata *) P7NCS_ADDR)            // Extended SFR
-#define     P7NCS       (*(__IO uint8_t xdata *) P8NCS_ADDR)            // Extended SFR
+#define     P0NCS       (*(__IO uint8_t xdata *) P0NCS_ADDR)            // Extended SFR
+#define     P1NCS       (*(__IO uint8_t xdata *) P1NCS_ADDR)            // Extended SFR
+#define     P2NCS       (*(__IO uint8_t xdata *) P2NCS_ADDR)            // Extended SFR
+#define     P3NCS       (*(__IO uint8_t xdata *) P3NCS_ADDR)            // Extended SFR
+#define     P4NCS       (*(__IO uint8_t xdata *) P4NCS_ADDR)            // Extended SFR
+#define     P5NCS       (*(__IO uint8_t xdata *) P5NCS_ADDR)            // Extended SFR
+#define     P6NCS       (*(__IO uint8_t xdata *) P6NCS_ADDR)            // Extended SFR
+#define     P7NCS       (*(__IO uint8_t xdata *) P7NCS_ADDR)            // Extended SFR
+
+/* Register level conversion rate: [0] fast; [1] slow */
+#define     P0SR        (*(__IO uint8_t xdata *) P0SR_ADDR)            // Extended SFR
+#define     P1SR        (*(__IO uint8_t xdata *) P1SR_ADDR)            // Extended SFR
+#define     P2SR        (*(__IO uint8_t xdata *) P2SR_ADDR)            // Extended SFR
+#define     P3SR        (*(__IO uint8_t xdata *) P3SR_ADDR)            // Extended SFR
+#define     P4SR        (*(__IO uint8_t xdata *) P4SR_ADDR)            // Extended SFR
+#define     P5SR        (*(__IO uint8_t xdata *) P5SR_ADDR)            // Extended SFR
+#define     P6SR        (*(__IO uint8_t xdata *) P6SR_ADDR)            // Extended SFR
+#define     P7SR        (*(__IO uint8_t xdata *) P7SR_ADDR)            // Extended SFR
+/* Drive current control register Address: [0] enhanced; [1] normal */
+#define     P0DR        (*(__IO uint8_t xdata *) P0DR_ADDR)            // Extended SFR
+#define     P1DR        (*(__IO uint8_t xdata *) P1DR_ADDR)            // Extended SFR
+#define     P2DR        (*(__IO uint8_t xdata *) P2DR_ADDR)            // Extended SFR
+#define     P3DR        (*(__IO uint8_t xdata *) P3DR_ADDR)            // Extended SFR
+#define     P4DR        (*(__IO uint8_t xdata *) P4DR_ADDR)            // Extended SFR
+#define     P5DR        (*(__IO uint8_t xdata *) P5DR_ADDR)            // Extended SFR
+#define     P6DR        (*(__IO uint8_t xdata *) P6DR_ADDR)            // Extended SFR
+#define     P7DR        (*(__IO uint8_t xdata *) P7DR_ADDR)            // Extended SFR
+/* Input enable control register Address: [0] disable digital signal input; [1]  enable digital signal input */
+#define     P0IE       (*(__IO uint8_t xdata *) P0IE_ADDR)            // Extended SFR
+#define     P1IE       (*(__IO uint8_t xdata *) P1IE_ADDR)            // Extended SFR
+#define     P2IE       (*(__IO uint8_t xdata *) P2IE_ADDR)            // Extended SFR
+#define     P3IE       (*(__IO uint8_t xdata *) P3IE_ADDR)            // Extended SFR
+#define     P4IE       (*(__IO uint8_t xdata *) P4IE_ADDR)            // Extended SFR
+#define     P5IE       (*(__IO uint8_t xdata *) P5IE_ADDR)            // Extended SFR
+#define     P6IE       (*(__IO uint8_t xdata *) P6IE_ADDR)            // Extended SFR
+#define     P7IE       (*(__IO uint8_t xdata *) P7IE_ADDR)            // Extended SFR
+
+
 
 #define GPIO_Px(x)  (P##x)
 #define Px_M1(x)    (P##x##M1)

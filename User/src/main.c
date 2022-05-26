@@ -43,16 +43,20 @@ char putchar (char c) {
 }
 
 int main (void) {
-    uint8_t i = 12;
-
     GPIO_DeInit();
     UART1_Init();
+
+    Px_M1(5) &= ~(0x01); Px_M1(5) &= ~(0x01); // P5.0 port weak pull
+    P_SW2 |= P_SW2_EAXFR;
+    Px_PU(5) |= 0x01;
+    P_SW2 &= ~P_SW2_EAXFR;
 
     EA = SETBIT;
 
     while (1) {
-        printf("STC8A8K64D4 UART1 BMM Test Programme! %bd \r\n", i);
-        delay_nms(500);
+        // printf("STC8A8K64D4 UART1 BMM Test Programme! %bd \r\n", i);
+        P50 = ~P50;
+        delay_nms(200);
     }
 
     return 0;
