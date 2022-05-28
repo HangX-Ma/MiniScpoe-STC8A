@@ -70,7 +70,7 @@ uint16_t GetADC_CHx(uint8_t chx) {
 uint16_t Get_RAM_REFV(void) {
     uint16_t BGV_res;
 
-    BGV_res = (uint16_t)(BGV_HByte) << 4 + (uint16_t)(BGV_LByte);
+    BGV_res = *BGV_ADDR;
 
     return BGV_res;
 }

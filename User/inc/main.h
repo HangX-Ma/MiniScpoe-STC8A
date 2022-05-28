@@ -27,10 +27,9 @@
 #ifndef __MAIN__H__
 #define __MAIN__H__
 
-#include "stc8x_sysclk.h"
-#include "STDIO.H"
-#include "STDLIB.H"
-
-
+#include "uart.h"
+#include "adc.h"
+#include "stc8x_gpio.h"
+#include "stc8x_delay.h"
 
 #endif  //!__MAIN__H__

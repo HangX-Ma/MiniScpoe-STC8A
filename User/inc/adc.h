@@ -41,8 +41,7 @@
 //* ------------   GLOBAL variables   ------------
 
 //* ------------ developer definitions ------------
-#define BGV_HByte       (*(uint8_t idata *)0xEF)    //!< internal 1.344V reference voltage high byte
-#define BGV_LByte       (*(uint8_t idata *)0xF0)    //!< internal 1.344V reference voltage low byte
+#define BGV_ADDR        ((uint16_t idata *)0xEF)    //!< internal 1.344V(1.19V D64 version) reference voltage high byte
 
 sbit ADC_Sample_Ready_LED = P1^7;
 

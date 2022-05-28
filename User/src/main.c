@@ -25,9 +25,8 @@
  */
 
 #include "main.h"
-#include "uart.h"
-#include "stc8x_gpio.h"
-#include "stc8x_delay.h"
+#include "STDIO.H"
+#include "STDLIB.H"
 #include "STRING.H"
 
 /**
@@ -43,8 +42,11 @@ char putchar (char c) {
 }
 
 int main (void) {
+    uint16_t ADC_REFV;
+
     GPIO_DeInit();
     UART1_Init();
+    Wave_ADC_Init(Scale_500ms);
 
     Px_M1(5) &= ~(0x01); Px_M1(5) &= ~(0x01); // P5.0 port weak pull
     P_SW2 |= P_SW2_EAXFR;
@@ -53,10 +55,15 @@ int main (void) {
 
     EA = SETBIT;
 
+    ADC_REFV = Get_RAM_REFV();
+
     while (1) {
         // printf("STC8A8K64D4 UART1 BMM Test Programme! %bd \r\n", i);
         P50 = ~P50;
+        printf("STC8A8K64D4 ADC Bandgap value: %d\r\n", ADC_REFV);
+
         delay_nms(200);
+
     }
 
     return 0;
