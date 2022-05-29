@@ -107,6 +107,8 @@ extern int8_t   G_OptionInChart;                    //!< main screen options int
 extern bit      G_State_Settings_FLAG;              //!< Setting interface state flag
 extern bit      G_State_OptionChanged_FLAG;         //!< Options changed state flag
 
+extern bit      G_UpdateVBAT_FLAG;                  //!< Update battery voltage flag
+
 extern uint16_t ADCbuf[ADC_SAMPLE_BUF_SIZE];        //!< Original sampled data in buffer
 extern const uint8_t code *PlotModeTxt[];           //!< Plot mode characters
 extern const uint8_t code *TriModeTxt[];            //!< Trigger mode characters

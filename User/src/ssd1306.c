@@ -143,6 +143,9 @@ void OLED_SetPos(uint8_t x, uint8_t y) {
     _locY = y;
 }
 
+void OLED_SetFontWidth(uint8_t w) {
+    _font_width = w;
+}
 
 void OLED_ClearScreen(void) {
     memset(pixel_buf, 0x00, WIDTH*PAGES);

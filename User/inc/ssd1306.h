@@ -94,6 +94,14 @@ void OLED_Display(void);
 void OLED_SetPos(uint8_t x, uint8_t y);
 
 /**
+ * @brief Set OLED display font width
+ * 
+ * @param w pixel width
+ */
+void OLED_SetFontWidth(uint8_t w);
+
+
+/**
  * @brief Draw a byte to buffer
  * @details If the byte 1111 1111 we want to write cross two pages 0001 1111 1110 0000.
  * In redraw mode, to avoid affect adjacent content. Set offset=3, reserve_hl=1,

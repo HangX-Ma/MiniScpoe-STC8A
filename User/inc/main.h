@@ -29,7 +29,16 @@
 
 #include "uart.h"
 #include "adc.h"
+#include "chart.h"
+#include "ssd1306.h"
+#include "setting.h"
 #include "stc8x_gpio.h"
 #include "stc8x_delay.h"
+
+
+void GlobalVarInit(void);
+void TM0_Init(void);
+void TM1_Init(void);
+
 
 #endif  //!__MAIN__H__

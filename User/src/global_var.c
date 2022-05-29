@@ -82,6 +82,9 @@ int8_t   G_OptionInChart;
 bit      G_State_Settings_FLAG;
 bit      G_State_OptionChanged_FLAG;
 
+bit      G_UpdateVBAT_FLAG;
+
+
 
 uint16_t ADCbuf[ADC_SAMPLE_BUF_SIZE];
 const uint8_t code *PlotModeTxt[] = {"Vect", "Dots"};
