@@ -37,6 +37,7 @@
 
 
 void GlobalVarInit(void);
+void Encoder_Init(void);
 void TM0_Init(void);
 void TM1_Init(void);
 
