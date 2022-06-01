@@ -441,6 +441,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\global_var.c</FilePath>
             </File>
+            <File>
+              <FileName>ISR.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\src\ISR.asm</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -49,15 +49,16 @@ void Wave_ADC_Init(ScaleSel_TypeDef scale_h) {
 }
 
 uint16_t GetADC_CHx(uint8_t chx) {
-    uint16_t ADC_res = 0;
+    uint16_t ADC_res;
     uint8_t i;
 
-    ADC_CHx_SEL(chx);
+    // ADC_CHx_SEL(chx);
     Wave_ADC_Init(Scale_500ms);
     // read twice but abandon
     ADC_GetSampleVal_Enquiry(chx);
     ADC_GetSampleVal_Enquiry(chx);
-
+    ADC_res = 0;
+    
     for (i = 0; i < 16; i++) {
         ADC_GetSampleVal_Enquiry(chx);
         ADC_res += G_ADC_data; 
@@ -67,19 +68,20 @@ uint16_t GetADC_CHx(uint8_t chx) {
     return ADC_res;
 }
 
-uint16_t Get_RAM_REFV(void) {
-    uint16_t BGV_res;
+uint16_t *Get_RAM_REFV(void) {
+    uint16_t *BGV_resPtr;
 
-    BGV_res = *BGV_ADDR;
+    BGV_resPtr = BGV_ADDR;
 
-    return BGV_res;
+    return BGV_resPtr;
 }
 
 uint16_t Get_BATV(uint8_t chx, uint8_t ratio) {
-    uint16_t ADC_Sampled_Bandgap, ADC_RAM_Bandgap, ADC_CHx_Val;
+    uint16_t ADC_Sampled_Bandgap, *ADC_RAM_Bandgap, ADC_CHx_Val;
     uint16_t Vin;
 
     /* ADC_RAM_Bandgap/(ADC_Sampled_Bandgap/2^12) = Vin/(ADC_CHx_Val/2^12) */
+    Wave_ADC_Init(Scale_500ms);
 
     /* get internal 1.344V REFV average value by ADC */
     ADC_GetSampleVal_Enquiry(ADC_CONTR_ADC_CHS_VAL15);
@@ -90,21 +92,21 @@ uint16_t Get_BATV(uint8_t chx, uint8_t ratio) {
     ADC_GetSampleVal_Enquiry(chx);
     ADC_CHx_Val = G_ADC_data;
     
-    Vin = (uint16_t) (ADC_RAM_Bandgap/ADC_Sampled_Bandgap) * ADC_CHx_Val * (ratio/100);
+    Vin = (uint16_t) (*ADC_RAM_Bandgap/ADC_Sampled_Bandgap) * ADC_CHx_Val * (ratio/100);
 
     return Vin;
 }
 
-int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t _ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio) {
+int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio) {
     int32_t ADCx;
-    ADCx = (int32_t)_mV * (_ADC_Sampled_Bandgap/_ADC_RAM_Bandgap) / (ratio/100);
+    ADCx = (int32_t)_mV * (_ADC_Sampled_Bandgap/ (*_ADC_RAM_Bandgap)) / (ratio/100);
 
     return ADCx;
 }
 
-int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t _ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio) {
+int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio) {
     int32_t mv;
-    mv = (int32_t)_ADCx / (_ADC_RAM_Bandgap/_ADC_Sampled_Bandgap) * (ratio/100);
+    mv = (int32_t)_ADCx / ((*_ADC_RAM_Bandgap)/_ADC_Sampled_Bandgap) * (ratio/100);
 
     return mv;
 }
@@ -114,38 +116,40 @@ void SwitchDelay(uint8_t scale_h) {
     switch (scale_h)
     {
         case Scale_500ms: delay_nus(19971); break;
-        case Scale_200ms: delay_nus(7971); break;
-        case Scale_100ms: delay_nus(3971); break;
-        case Scale_50ms: delay_nus(1971); break;
-        case Scale_20ms: delay_nus(771); break;
-        case Scale_10ms: delay_nus(371); break;
-        case Scale_5ms: delay_nus(171); break;
-        case Scale_2ms: delay_nus(51); break;
-        case Scale_1ms: delay_nus(18); break;
-        case Scale_500us: delay_nus(6); break;
-        case Scale_200us: delay_nus(1); break;
-        case Scale_100us: delay_nus(0); break;
+        case Scale_200ms: delay_nus(7971);  break;
+        case Scale_100ms: delay_nus(3971);  break;
+        case Scale_50ms:  delay_nus(1971);  break;
+        case Scale_20ms:  delay_nus(771);   break;
+        case Scale_10ms:  delay_nus(371);   break;
+        case Scale_5ms:   delay_nus(171);   break;
+        case Scale_2ms:   delay_nus(51);    break;
+        case Scale_1ms:   delay_nus(18);    break;
+        case Scale_500us: delay_nus(6);     break;
+        case Scale_200us: delay_nus(1);     break;
+        case Scale_100us: delay_nus(0);     break;
     }
 }
 
 uint16_t* GetWaveADC(uint8_t chx, uint8_t scale_h) {
     uint8_t i, j;
-    uint16_t ADC_Sampled_Bandgap, ADC_RAM_Bandgap;
+    // uint16_t ADC_Sampled_Bandgap, ADC_RAM_Bandgap;
     static uint16_t ADCSampling[ADC_SAMPLE_BUF_SIZE];
     /* single trigger buffer, effective sampling point is PRE_BUF_NUM, the additional position copy the last position value, creating a loop */
     uint16_t ADCSingleTriggerSampling[ADC_SINGLE_TRIGGER_BUF_SIZE + 1];
+
+    G_ADC_Complete_FLAG = CLRBIT;
 
     if (G_ADC_Interrupt_FLAG) {
         return ADCSampling;
     }
 
-    memset(ADCSampling, 0x00, sizeof(ADCSampling));
-    memset(ADCSingleTriggerSampling, 0x00, sizeof(ADCSingleTriggerSampling));
+    memset(ADCSampling, 0x00, ADC_SAMPLE_BUF_SIZE*2);
+    memset(ADCSingleTriggerSampling, 0x00, (ADC_SINGLE_TRIGGER_BUF_SIZE+ 1) * 2);
 
-    ADC_RAM_Bandgap     = Get_RAM_REFV(); // Read Bandgap voltage value stored in RAM
-    ADC_Sampled_Bandgap = GetADC_CHx(ADC_CONTR_ADC_CHS_VAL15); // Get sampled Bandgap voltage value from ADC
+    // ADC_RAM_Bandgap     = Get_RAM_REFV(); // Read Bandgap voltage value stored in RAM
+    ADCbg           = GetADC_CHx(ADC_CONTR_ADC_CHS_VAL15); // Get sampled Bandgap voltage value from ADC
     /* Convert trigger voltage set by user to ADC value */
-    G_TriggerADCx       = ConvertUnit_mV2ADC(G_TriggerLevel_mV, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
+    G_TriggerADCx   = ConvertUnit_mV2ADC(G_TriggerLevel_mV, BGV, ADCbg, SVin_ratio);
 
     Wave_ADC_Init((ScaleSel_TypeDef)scale_h);
 

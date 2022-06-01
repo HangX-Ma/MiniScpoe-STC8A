@@ -23,9 +23,19 @@
  * limitations under the License.
  *****************************************************************************
  */
-
+/* Introduction [SPI] mode */
+// ----------------------------------------------------------------
+//  GND  Ground
+//  VCC  5V or 3.3v
+//  D0   P2.7（SCL）
+//  D1   P2.6（SDA）
+//  RES  P2.5, Keep high during normal operation
+//  DC   P2.4, 'Low' transfers to command register. 'High' transfers to data register.
+//  CS   P2.3, Chip selection, low when enabled.
+//   ----------------------------------------------------------------
 #ifndef __SSD1306__H__
 #define __SSD1306__H__
+
 
 //* ------------      head files      ------------
 #include "core_stc8x.h"
@@ -41,16 +51,16 @@
 
 //* ------------ developer definitions ------------
 /*  OLED Pixel */
-#define WIDTH  128
+#define WIDTH  130
 #define HEIGHT 64
 #define PAGES  8
 
-#define Max_Column 128
+#define Max_Column 130
 #define Max_Row 64
 
 /*  OLED Pins */
 sbit OLED_SCLK = P2^7;   // clock(D0/SCLK)
-sbit OLED_SDIN = P2^6;   // data(D1/MOSI)
+sbit OLED_SDIN = P2^6;   // data(D1/SDIN)
 sbit OLED_RST  = P2^5;   // reset(RES)
 sbit OLED_DC   = P2^4;   // data/cmd(DC)
 sbit OLED_CS   = P2^3;   // chip select(CS)
@@ -63,7 +73,9 @@ void OLED_Init(void);
 
 /**
  * @brief Write command to screen cache
- * 
+ * @details SDIN is shifted into an 8-bit shift register on every rising edge of SCLK in the order of D7, D6, ... D0.
+ * D/C# is sampled on every eighth clock and the data byte in the shift register is written to the Graphic Display 
+ * Data RAM (GDDRAM) or command register in the same clock.
  * @param cmd command
  */
 void OLED_WR_CMD(uint8_t cmd);
@@ -76,9 +88,9 @@ void OLED_WR_CMD(uint8_t cmd);
 void OLED_WR_data(uint8_t dat);
 
 /**
- * @brief Clear OLED screen
+ * @brief Clear OLED Buffer
  */
-void OLED_ClearScreen(void);
+void OLED_ClearBuffer(void);
 
 /**
  * @brief OLED buffer data display

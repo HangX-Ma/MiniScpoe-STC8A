@@ -62,7 +62,7 @@ uint16_t GetADC_CHx(uint8_t chx);
  * 
  * @return Reference voltage value stroed in RAM 
  */
-uint16_t Get_RAM_REFV(void);
+uint16_t *Get_RAM_REFV(void);
 
 /**
  * @brief Get battery voltage or CHx channel ADC input voltage
@@ -73,9 +73,9 @@ uint16_t Get_RAM_REFV(void);
  */
 uint16_t Get_BATV(uint8_t chx, uint8_t ratio);
 
-int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t _ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio);
+int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio);
 
-int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t _ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio);
+int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio);
 
 /**
  * @brief Get the Wave ADC

@@ -301,7 +301,7 @@ void Select_Option(bit ifNext) {
             G_WaveAvgLengthSum    = 0;   
         } // Switch Trigger Mode
         else if (G_OptionInChart == ChartSel_MeasureWay) {
-            G_MeasureWaySel = ~G_MeasureWaySel;
+            G_MeasureWaySel = !G_MeasureWaySel;
             G_WaveUpdate_FLAG = CLRBIT;
             G_ClearWave_FLAG  = CLRBIT;
         } // Switch measurement way

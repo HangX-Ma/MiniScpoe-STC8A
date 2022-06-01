@@ -34,12 +34,15 @@
 #include "setting.h"
 #include "stc8x_gpio.h"
 #include "stc8x_delay.h"
+#include "global_var.h"
 
-
-void GlobalVarInit(void);
 void Encoder_Init(void);
 void TM0_Init(void);
 void TM1_Init(void);
+void GlobalVar_Init(void);
 
+void runWhenInSettings(void);
+void runWhenADCInterrupt(void);
+void runWhenADCComplete(void);
 
 #endif  //!__MAIN__H__

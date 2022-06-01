@@ -561,14 +561,14 @@ sbit P77        =   P7^7;
 #define     P7PU        (*(__IO uint8_t xdata *) P7PU_ADDR)             // Extended SFR
 
 // * GPIO Schmitt trigger control registers: [0] off; [1] on */
-#define     P0NCS       (*(__IO uint8_t xdata *) P1NCS_ADDR)            // Extended SFR
-#define     P1NCS       (*(__IO uint8_t xdata *) P2NCS_ADDR)            // Extended SFR
-#define     P2NCS       (*(__IO uint8_t xdata *) P3NCS_ADDR)            // Extended SFR
-#define     P3NCS       (*(__IO uint8_t xdata *) P4NCS_ADDR)            // Extended SFR
-#define     P4NCS       (*(__IO uint8_t xdata *) P5NCS_ADDR)            // Extended SFR
-#define     P5NCS       (*(__IO uint8_t xdata *) P6NCS_ADDR)            // Extended SFR
-#define     P6NCS       (*(__IO uint8_t xdata *) P7NCS_ADDR)            // Extended SFR
-#define     P7NCS       (*(__IO uint8_t xdata *) P8NCS_ADDR)            // Extended SFR
+#define     P0NCS       (*(__IO uint8_t xdata *) P0NCS_ADDR)            // Extended SFR
+#define     P1NCS       (*(__IO uint8_t xdata *) P1NCS_ADDR)            // Extended SFR
+#define     P2NCS       (*(__IO uint8_t xdata *) P2NCS_ADDR)            // Extended SFR
+#define     P3NCS       (*(__IO uint8_t xdata *) P3NCS_ADDR)            // Extended SFR
+#define     P4NCS       (*(__IO uint8_t xdata *) P4NCS_ADDR)            // Extended SFR
+#define     P5NCS       (*(__IO uint8_t xdata *) P5NCS_ADDR)            // Extended SFR
+#define     P6NCS       (*(__IO uint8_t xdata *) P6NCS_ADDR)            // Extended SFR
+#define     P7NCS       (*(__IO uint8_t xdata *) P7NCS_ADDR)            // Extended SFR
 
 #define GPIO_Px(x)  (P##x)
 #define Px_M1(x)    (P##x##M1)
@@ -644,6 +644,8 @@ sbit P77        =   P7^7;
 #define     INTCLKO_EX3     0x20             /*!< external interrupt 3 interrupt enabling flag */
 #define     INTCLKO_EX2     0x10             /*!< external interrupt 2 interrupt enabling flag */
 #define     INTCLKO_T2CLKO  0x04
+#define     INTCLKO_T1CLKO  0x02
+#define     INTCLKO_T0CLKO  0x01
 
 
 /* Bit definition for AUXINTIF registers */
@@ -721,14 +723,14 @@ sbit PX0        =   IP^0;
 #define     TMOD_T0_GATE    0x08        /*!< Timer T0 control. T1 works when TR1=1 and INT1 is high. */
 #define     TMOD_T0_CT      0x04        /*!< Timer/Counter T1 function selection: [0] timer-internal SYSCLK input; [1] counter-P3.4 input */
 
-#define     TMOD_T0_SEL     0x30        /*!< Mode selection [1:0] (decided by M1 and M0) */
+#define     TMOD_T0_SEL     0x03        /*!< Mode selection [1:0] (decided by M1 and M0) */
 #define     TMOD_T0_M1      0x02        /*!< BIT [1] */
 #define     TMOD_T0_M0      0x01        /*!< BIT [0] */
 
 #define     TMOD_T0_SEL_16B_AUTO_RELOAD             0x00     /*!< 16 bits auto reload mode. When T0 overflowing, T0 reload [TH0, TL0] */
-#define     TMOD_T0_SEL_16B_REPEATED                0x10     /*!< 16 bits repeated mode. When T0 overflowing, T0 starts from 0. */
-#define     TMOD_T0_SEL_8B_AUTO_RELOAD              0x20     /*!< 8 bits auto reload mode. When T0 overflowing, T0 reload [TL0] with [TH0]. */
-#define     TMOD_T0_SEL_UNSHIELDED_16B_AUTO_RELOAD  0x30     /*!< unshielded 16 bits auto reload mode, which has the highest prioty */
+#define     TMOD_T0_SEL_16B_REPEATED                0x01     /*!< 16 bits repeated mode. When T0 overflowing, T0 starts from 0. */
+#define     TMOD_T0_SEL_8B_AUTO_RELOAD              0x02     /*!< 8 bits auto reload mode. When T0 overflowing, T0 reload [TL0] with [TH0]. */
+#define     TMOD_T0_SEL_UNSHIELDED_16B_AUTO_RELOAD  0x03     /*!< unshielded 16 bits auto reload mode, which has the highest prioty */
 
 /* Bit definition for AUXR register */
 #define     AUXR_T0x12      0x80        /*!< timer T0 speed selection ([0], CPU clock divied by 12; [1], CPU clock no division)*/
@@ -1088,62 +1090,6 @@ struct ADC_struct{
 #define     ADCCFG_SPEED_480tk        0x0E          /*!< SYSCLK tick number: 480 ticks*/
 #define     ADCCFG_SPEED_512tk        0x0F          /*!< SYSCLK tick number: 512 ticks*/
 
-/* Bit definition for ADCTIM register */
-#define     ADCTIM_CSSETUP              0x80          /*!< ADC channel selection time control(Number of ADC system clock ticks consumed): [0], 1 tick; [1], 2 ticks */
-
-#define     ADCTIM_CSHOLD               0x60          /*!< CSHOLD[1:0], ADC channel selection hold time control */
-#define     ADCTIM_CSHOLD_0             0x20          /*!< Bit 0 */
-#define     ADCTIM_CSHOLD_1             0x40          /*!< Bit 1 */
-
-// Number of ADC system clock ticks consumed
-#define     ADCTIM_CSHOLD_1tk           0x00
-#define     ADCTIM_CSHOLD_2tk           0x20
-#define     ADCTIM_CSHOLD_3tk           0x40
-#define     ADCTIM_CSHOLD_4tk           0x60
-
-#define     ADCTIM_SMPDUTY              0x1F          /*!< CSHOLD[4:0], Sampling time control of ADC analog signal */
-#define     ADCTIM_SMPDUTY_0            0x01          /*!< Bit 0 */
-#define     ADCTIM_SMPDUTY_1            0x02          /*!< Bit 1 */
-#define     ADCTIM_SMPDUTY_2            0x04          /*!< Bit 2 */
-#define     ADCTIM_SMPDUTY_3            0x08          /*!< Bit 3 */
-#define     ADCTIM_SMPDUTY_4            0x10          /*!< Bit 4 */
-
-// Number of ADC system clock ticks consumed
-#define     ADCTIM_SMPDUT_1tk           0x00
-#define     ADCTIM_SMPDUT_2tk           0x01
-#define     ADCTIM_SMPDUT_3tk           0x02
-#define     ADCTIM_SMPDUT_4tk           0x03
-#define     ADCTIM_SMPDUT_5tk           0x04
-#define     ADCTIM_SMPDUT_6tk           0x05
-#define     ADCTIM_SMPDUT_7tk           0x06
-#define     ADCTIM_SMPDUT_8tk           0x07
-#define     ADCTIM_SMPDUT_9tk           0x08
-#define     ADCTIM_SMPDUT_10tk          0x09
-#define     ADCTIM_SMPDUT_11tk          0x0A
-#define     ADCTIM_SMPDUT_12tk          0x0B
-#define     ADCTIM_SMPDUT_13tk          0x0C
-#define     ADCTIM_SMPDUT_14tk          0x0D
-#define     ADCTIM_SMPDUT_15tk          0x0E
-#define     ADCTIM_SMPDUT_16tk          0x0F
-#define     ADCTIM_SMPDUT_17tk          0x10
-#define     ADCTIM_SMPDUT_18tk          0x11
-#define     ADCTIM_SMPDUT_19tk          0x12
-#define     ADCTIM_SMPDUT_20tk          0x13
-#define     ADCTIM_SMPDUT_21tk          0x14
-#define     ADCTIM_SMPDUT_22tk          0x15
-#define     ADCTIM_SMPDUT_23tk          0x16
-#define     ADCTIM_SMPDUT_24tk          0x17
-#define     ADCTIM_SMPDUT_25tk          0x18
-#define     ADCTIM_SMPDUT_26tk          0x19
-#define     ADCTIM_SMPDUT_27tk          0x1A
-#define     ADCTIM_SMPDUT_28tk          0x1B
-#define     ADCTIM_SMPDUT_29tk          0x1C
-#define     ADCTIM_SMPDUT_30tk          0x1D
-#define     ADCTIM_SMPDUT_31tk          0x1E
-#define     ADCTIM_SMPDUT_32tk          0x1F
-
-#define     ADCTIM                      (*(__IO uint8_t xdata *)ADCTIM_ADDR)
-
 #define     ADC                         (*((ADC_TypeDef idata* xdata*)ADC_BASE))
 
 /* ADC special function registers */
@@ -1153,27 +1099,6 @@ sfr ADC_RESL    =   ADC_RESL_ADDR;                  //!< ADC conversion result l
 sfr ADCCFG      =   ADCCFG_ADDR;                    //!< ADC configuration register
 
 //! PCA peripherals
-/**
- * @brief PCA generic I/O definition
- */
-struct PCAx_struct{
-    __IO uint8_t CCAPMx;
-    uint8_t RESERVED0[4];
-    __IO uint8_t CCAPxL;
-    uint8_t RESERVED1[3];
-    __IO uint8_t PCA_PWMx;
-    uint8_t RESERVED2[4];
-    __IO uint8_t CCAPxH;
-};
-#define PCAx_TypeDef struct PCAx_struct
-
-/* PCA basic address definition */
-#define     PCAx_BASE       0xDA
-#define     PCA0_BASE       (PCAx_BASE + 0x00)
-#define     PCA1_BASE       (PCAx_BASE + 0x01)
-#define     PCA2_BASE       (PCAx_BASE + 0x02)
-#define     PCA3_BASE       (PCAx_BASE + 0x03)
-
 #define     CCON_ADDR       0xD8
 #define     CMOD_ADDR       0xD9
 #define     CL_ADDR         0xE9
@@ -1282,12 +1207,6 @@ sfr PCA_PWM0    =   PCA_PWM0_ADDR;              //!< PCA0 PWM mode register
 sfr PCA_PWM1    =   PCA_PWM1_ADDR;              //!< PCA1 PWM mode register
 sfr PCA_PWM2    =   PCA_PWM2_ADDR;              //!< PCA2 PWM mode register
 sfr PCA_PWM3    =   PCA_PWM3_ADDR;              //!< PCA3 PWM mode register
-
-// PCA generic struct type definitions
-#define     PCA0                    (*((PCAx_TypeDef idata* xdata *) PCA0_BASE))
-#define     PCA1                    (*((PCAx_TypeDef idata* xdata *) PCA1_BASE))
-#define     PCA2                    (*((PCAx_TypeDef idata* xdata *) PCA2_BASE))
-#define     PCA3                    (*((PCAx_TypeDef idata* xdata *) PCA3_BASE))
 
 /* Bit definition for CCON register */
 sbit CCON_CF         =   CCON^7;                /*!< PCA counter overflow interrupt flag */

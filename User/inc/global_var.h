@@ -54,6 +54,10 @@ sbit EC11_B     = P3 ^ 4;   // Encoder B impulse connect to normal GPIO
 
 extern uint16_t VBAT;                               //!< Battery voltage
 extern uint16_t SVin_ratio;                         //!< Sampling port voltage division ratio
+
+
+extern uint16_t *BGV;                               //!< internal Bandgap reference voltage
+extern uint16_t ADCbg;                              //!< internal Bandgap reference voltage ADC sampled
 extern uint8_t  G_WaveLength;                       //!< Waveform length
 extern uint32_t G_WaveFreq;                         //!< Waveform frequency
 extern uint16_t G_WaveAvgLengthSumNum;              //!< Average wave length sum counts

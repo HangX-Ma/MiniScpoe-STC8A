@@ -25,6 +25,7 @@
  */
 
 #include "global_var.h"
+#include "setting.h"
 #include "chart.h"
 #include "adc.h"
 #include "MATH.H"
@@ -67,12 +68,12 @@ void GetVoltageVRangeAuto(void) {
             G_VolV_Min = G_VMin / 1000 * 1000;
         }
 
-        if (G_VolV_Max > G_VMax) {
-            G_VolV_Max = G_VMax;
+        if (G_VolV_Max > MAX_VOLTAGE_V) {
+            G_VolV_Max = MAX_VOLTAGE_V;
         }
 
-        if (G_VolV_Min < G_VMin) {
-            G_VolV_Min = G_VMin;
+        if (G_VolV_Min < MIN_VOLTAGE_V) {
+            G_VolV_Min = MIN_VOLTAGE_V;
         }
     }
 }
@@ -380,12 +381,10 @@ void AnalyzeData()
     static int32_t Avg_Modified_Voltage    = 0;
     static int32_t Modified_Voltage_Buffer = 0;
     static int8_t  Avg_Cnt = 0;
-    uint16_t ADC_Sampled_Bandgap, ADC_RAM_Bandgap;
+    // uint16_t ADC_Sampled_Bandgap, ADC_RAM_Bandgap;
     /* get internal 1.344V REFV average value by ADC */
-    ADC_GetSampleVal_Enquiry(ADC_CONTR_ADC_CHS_VAL15);
-    ADC_Sampled_Bandgap = G_ADC_data;
+
     /* read internal 1.344V REFV */
-    ADC_RAM_Bandgap = Get_RAM_REFV();
 
     if (G_ADC_Complete_FLAG) {
         G_ScaleH_tmp = G_ScaleH; 
@@ -429,11 +428,11 @@ void AnalyzeData()
     Min = adcMin;
 
     // The maximum and minimum sampling values of the sampling points are converted into voltage values mV
-    G_VMax = ConvertUnit_ADC2mV(adcMax, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
-    G_VMin = ConvertUnit_ADC2mV(adcMin, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
+    G_VMax = ConvertUnit_ADC2mV(adcMax, BGV, ADCbg, SVin_ratio);
+    G_VMin = ConvertUnit_ADC2mV(adcMin, BGV, ADCbg, SVin_ratio);
 
-    G_VMax_Modified = ConvertUnit_ADC2mV(adcMax - G_Bias_Voltage, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
-    G_VMin_Modified = ConvertUnit_ADC2mV(adcMin - G_Bias_Voltage, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
+    G_VMax_Modified = ConvertUnit_ADC2mV(adcMax - G_Bias_Voltage, BGV, ADCbg, SVin_ratio);
+    G_VMin_Modified = ConvertUnit_ADC2mV(adcMin - G_Bias_Voltage, BGV, ADCbg, SVin_ratio);
 
     if(G_VMax_Modified > 0  && G_VMin_Modified > 0)
     {
@@ -466,7 +465,7 @@ void AnalyzeData()
     else if(G_MeasureWaySel == MeasureWay_AC) {
         Modified_Voltage_Buffer = (G_VMax_Modified - G_VMin_Modified);
         
-        Modified_Voltage_Buffer = Modified_Voltage_Buffer / (0.1612f*(log10(Modified_Voltage_Buffer)/log10(2.728f)) - 0.5265f );
+        Modified_Voltage_Buffer = Modified_Voltage_Buffer / (0.3722f*(log10(Modified_Voltage_Buffer)/log10(2.728f)) - 2.0842f );
         
         Avg_Modified_Voltage   += Modified_Voltage_Buffer;
         
@@ -482,8 +481,8 @@ void AnalyzeData()
     GetVoltageVRangeAuto();
 
     // Use the vertical ruler mV range to invert the ADC range as the upper and lower limits of the chart
-    plotADCMax = ConvertUnit_mV2ADC(G_VolV_Max, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
-    plotADCMin = ConvertUnit_mV2ADC(G_VolV_Min, ADC_RAM_Bandgap, ADC_Sampled_Bandgap, SVin_ratio);
+    plotADCMax = ConvertUnit_mV2ADC(G_VolV_Max, BGV, ADCbg, SVin_ratio);
+    plotADCMin = ConvertUnit_mV2ADC(G_VolV_Min, BGV, ADCbg, SVin_ratio);
 
     // Calculate waveform frequency
     //如果当前的时间区间和采样数据的时间间隔一致则进行频率计算
@@ -513,7 +512,7 @@ void PlotChart(void)
 
     if (G_ClearDisplay_FLAG) {
         G_ClearDisplay_FLAG = CLRBIT;
-        OLED_ClearScreen();
+        OLED_ClearBuffer();
 
         /* Chart border
            Waveform horizontal plotting area: 101 grids, 26~126
@@ -542,28 +541,24 @@ void PlotChart(void)
             OLED_ShowVerticalLine(CHART_H_MIN + 75, CHART_V_MIN + 1 + i * 8, 3);
         }
 
-        /* 波形电压范围
-           Voltage range of waveform*/
+        /* Voltage range of waveform*/
         OLED_SetPos(18, 56);
         str = Convert_mV_Str(G_VMin_Modified);
         OLED_ShowString(str);
-		
-        /* 波形位置标尺
-           Ruler for waveform position*/
+
+        /* Ruler for waveform position*/
         OLED_ShowHorizontalLine(50, 66, 17);
         OLED_ShowVerticalLine(50, 60, 3);
         OLED_ShowVerticalLine(66, 60, 3);
         OLED_ShowVerticalLine((G_TriggerPos + G_TriggerPosOffset - 80) * 0.5f / 4 + 55, 58, 5);
-		
-		OLED_SetPos(67, 56);
+
+        OLED_SetPos(67, 56);
         str = Convert_mV_Str(G_VMax_Modified);
         OLED_ShowString(str);
-		
     }
 
     OLED_Overlap(0); // Set drawing mode to overwrite
 
-	
     /* Flag for Auto Range*/
     if (G_Scale_Auto_FLAG == SETBIT) {
         OLED_SetPos(0, 0);
@@ -682,7 +677,7 @@ void PlotChart(void)
     else {
         OLED_Reverse(1);
         OLED_ShowHorizontalLine(0, 25, 30);  // Because the top line doesn't cover it, so just draw it out and fill it in.
-        OLED_Reverse(0);		
+        OLED_Reverse(0);
     }
 
     str = Convert_mV_Str(G_VolV_Max_Modified);
@@ -807,7 +802,7 @@ void PlotSettings()
 {
     if (G_ClearDisplay_FLAG) {
         G_ClearDisplay_FLAG = CLRBIT;
-        OLED_ClearScreen();
+        OLED_ClearBuffer();
         
         OLED_ShowVerticalLine(48, 0, 11);    // left frame
         OLED_ShowVerticalLine(88, 0, 11);    // right frame

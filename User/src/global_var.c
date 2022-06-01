@@ -28,6 +28,9 @@
 uint16_t VBAT;
 uint16_t SVin_ratio;
 
+uint16_t *BGV;
+uint16_t ADCbg;
+
 uint8_t  G_WaveLength;
 uint32_t G_WaveFreq;
 uint16_t G_WaveAvgLengthSumNum;
@@ -49,7 +52,7 @@ bit      G_DisplayUpdate_FLAG;
 bit      G_ClearDisplay_FLAG;
 bit      G_ClearWave_FLAG;
 
-int8_t   G_OLED_Brightness;
+int8_t   G_OLED_Brightness = 10;
 bit      G_OLED_BrightnessChanged_FLAG;
 
 

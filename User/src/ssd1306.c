@@ -24,9 +24,21 @@
  *****************************************************************************
  */
 
+// OLED RAM
+// [0]0 1 2 3 ... 127
+// [1]0 1 2 3 ... 127
+// [2]0 1 2 3 ... 127
+// [3]0 1 2 3 ... 127
+// [4]0 1 2 3 ... 127
+// [5]0 1 2 3 ... 127
+// [6]0 1 2 3 ... 127
+// [7]0 1 2 3 ... 127
+
+
 #include "ssd1306.h"
 #include "ssd1306font.h"
 #include "stc8x_delay.h"
+#include "global_var.h"
 #include "STRING.H"
 #include "STDLIB.H"
 #include "MATH.H"
@@ -38,13 +50,12 @@ extern void delay_nms(uint16_t nms);
 #endif
 
 
-bit ReverseMode = 0;    //!< 1: reverse display; 0: normal display
-bit OverlapMode = 1;    //!< 1: overlap; 0: override
+bit ReverseMode = CLRBIT;   //!< 1: reverse display; 0: normal display
+bit OverlapMode = SETBIT;   //!< 1: overlap; 0: override
 
 uint8_t pixel_buf[WIDTH*PAGES]; // whole screen pixel size: WIDTH * (8 pages-8bits)
 static  uint8_t _font_width = 6;
 static  int8_t _locX, _locY;
-
 
 void OLED_Init(void) {
     OLED_RST = SETBIT;
@@ -52,11 +63,10 @@ void OLED_Init(void) {
     OLED_RST = CLRBIT;
     delay_nms(50);
     OLED_RST = SETBIT;
-    delay_nms(1);
 
-    OLED_WR_CMD(0xAE); // set display off (sleep mode)
-    delay_nms(5);
-
+    OLED_WR_CMD(0xAE); // turn off OLED panel (sleep mode)
+    
+    OLED_WR_CMD(0xAE); // turn off OLED panel (sleep mode)
     OLED_WR_CMD(0x20); // Set Memory Addressing Mode: 0x00 Horizontal, 0x01 Vertical, 0x02 Page(RESET)
     OLED_WR_CMD(0x00); // Horizontal
 
@@ -71,7 +81,7 @@ void OLED_Init(void) {
     OLED_WR_CMD(0x40); // Set Display Start Line (0x40h~0x7F)
 
     OLED_WR_CMD(0x81); // Set Contrast Control
-    OLED_WR_CMD(0x80); // (0x00 ~ 0xFF) The segment output current increases as the contrast step value increases
+    OLED_WR_CMD(G_OLED_Brightness*10); // (0x00 ~ 0xFF) The segment output current increases as the contrast step value increases
 
     OLED_WR_CMD(0xA1); // Set Segment Re-map. 0xA1: Normal, 0xA0: Re-map left to right
     
@@ -82,7 +92,7 @@ void OLED_Init(void) {
     OLED_WR_CMD(0xA8); // Set Multiplex Ratio (16MUX~64MUX)
     OLED_WR_CMD(0x3F); // 64 multiplex mode
 
-    OLED_WR_CMD(0xD3); // Set Display Offset (0x00~0x3F)
+    OLED_WR_CMD(0xD3); // Set Display Offset, Shift Mapping RAM Counter (0x00~0x3F)
     OLED_WR_CMD(0x00); // No offset
 
     OLED_WR_CMD(0xD5); // Set display clock divide ratio/oscillator frequency
@@ -97,26 +107,38 @@ void OLED_Init(void) {
     OLED_WR_CMD(0xDB); // Set VCOM Deselect Level
     OLED_WR_CMD(0x30); // 0.83 x Vcc
 
+    OLED_WR_CMD(0x8D); //-Set Charge Pump enable/disable
+    OLED_WR_CMD(0x14); //--0x14: Enable, 0x10: Disable
+
+
     OLED_WR_CMD(0xA4); // Entire Display ON, 0xA4: Disable, 0xA5: Enable
     OLED_WR_CMD(0xAF); // Set Display ON/OFF, 0xAF: Turn on oled panel
+
+	OLED_WR_CMD(0xAF); /*display ON*/ 
+	OLED_ClearBuffer();
 }
 
 
 void OLED_WR_CMD(uint8_t cmd) {
     uint8_t i;
     /* write command mode */
-    OLED_DC = SETBIT;
+    OLED_DC = CLRBIT;
     /* select device */
     OLED_CS = CLRBIT;
     for (i = 0; i < 8; i++) {
+        OLED_SCLK = CLRBIT;
+
         if (cmd & 0x80) {
             OLED_SDIN = SETBIT;
-        } else {
+        } 
+        else {
             OLED_SDIN = CLRBIT;
         }
+
+        OLED_SCLK = SETBIT;
         cmd <<= 1;
     }
-    OLED_CS = SETBIT;
+    OLED_CS = SETBIT; // deselect the chip
 }
 
 
@@ -127,19 +149,23 @@ void OLED_WR_data(uint8_t dat) {
     /* select device */
     OLED_CS = CLRBIT;
     for (i = 0; i < 8; i++) {
+        OLED_SCLK = CLRBIT;
+
         if (dat & 0x80) {
             OLED_SDIN = SETBIT;
         } 
         else {
             OLED_SDIN = CLRBIT;
         }
+
+        OLED_SCLK = SETBIT;
         dat <<= 1;
     }
     OLED_CS = SETBIT;
 }
 
 void OLED_SetPos(uint8_t x, uint8_t y) {
-    _locX = x;
+    _locX = x+1;
     _locY = y;
 }
 
@@ -147,7 +173,7 @@ void OLED_SetFontWidth(uint8_t w) {
     _font_width = w;
 }
 
-void OLED_ClearScreen(void) {
+void OLED_ClearBuffer(void) {
     memset(pixel_buf, 0x00, WIDTH*PAGES);
 }
 
@@ -208,7 +234,7 @@ void OLED_ShowChar(uint8_t x, uint8_t y, uint8_t chr) {
     /* pixel_buf is uint8_t type, so 'y' need to become 'y >> 3' to fit each page container size. */
     pBuf   = pixel_buf + (y >> 3) * WIDTH + x; 
     ch     = chr - ' '; // get the character group number, ASCII 
-    offset = y & 0x07;  // offset (0~7) for a byte
+    offset = y & 7;  // offset (0~7) for a byte, mod 8
 
     for (i = 0; i < _font_width; i++) {
         mask = F6x8[ch][i] << offset; 
@@ -217,7 +243,7 @@ void OLED_ShowChar(uint8_t x, uint8_t y, uint8_t chr) {
 
     if (offset && y < HEIGHT - 8)
     {
-        pBuf = &pixel_buf[((y >> 3) + 1) * WIDTH + x];
+        pBuf = pixel_buf + ((y >> 3) + 1) * WIDTH + x;
         for (i = 0; i < _font_width; i++)
         {
             mask = F6x8[ch][i] >> (8 - offset);
@@ -254,9 +280,18 @@ uint32_t OLED_pow(uint8_t coefficient, uint8_t exponent) {
 
 void OLED_ShowNum(uint32_t digit, uint8_t len) {
     uint8_t index, currDigit;
-
+    uint8_t enshow = 0;
+    uint8_t i = 0;
     for (index = 0; index < len; index++) {
         currDigit = (digit/OLED_pow(10, len-index-1))%10;
+
+        if (enshow == 0 && index < (len - 1)) {
+            if (currDigit == 0) {
+                i++;
+                continue;
+            }else
+                enshow = 1;
+        }
 
         // adjust display area: X-axis
         if (_locX > len - _font_width) {
@@ -268,7 +303,7 @@ void OLED_ShowNum(uint32_t digit, uint8_t len) {
             _locY = 0;
         }
 
-        OLED_ShowChar(_locX + _font_width*index , _locY, currDigit + '0' );
+        OLED_ShowChar(_locX + _font_width* (index-i) , _locY, currDigit + '0' );
     }
     _locX += len;
 }
@@ -282,18 +317,18 @@ void OLED_ShowPixel(uint8_t x, uint8_t y) {
         _locY += 1;
     }
 
-    if (_locX > HEIGHT - 1) {
-        _locX = 0;
+    if (_locY > HEIGHT - 1) {
+        _locY = 0;
     }
 
     pBuf = pixel_buf + (y >> 3)*WIDTH + x + 1;
     mask = 1 << (y & 7);
 
     if (ReverseMode) {
-        *pBuf &= ~mask;
+        *pBuf++ &= ~mask;
     }
     else {
-        *pBuf |= mask;
+        *pBuf++ |= mask;
     }
 }
 
@@ -311,10 +346,9 @@ void OLED_ShowVerticalLine(uint8_t x, uint8_t y, uint8_t h) {
         x = WIDTH - 1;
     }
 
-    pBuf = pixel_buf + (y >> 3) * WIDTH + x + 1;
-    mask = 1 << (y & 0x07);
-
     while (h--) {
+        pBuf = pixel_buf + (y >> 3) * WIDTH + x + 1;
+        mask = 1 << (y & 7);
         if (ReverseMode) {
             *pBuf++ &= ~mask;
         } 

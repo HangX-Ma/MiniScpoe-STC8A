@@ -42,33 +42,38 @@ char putchar (char c) {
 }
 
 int main (void) {
-    uint16_t ADC_REFV;
-    uint8_t Pstate;
+    // uint16_t ADC_REFV;
+    // uint8_t Pstate;
 
-    GPIO_DeInit(); // Set all Px mode to quasi bidirectional mode 
+    // GPIO_DeInit(); // Set all Px mode to quasi bidirectional mode 
 
-    /* Set OLED port P2.3, P2.4, P2.5, P2.6 as quasi bidirectional */
-    P2M1 &= ~0xE8;
-    P2M0 &= ~0xE8;
+    /* Set OLED port P2.3, P2.4, P2.5, P2.6, P2.7 as quasi bidirectional */
+    P2M1 &= ~0xF8;
+    P2M0 &= ~0xF8;
     /* Set ADC port P0.4, P0.6 as high-impedance */
     P0M1 |= 0x50;
     P0M0 &= ~0x50;
-    /* Set indicator port P1.1 as push-pull output */
-    P0M1 &= ~0x02;
-    P0M0 |= 0x02;
+    /* Set indicator port P1.7 as push-pull output */
+    P0M1 &= ~0x80;
+    P0M0 |= 0x80;
     /* Set Encoder port P3.2, P3.3, P3.4 as quasi bidirectional */
     P3M1 &= ~0x1C;
     P3M0 &= ~0x1C;
-    /* Set P0.0, P0.1 as high impedance */
+    /* Set P2.1, P2.2, P5.4 as high-impedance */
+    P2M1 |= 0x06;
+    P2M0 &= ~0x06;
+    P5M1 |= 0x10;
+    P5M0 &= ~0x10;
+
     P0M1 |= 0x03;
     P0M0 &= ~0x03;
-
-
+    
+    Encoder_Init();
     TM0_Init();
-    TM1_Init();
     UART1_Init();
+    TM1_Init();
     Read_Options();
-    GlobalVarInit();
+    GlobalVar_Init();
     delay_nus(20);
 
     OLED_Init();
@@ -84,13 +89,13 @@ int main (void) {
         ADC_Sample_Ready_LED = CLRBIT;
         if (G_UpdateVBAT_FLAG) {
             G_UpdateVBAT_FLAG = CLRBIT; // Prepare for next VBAT info interrupt
-            VBAT = Get_BATV(ADC_CONTR_ADC_CHS_VAL4, VBAT_RATIO);
+            VBAT = Get_BATV(ADC_CONTR_ADC_CHS_VAL12, VBAT_RATIO);
         }
 
         GetWaveData(); // Sample waveform
 
-        if (G_OptionInSettings) {
-            runWhenInSettrings();
+        if (G_State_Settings_FLAG) {
+            runWhenInSettings();
         } // Enter Settings Interface
         else if (G_ADC_Interrupt_FLAG) {
             runWhenADCInterrupt();
@@ -104,8 +109,7 @@ int main (void) {
 }
 
 
-
-void MainInit(void) {
+void GlobalVar_Init(void) {
     G_State_Settings_FLAG       = CLRBIT;                   // Not enter setting interface
     G_OptionInSettings          = SettingSel_PlotMode;      // PlotMode
     G_OptionInChart             = ChartSel_ScaleH;          // ScaleH
@@ -142,6 +146,7 @@ void MainInit(void) {
     if (G_ADC_Running_FLAG && G_WaveScroll_FLAG) {
         EX0 = 0;
     } // Disable external interrupt 0(Encoder rotation) in waveform scroll mode when sampling
+    BGV = Get_RAM_REFV();
 }
 
 void Encoder_Init(void) {
@@ -149,14 +154,12 @@ void Encoder_Init(void) {
     TCON_IT0    = CLRBIT; // External interrupt 0 trigger way, rasing edge or falling edge.
     /* External interrupt 0 high priority, which can interrupt the key pressing,
        used to identified a state that encoder is pressed and simultaneously rotated. */
-    IPH        &= IPH_PX0H; 
     PX0         = SETBIT; 
     EX0         = SETBIT; // Start external interrupt 0
 
     /* Interrupt for clicking of Encoder */
     TCON_IT1    = SETBIT; // External interrupt 1 trigger way, falling edge.
     /* External interrupt 1 low priority */
-    IPH        &= IPH_PX1H; 
     PX1         = CLRBIT;
     EX1         = SETBIT; // Start external interrupt 1
 }
@@ -164,17 +167,17 @@ void Encoder_Init(void) {
 void TM0_Init(void) {
     /* Timer 0, for updating voltage of battery */
     AUXR     &= ~AUXR_T0x12; // Timer clock is 12T mode
-    TMOD     &= ~(TMOD_T0_CT | TMOD_T0_SEL_16B_AUTO_RELOAD | TMOD_T0_GATE); // Set timer work mode
+    TMOD     &= ~(TMOD_T0_CT | TMOD_T0_SEL | TMOD_T0_GATE); // Set timer work mode
     TL0      = 0xB0;         // Initial timer value LOW BYTE
     TH0      = 0x3C;         // Initial timer value HIGH BYTE
     TCON_TF0 = CLRBIT;       // Clear TF0 interrupt flag
-    TCON_TR0 = SETBIT;       // Timer0 start running
+    // TCON_TR0 = SETBIT;       // Timer0 start running
     ET0      = SETBIT;       // Enable TM0 interrupt
 } // 25ms@24.000MHz
 
 void TM1_Init(void) {
     AUXR    &= ~AUXR_T1x12;  //Timer clock is 12T mode
-    TMOD    &= ~(TMOD_T1_CT | TMOD_T1_SEL_16B_AUTO_RELOAD | TMOD_T1_GATE);  //Set timer work mode
+    TMOD    &= ~(TMOD_T1_CT | TMOD_T1_SEL | TMOD_T1_GATE);  //Set timer work mode
     TL1      = 0xC0;         // Initial timer value LOW BYTE
     TH1      = 0x63;         // Initial timer value HIGH BYTE
     TCON_TF1 = CLRBIT;       // Clear TF1 flag
@@ -193,14 +196,13 @@ void Scan_EC11(void) {
     if (EC11_A != EC11_B) {
         Select_Option(1);
     } // Clockwise
-
     else if (EC11_A == EC11_B) {
        Select_Option(0);
     } // Anticlockwise
 }
 
 /**
- * @brief Interrput for Encoder Rotated 
+ * @brief Interrupt for Encoder Rotated 
  */
 void INT0_ISR_Handler(void) interrupt(EXTI0_VECTOR) {
     /* Delay to remove jitter */
@@ -288,7 +290,7 @@ void TM1_ISR_Handler(void) interrupt(TM1_VECTOR) {
     cont2 = read2;
 
     // P5.4
-    read3 = (P5 & 0x10) ^ 0x10;
+    read3 = P5 ^ 0xFF;
     Trg3  = read3 & (read3 ^ cont3); 
     cont3 = read3;
 
@@ -346,8 +348,8 @@ void runWhenInSettings(void)
         /* Update battery voltage information */
         if (G_UpdateVBAT_FLAG) {
             G_UpdateVBAT_FLAG = CLRBIT;
-            VBAT = Get_BATV(ADC_CONTR_ADC_CHS_VAL4, VBAT_RATIO);
-        }		
+            VBAT = Get_BATV(ADC_CONTR_ADC_CHS_VAL12, VBAT_RATIO);
+        }
         /* Update OLED Brightness */
         if (G_OLED_BrightnessChanged_FLAG) {
             G_OLED_BrightnessChanged_FLAG = CLRBIT;
@@ -379,7 +381,7 @@ void runWhenInSettings(void)
     OLED_Display();
     TCON_IE0 = CLRBIT;
     TCON_IE1 = CLRBIT;
-    EA = 1;
+    EA = SETBIT;
 }
 
 /*
@@ -484,8 +486,8 @@ void runWhenADCComplete() {
         PlotChart();
         PlotWave();
         OLED_Display();
-        TCON_IE0 = CLRBIT;
-        EX0 = SETBIT;
+        TCON_IE0                = CLRBIT;
+        EX0                     = SETBIT;
     } // ADC Sampling Complete - Single Trigger Mode
     else {
         //EX0 = 0;
