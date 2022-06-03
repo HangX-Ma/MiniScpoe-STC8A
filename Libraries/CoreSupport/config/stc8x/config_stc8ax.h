@@ -951,21 +951,7 @@ sfr CMPCR1      =   CMPCR1_ADDR;    //!< comparator control register 1
 sfr CMPCR2      =   CMPCR2_ADDR;    //!< comparator control register 2
 
 //! EEPROM peripherals
-/**
- * @brief EEPROM generic I/O definition
- */
-struct IAP_EEPROM_struct{
-    __IO uint8_t IAP_DATA;
-    __IO uint8_t IAP_ADDRH;
-    __IO uint8_t IAP_ADDRL;
-    __IO uint8_t IAP_CMD;
-    __IO uint8_t IAP_TRIG;
-    __IO uint8_t IAP_CONTR;
-};
-#define IAP_EEPROM_TypeDef struct IAP_EEPROM_struct
-
 /* EEPROM basic address definition */
-#define     IAP_EEPROM_BASE         0xC2
 #define     IAP_DATA_ADDR           0xC2
 #define     IAP_ADDRH_ADDR          0xC3
 #define     IAP_ADDRL_ADDR          0xC4
@@ -1003,8 +989,6 @@ struct IAP_EEPROM_struct{
 #define     IAP_CMD_CMD_WRITE       0x02     /*!< write 1 byte to target address, converting 1 to 0 */
 #define     IAP_CMD_CMD_ERASE       0x03     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
 
-#define     IAP_EEPROM              (*((IAP_EEPROM_TypeDef idata* xdata*) IAP_EEPROM_BASE))
-
 /* IAP special function registers */
 sfr IAP_DATA    =   IAP_DATA_ADDR;                      //!< IAP data regiseter
 sfr IAP_ADDRH   =   IAP_ADDRH_ADDR;                     //!< IAP high address regiseter
@@ -1014,20 +998,8 @@ sfr IAP_TRIG    =   IAP_TRIG_ADDR;                      //!< IAP trigger regiset
 sfr IAP_CONTR   =   IAP_CONTR_ADDR;                     //!< IAP control regiseter
 
 //! ADC peripherals
-/**
- * @brief ADC generic I/O definition
- */
-struct ADC_struct{
-    __IO uint8_t ADC_CONTR;
-    __IO uint8_t ADC_RESH;
-    __IO uint8_t ADC_RESL;
-    __IO uint8_t ADCCFG;
-};
-#define ADC_TypeDef struct ADC_struct
 
 /* ADC basic address definition */
-#define     ADC_BASE        0xBC
-
 #define     ADC_CONTR_ADDR  0xBC
 #define     ADC_RESH_ADDR   0xBD
 #define     ADC_RESL_ADDR   0xBE
@@ -1089,8 +1061,6 @@ struct ADC_struct{
 #define     ADCCFG_SPEED_448tk        0x0D          /*!< SYSCLK tick number: 448 ticks*/
 #define     ADCCFG_SPEED_480tk        0x0E          /*!< SYSCLK tick number: 480 ticks*/
 #define     ADCCFG_SPEED_512tk        0x0F          /*!< SYSCLK tick number: 512 ticks*/
-
-#define     ADC                         (*((ADC_TypeDef idata* xdata*)ADC_BASE))
 
 /* ADC special function registers */
 sfr ADC_CONTR   =   ADC_CONTR_ADDR;                 //!< ADC control register
@@ -1483,18 +1453,7 @@ sfr PWMCR       =   PWMCR_ADDR;         //!< Enhanced PWM configuration register
 #define     PWM7HLD         (*(__IO uint8_t xdata *) PWM7HLD_ADDR)
 
 //! SPI peripherals
-/**
- * @brief SPI general I/O interface
- */
-struct SPI_struct{
-    __IO uint8_t SPSTAT;
-    __IO uint8_t SPCTL;
-    __IO uint8_t SPDAT;
-};
-#define SPI_TypeDef struct SPI_struct
-
 /* SPI basic address definition */
-#define     SPI_BASE        0xCD
 #define     SPSTAT_ADDR     0xCD
 #define     SPCTL_ADDR      0xCE
 #define     SPDAT_ADDR      0xCF
@@ -1531,7 +1490,6 @@ struct SPI_struct{
  * \code{.c} (SPI_TypeDef idata *) var \endcode, in witch the
  * \c var is \b SPI_TypeDef .
  */
-#define     SPI             (*((SPI_TypeDef idata* xdata* ) SPI_BASE))    //!< SPI generic struct type definition
 
 /* SPI special function registers */
 sfr SPSTAT      =   SPSTAT_ADDR;        //!< SPI State Register

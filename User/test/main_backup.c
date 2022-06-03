@@ -29,9 +29,6 @@
 #include "STDLIB.H"
 #include "STRING.H"
 #include "stc8x_sysclk.h"
-
-bit interrupt_num;
-bit Encoder_Flag;
 /**
  * @brief Rewrite 'putchar' function, remapped to UARTx output
  * 
@@ -77,7 +74,7 @@ int main (void) {
     UART1_Init();
     TM1_Init();
     ET1 = SETBIT; // Enable TM1 interrupt
-    // Read_Options();
+    Read_Options();
     GlobalVar_Init();
     delay_nus(20);
 
@@ -95,9 +92,8 @@ int main (void) {
         if (G_UpdateVBAT_FLAG) {
             G_UpdateVBAT_FLAG = CLRBIT; // Prepare for next VBAT info interrupt
             VBAT = Get_BATV(ADC_CONTR_ADC_CHS_VAL12, VBAT_RATIO);
-            printf("VBAT value: %d\r\n", VBAT);
+            // printf("VBAT value: %d\r\n", VBAT);
         }
-        
         GetWaveData(); // Sample waveform
 
         if (G_State_Settings_FLAG) {
@@ -191,9 +187,27 @@ void TM1_Init(void) {
 
 
 /**
+ * @brief Analyse Rotation of Encoder 
+ */
+void Scan_EC11(void) {
+    /* Delay to remove jitter */
+    delay_nus(500);
+
+    if (EC11_A != EC11_B) {
+        Select_Option(1);
+    } // Clockwise
+    else if (EC11_A == EC11_B) {
+       Select_Option(0);
+    } // Anticlockwise
+}
+
+/**
  * @brief Interrupt for Encoder Rotated 
  */
-void INT0_ISR_Handler(void) interrupt(EXTI0_VECTOR) using(2) {
+void INT0_ISR_Handler(void) interrupt(EXTI0_VECTOR) {
+    /* Delay to remove jitter */
+    delay_nus(500);
+
     /* Whether the Encoder is pressed or not */
     if (!EC11_KEY) {
         G_EC11PressWithRotate_FLAG = SETBIT;
@@ -202,28 +216,16 @@ void INT0_ISR_Handler(void) interrupt(EXTI0_VECTOR) using(2) {
         G_EC11PressWithRotate_FLAG = CLRBIT;
     }
 
-    if (interrupt_num == 0 && EC11_A == 0) {
-        Encoder_Flag = CLRBIT;
-        if (EC11_B) {
-            Encoder_Flag = SETBIT;
-        }
-        interrupt_num = 1;
-    } // First interrupt, EC11_A is falling edge
+    Scan_EC11();
+    G_ADC_Interrupt_FLAG = SETBIT;
+    G_DisplayUpdate_FLAG = SETBIT;
 
-    if (interrupt_num == 1 && EC11_A == 1) {
-        if (EC11_B == 0 && Encoder_Flag == 1) {
-            Select_Option(1);
-        }
+    TCON_IE1 = CLRBIT; // Clear external interrupt 1 flag 
+    TCON_IE0 = CLRBIT; // Clear external interrupt 0 flag 
+    // printf("INT0 ISR\r\n");
 
-        if (EC11_B == 1 && Encoder_Flag == 0) {
-             Select_Option(0);
-        }
-        interrupt_num = 0;
-        
-        G_ADC_Interrupt_FLAG = SETBIT;
-        G_DisplayUpdate_FLAG = SETBIT;
-    } // Second interrupt, EC11_A is rising edge
 }
+
 
 /**
  * @brief Interrupt for Encoder Pressed
@@ -372,14 +374,14 @@ void runWhenInSettings(void)
 
     /* Save Settings */
     EA = 0;
-    if (G_State_OptionChanged_FLAG){
-        G_State_OptionChanged_FLAG  = CLRBIT;
-        G_ClearDisplay_FLAG         = CLRBIT;
-        /* Save settings and display saving status*/
-        PlotSaveStatus(Save_Options());
-        OLED_Display();
-        delay_nms(1000);
-    }
+    // if (G_State_OptionChanged_FLAG){
+    //     G_State_OptionChanged_FLAG  = CLRBIT;
+    //     G_ClearDisplay_FLAG         = CLRBIT;
+    //     /* Save settings and display saving status*/
+    //     PlotSaveStatus(Save_Options());
+    //     OLED_Display();
+    //     delay_nms(1000);
+    // }
 
     /* Refresh screen after exiting settings */
     G_ClearDisplay_FLAG = SETBIT;

@@ -41,13 +41,13 @@
 //* ------------   GLOBAL variables   ------------
 
 //* ------------ developer definitions ------------
-#define BGV_ADDR        ((uint16_t idata *)0xEF)    //!< internal 1.344V(1.19V D64 version) reference voltage high byte
+#define BGV_ADDR        0xEF    //!< internal 1.344V(1.19V D64 version) reference voltage high byte
 
 sbit ADC_Sample_Ready_LED = P1^7;
 
 //* ------------     functions     ------------
 
-void Wave_ADC_Init(ScaleSel_TypeDef scale_h);
+void Wave_ADC_Init(uint8_t scale_h);
 
 /**
  * @brief Get ADC channel x conversion result
@@ -71,11 +71,11 @@ uint16_t *Get_RAM_REFV(void);
  * @param ratio voltage division ratio, ratio = ratio_origin x 100
  * @return V 
  */
-uint16_t Get_BATV(uint8_t chx, uint8_t ratio);
+uint16_t Get_BATV(uint8_t chx, uint16_t ratio);
 
-int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio);
+int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint16_t ratio);
 
-int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio);
+int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint16_t ratio);
 
 /**
  * @brief Get the Wave ADC

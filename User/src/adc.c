@@ -28,7 +28,7 @@
 #include "INTRINS.H"
 #include "STRING.H"
 
-void Wave_ADC_Init(ScaleSel_TypeDef scale_h) {
+void Wave_ADC_Init(uint8_t scale_h) {
     uint8_t ADC_SPEED;
 
     switch ((uint8_t)scale_h) {
@@ -71,12 +71,12 @@ uint16_t GetADC_CHx(uint8_t chx) {
 uint16_t *Get_RAM_REFV(void) {
     uint16_t *BGV_resPtr;
 
-    BGV_resPtr = BGV_ADDR;
+    BGV_resPtr = (uint16_t idata *)BGV_ADDR;
 
     return BGV_resPtr;
 }
 
-uint16_t Get_BATV(uint8_t chx, uint8_t ratio) {
+uint16_t Get_BATV(uint8_t chx, uint16_t ratio) {
     uint16_t ADC_Sampled_Bandgap, *ADC_RAM_Bandgap, ADC_CHx_Val;
     uint16_t Vin;
 
@@ -92,21 +92,21 @@ uint16_t Get_BATV(uint8_t chx, uint8_t ratio) {
     ADC_GetSampleVal_Enquiry(chx);
     ADC_CHx_Val = G_ADC_data;
     
-    Vin = (uint16_t) (*ADC_RAM_Bandgap/ADC_Sampled_Bandgap) * ADC_CHx_Val * (ratio/100);
+    Vin = (uint32_t)(*ADC_RAM_Bandgap) * ADC_CHx_Val * ratio /100 /ADC_Sampled_Bandgap;
 
     return Vin;
 }
 
-int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio) {
+int32_t ConvertUnit_mV2ADC(int32_t _mV, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint16_t ratio) {
     int32_t ADCx;
-    ADCx = (int32_t)_mV * (_ADC_Sampled_Bandgap/ (*_ADC_RAM_Bandgap)) / (ratio/100);
+    ADCx = (int32_t)_mV * _ADC_Sampled_Bandgap *100 / ratio / (*_ADC_RAM_Bandgap) ;
 
     return ADCx;
 }
 
-int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint8_t ratio) {
+int32_t ConvertUnit_ADC2mV(int32_t _ADCx, uint16_t *_ADC_RAM_Bandgap, uint16_t _ADC_Sampled_Bandgap,  uint16_t ratio) {
     int32_t mv;
-    mv = (int32_t)_ADCx / ((*_ADC_RAM_Bandgap)/_ADC_Sampled_Bandgap) * (ratio/100);
+    mv = (int32_t)_ADCx *(*_ADC_RAM_Bandgap) * ratio/100 / _ADC_Sampled_Bandgap;
 
     return mv;
 }
@@ -151,7 +151,7 @@ uint16_t* GetWaveADC(uint8_t chx, uint8_t scale_h) {
     /* Convert trigger voltage set by user to ADC value */
     G_TriggerADCx   = ConvertUnit_mV2ADC(G_TriggerLevel_mV, BGV, ADCbg, SVin_ratio);
 
-    Wave_ADC_Init((ScaleSel_TypeDef)scale_h);
+    Wave_ADC_Init(scale_h);
 
     /* Read initial two ADC sampled values but discarded */
     ADC_GetSampleVal_Enquiry(chx);

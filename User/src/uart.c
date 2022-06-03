@@ -73,8 +73,9 @@ void UART1_Init(void) {
     S1CON  = 0x50;          // Mode1, variable bund rate, 8 bits data
     ES     = SETBIT;        // Enable UART1 interrupt
     S1REN  = SETBIT;        // Enable UART1 receiver
-    // PS     = SETBIT;        // Interrupt Level 1
-    P_SW1  = (~P_SW1_S1_S) | P_SW1_S1_S_GROUP1; // P3.0 RxD, P3.1 TxD
+    // PS     = SETBIT;     // Interrupt Level 1
+    P_SW1  &= (~P_SW1_S1_S); // P3.0 RxD, P3.1 TxD
+    P_SW1  |= P_SW1_S1_S_GROUP1;
     isUART1_Tx_IDLE = SETBIT;
     isUART1_Rx_IDLE = SETBIT;
     FIFO_Init(&UART1_Rx);
@@ -145,7 +146,7 @@ void UART1_ISR_Handler(void) interrupt(UART1_VECTOR) using(1) {
 }
 
 
-void TM3_ISR_Handler(void) interrupt(TM3_VECTOR) using(2) {
+void TM3_ISR_Handler(void) interrupt(TM3_VECTOR) using(3) {
     if (UARTx_Rx_NmsTimeout > 0) {
         UARTx_Rx_NmsTimeout--;
     }

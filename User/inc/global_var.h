@@ -41,8 +41,8 @@ sbit EC11_A     = P3 ^ 2;   // Encoder A impulse connects to External Interrupt 
 sbit EC11_B     = P3 ^ 4;   // Encoder B impulse connect to normal GPIO
 
 #define VBAT_UPDATE_FREQ            40              //!< Battery voltage information updating frequency VBAT_UPDATE_FREQ*25ms
-#define VBAT_RATIO                  500             //!< 'battery voltage ratio' * 100,(2K+8K)/(2K)*100=5*100=500
-#define CHX_VBAT_RATIO              500             //!< 'battery voltage ratio'
+#define VBAT_RATIO                  510             //!< 'battery voltage ratio' * 100,(2K+8K)/(2K)*100=5*100=500
+#define CHX_VBAT_RATIO              510             //!< 'battery voltage ratio'
 #define ADC_SAMPLE_BUF_SIZE         220             //!< ADC sampling point buffer size
 #define ADC_SINGLE_TRIGGER_BUF_SIZE 62              //!< ADC single trigger sampling point buffer size
 
@@ -170,5 +170,44 @@ typedef enum {
     PlotMode_Vector = 0x00,
     PlotMode_Dot    = 0x01,
 } PlotModeSel_Typedef;
+
+
+// #define Scale_500ms 0x00
+// #define Scale_200ms 0x01
+// #define Scale_100ms 0x02
+// #define Scale_50ms  0x03
+// #define Scale_20ms  0x04
+// #define Scale_10ms  0x05
+// #define Scale_5ms   0x06
+// #define Scale_2ms   0x07
+// #define Scale_1ms   0x08
+// #define Scale_500us 0x09
+// #define Scale_200us 0x10
+// #define Scale_100us 0x11
+
+// #define TriggerSel_Auto     0x00
+// #define TriggerSel_Normal   0x01
+// #define TriggerSel_Single   0x02
+
+// #define ChartSel_ScaleH         0x00
+// #define ChartSel_ScaleV         0x01
+// #define ChartSel_TriggerLevel   0x02
+// #define ChartSel_TriggerSlope   0x03
+// #define ChartSel_TriggerMode    0x04
+// #define ChartSel_MeasureWay     0x05
+
+// #define SettingSel_PlotMode         0x00
+// #define SettingSel_SVin_ratio       0x01
+// #define SettingSel_OLED_Brightness  0x02
+
+
+// #define FallingEdgeTrigger  0x00
+// #define RisingEdgeTrigger   0x01
+
+// #define MeasureWay_DC       0x00
+// #define MeasureWay_AC       0x01
+
+// #define PlotMode_Vector     0x00
+// #define PlotMode_Dot        0x01
 
 #endif  //!__GLOBAL_VAR__H__

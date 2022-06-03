@@ -51,11 +51,11 @@ void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed) {
     /* disable external special registers */
     P_SW2 &= ~P_SW2_EAXFR;
     /* clear ADCCFG register */
-    ADC->ADCCFG     = 0x00;
+    ADCCFG     = 0x00;
     /* set align type and ADC conversion frequency */
-    ADC->ADCCFG     = _ADC_align | _ADC_speed;
+    ADCCFG     = _ADC_align | _ADC_speed;
     /* power on ADC */
-    ADC->ADC_CONTR |= ADC_CONTR_ADC_POWER;
+    ADC_CONTR |= ADC_CONTR_ADC_POWER;
     /* wait for stable power source */
     delay_nms(5);
 }
@@ -63,33 +63,33 @@ void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed) {
 
 void ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx) {
     /* clear previous result */
-    ADC->ADC_RESH = 0x00;
-    ADC->ADC_RESL = 0x00;
+    ADC_RESH = 0x00;
+    ADC_RESL = 0x00;
     /* clear previous ADC_CHS value */
-    ADC->ADC_CONTR &= 0xF0;
+    ADC_CONTR &= 0xF0;
     /* select GPIO for ADC function */
     // ADC_CHx_SEL(_ADC_CHx);
-    ADC->ADC_CONTR |= _ADC_CHx;
+    ADC_CONTR |= _ADC_CHx;
     /* start conversion */
-    ADC->ADC_CONTR |= ADC_CONTR_ADC_START;
+    ADC_CONTR |= ADC_CONTR_ADC_START;
     _nop_();
     _nop_();
 
-    while (!(ADC->ADC_CONTR & ADC_CONTR_ADC_FLAG)) {
+    while (!(ADC_CONTR & ADC_CONTR_ADC_FLAG)) {
         ;
     } // wait for conversion complete
 
     /* clear ADC flag for next conversion */
-    ADC->ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
+    ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
 
-    G_ADC_data = (ADC->ADC_RESH) << 8 | ADC->ADC_RESL;
+    G_ADC_data = (ADC_RESH) << 8 | ADC_RESL;
 }
 
 
 void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority) {
     /* clear previous result */
-    ADC->ADC_RESH = 0x00;
-    ADC->ADC_RESL = 0x00;
+    ADC_RESH = 0x00;
+    ADC_RESL = 0x00;
     /* select GPIO for ADC function */
     // ADC_CHx_SEL(_ADC_CHx);
     /* enable ADC interrupt */
@@ -100,21 +100,21 @@ void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority) {
     IP  = (IPH & 0xDF) | (((uint8_t)_ADC_NVIC_Priority & 0x01) << 5);
     IPH = (IPH & 0xDF) | (((uint8_t)_ADC_NVIC_Priority & 0x02) << 4);
     /* ensure interrupt flag cleared */
-    ADC->ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
+    ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
     /* start conversion */
-    ADC->ADC_CONTR |= ADC_CONTR_ADC_START;
-    ADC->ADC_CONTR |= _ADC_CHx;
+    ADC_CONTR |= ADC_CONTR_ADC_START;
+    ADC_CONTR |= _ADC_CHx;
 }
 
 
-void ADC_ISR_Handler(void) interrupt(ADC_VECTOR) using(3) {
+void ADC_ISR_Handler(void) interrupt(ADC_VECTOR) {
     /* disable interrupt system to protect value */
     EA      = SETBIT;
-    G_ADC_data = ((uint16_t)(ADC->ADC_RESH) << 8) | (uint16_t)(ADC->ADC_RESL);
+    G_ADC_data = ((uint16_t)(ADC_RESH) << 8) | (uint16_t)(ADC_RESL);
     /* ensure interrupt flag cleared */
-    ADC->ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
+    ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
     /* enable interrupt system */
     EA      = CLRBIT;
     /* start conversion */
-    ADC->ADC_CONTR |= ADC_CONTR_ADC_START;
+    ADC_CONTR |= ADC_CONTR_ADC_START;
 }
