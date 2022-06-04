@@ -12,6 +12,6 @@ I want to use this **MiniScope** project to learn embedded system. I imitate [Op
 
 
 ## Functions Selection Flowchart
-![MiniScopeUI](share/MiniScopeUI.png)
+![MiniScopeUI](share/MiniScopeUI.svg)
 
 > Reference: [Open-ELL/MiniDSO-Pro](https://gitee.com/open-ell/mini-dso-pro)
