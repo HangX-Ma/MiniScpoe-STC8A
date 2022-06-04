@@ -12,21 +12,21 @@
 
 	<style type="text/css">
 	<![CDATA[
-		.st1 {fill:#ffffff;stroke:#a5a5a5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
+		.st1 {fill:none;stroke:#a5a5a5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
 		.st2 {fill:#5c5c5c;font-family:Candara;font-size:0.666664em}
 		.st3 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
 		.st4 {fill:#5c5c5c;font-family:Candara;font-size:0.666664em;font-weight:bold}
 		.st5 {font-size:1em;font-weight:normal}
-		.st6 {fill:#ffffff;stroke:#febf01;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
+		.st6 {fill:none;stroke:#febf01;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
 		.st7 {fill:#8d6b01;font-family:Candara;font-size:0.666664em}
 		.st8 {marker-end:url(#mrkr4-35);stroke:#a5a5a5;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
 		.st9 {fill:#a5a5a5;fill-opacity:1;stroke:#a5a5a5;stroke-opacity:1;stroke-width:0.28409090909091}
 		.st10 {font-size:1em}
 		.st11 {fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-width:7.2}
-		.st12 {fill:#ffffff;stroke:none;stroke-linecap:butt}
-		.st13 {fill:#5b9ad4}
-		.st14 {stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
-		.st15 {fill:#ffffff;font-family:Candara;font-size:0.666664em;font-weight:bold}
+		.st12 {fill:#5b9ad4}
+		.st13 {stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st14 {fill:#ffffff;font-family:Candara;font-size:0.666664em;font-weight:bold}
+		.st15 {fill:#ffffff;stroke:none;stroke-linecap:butt}
 		.st16 {fill:#5b9bd5;font-family:Candara;font-size:0.833336em;font-weight:bold}
 		.st17 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
 	]]>
@@ -509,7 +509,7 @@
 				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
 				<v:textRect cx="7.08661" cy="612.638" width="40" height="17.6036"/>
 				<path d="M7.09 595.28 L7.09 622.96" class="st8"/>
-				<rect v:rectContext="textBkgnd" x="-4.56405" y="607.838" width="23.3012" height="9.59985" class="st12"/>
+				<rect v:rectContext="textBkgnd" x="-4.56405" y="607.838" width="23.3012" height="9.59985" class="st11"/>
 				<text x="-4.56" y="615.04" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>SETBIT</text>			</g>
 			<g id="shape47-163" v:mID="47" v:groupContext="shape" v:layerMember="0" transform="translate(428.504,-150.236)">
 				<title>Decision.47</title>
@@ -623,11 +623,11 @@
 				</v:userDefs>
 				<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
 				<v:textRect cx="48.8976" cy="574.016" width="80.79" height="42.5197"/>
-				<path d="M0 595.28 L97.8 595.28 L97.8 552.76 L0 552.76 L0 595.28 Z" class="st13"/>
-				<path d="M0 595.28 L97.8 595.28 L97.8 552.76 L0 552.76 L0 595.28" class="st14"/>
-				<path d="M8.5 595.28 L8.5 552.76" class="st14"/>
-				<path d="M89.29 595.28 L89.29 552.76" class="st14"/>
-				<text x="39.16" y="566.82" class="st15" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>LOOP<v:newlineChar/><tspan
+				<path d="M0 595.28 L97.8 595.28 L97.8 552.76 L0 552.76 L0 595.28 Z" class="st12"/>
+				<path d="M0 595.28 L97.8 595.28 L97.8 552.76 L0 552.76 L0 595.28" class="st13"/>
+				<path d="M8.5 595.28 L8.5 552.76" class="st13"/>
+				<path d="M89.29 595.28 L89.29 552.76" class="st13"/>
+				<text x="39.16" y="566.82" class="st14" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>LOOP<v:newlineChar/><tspan
 							x="15.19" dy="1.2em" class="st5">Pin3:(Last Function) <v:newlineChar/><v:paragraph v:horizAlign="1"/></tspan><tspan
 							x="13.84" dy="1.2em" class="st5">Pin4:(Next Function) </tspan> </text>			</g>
 			<g id="shape59-200" v:mID="59" v:groupContext="shape" v:layerMember="1" transform="translate(381.968,-212.244)">
@@ -706,11 +706,11 @@
 				</v:userDefs>
 				<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
 				<v:textRect cx="48.8976" cy="571.181" width="80.79" height="48.189"/>
-				<path d="M0 595.28 L97.8 595.28 L97.8 547.09 L0 547.09 L0 595.28 Z" class="st13"/>
-				<path d="M0 595.28 L97.8 595.28 L97.8 547.09 L0 547.09 L0 595.28" class="st14"/>
-				<path d="M8.5 595.28 L8.5 547.09" class="st14"/>
-				<path d="M89.29 595.28 L89.29 547.09" class="st14"/>
-				<text x="34.91" y="563.98" class="st15" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>LOCKED<v:newlineChar/><tspan
+				<path d="M0 595.28 L97.8 595.28 L97.8 547.09 L0 547.09 L0 595.28 Z" class="st12"/>
+				<path d="M0 595.28 L97.8 595.28 L97.8 547.09 L0 547.09 L0 595.28" class="st13"/>
+				<path d="M8.5 595.28 L8.5 547.09" class="st13"/>
+				<path d="M89.29 595.28 L89.29 547.09" class="st13"/>
+				<text x="34.91" y="563.98" class="st14" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>LOCKED<v:newlineChar/><tspan
 							x="15.19" dy="1.2em" class="st5">Pin3:(Last Function) <v:newlineChar/><v:paragraph v:horizAlign="1"/></tspan><tspan
 							x="13.84" dy="1.2em" class="st5">Pin4:(Next Function) </tspan> </text>			</g>
 			<g id="shape84-229" v:mID="84" v:groupContext="shape" v:layerMember="0" transform="translate(545.669,-62.3622)">
@@ -752,7 +752,7 @@
 				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
 				<v:textRect cx="-61.9488" cy="584.469" width="40" height="17.6036"/>
 				<path d="M0 599 L0 584.47 L-117.17 584.47 L-117.17 598.69" class="st8"/>
-				<rect v:rectContext="textBkgnd" x="-75.49" y="579.669" width="27.0821" height="9.59985" class="st11"/>
+				<rect v:rectContext="textBkgnd" x="-75.49" y="579.669" width="27.0821" height="9.59985" class="st15"/>
 				<text x="-75.49" y="586.87" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>No Click</text>			</g>
 			<g id="shape86-242" v:mID="86" v:groupContext="shape" v:layerMember="1" transform="translate(580.394,-124.724)">
 				<title>Dynamic connector.86</title>
@@ -839,7 +839,7 @@
 				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
 				<v:textRect cx="-59.8228" cy="343.346" width="40" height="17.6036"/>
 				<path d="M0 595.28 L0 343.35 L-364.53 343.35" class="st8"/>
-				<rect v:rectContext="textBkgnd" x="-71.8874" y="338.547" width="24.129" height="9.59985" class="st11"/>
+				<rect v:rectContext="textBkgnd" x="-71.8874" y="338.547" width="24.129" height="9.59985" class="st15"/>
 				<text x="-71.89" y="345.75" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>CLRBIT</text>			</g>
 			<g id="shape92-275" v:mID="92" v:groupContext="shape" v:layerMember="1" transform="translate(629.291,-15.9449)">
 				<title>Dynamic connector.92</title>
