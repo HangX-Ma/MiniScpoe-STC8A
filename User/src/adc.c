@@ -226,8 +226,7 @@ uint16_t* GetWaveADC(uint8_t chx, uint8_t scale_h) {
             ADCSampling[i] = ADCSingleTriggerSampling[j];
         }
     } // Single or Normal Trigger Mode
-    else
-    {
+    else {
         ADC_Sample_Ready_LED = SETBIT;
         for (i = 0; i < ADC_SAMPLE_BUF_SIZE; i++)
         {
@@ -240,7 +239,7 @@ uint16_t* GetWaveADC(uint8_t chx, uint8_t scale_h) {
             SwitchDelay(scale_h);
         }
         ADC_Sample_Ready_LED = CLRBIT;
-    }
+    } // Auto Trigger Mode
     G_ADC_Complete_FLAG = SETBIT; //置位采样完成标志
     return ADCSampling;
 }

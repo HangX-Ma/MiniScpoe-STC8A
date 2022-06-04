@@ -121,6 +121,8 @@ extern const uint8_t code *ScaleHTxt[];             //!< Horizontal scaling char
 
 extern bit G_SELOption_FLAG;
 extern bit G_SELOption_Next;
+
+extern bit G_SELSwitcher_FLAG;
 /* Time scale: 500ms, 200ms, 100ms, 50ms, 20ms, 10ms, 5ms, 2ms, 1ms, 500us, 200us, 100us */
 typedef enum {
     Scale_500ms = 0x00,

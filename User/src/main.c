@@ -92,7 +92,7 @@ int main (void) {
             G_UpdateVBAT_FLAG = CLRBIT;
         }
 
-        // GetWaveData(); // Sample waveform
+        GetWaveData(); // Sample waveform
 
         if (G_SELOption_FLAG) {
             SelectInChart(G_SELOption_Next);
@@ -146,6 +146,12 @@ void GlobalVar_Init(void) {
     G_VolV_Max_Modified         = 0;
 
     G_MeasureWaySel             = MeasureWay_AC;
+
+    G_SELSwitcher_FLAG          = SETBIT;
+    /* Disable switcher interrupt in waveform scroll mode when sampling*/
+    if (G_ADC_Running_FLAG && G_WaveScroll_FLAG) {
+        G_SELSwitcher_FLAG = CLRBIT;
+    }
 
     BGV = Get_RAM_REFV();
 }
@@ -214,6 +220,7 @@ void runWhenADCInterrupt(void) {
     ADC_Sample_Ready_LED = CLRBIT;
 
     if (G_ADC_Running_FLAG) {
+        G_SELSwitcher_FLAG      = CLRBIT; // Avoid Switcher Interrupt
 
         if (G_WaveUpdate_FLAG) {
             G_WaveUpdate_FLAG   = CLRBIT;
@@ -241,13 +248,18 @@ void runWhenADCInterrupt(void) {
         }
         OLED_Display();
 
+        /* Not to enable Switcher interrupt when both of ADCRunning and WaveScroll set. */
+        if (!G_WaveScroll_FLAG) {
+            G_SELSwitcher_FLAG      = CLRBIT; // Avoid Switcher Interrupt
+        }
     } // ADC Sampling Running
     else {
         while (!G_ADC_Running_FLAG && !G_State_Settings_FLAG) {
             if (G_DisplayUpdate_FLAG) {
-                G_DisplayUpdate_FLAG = CLRBIT;
+                G_SELSwitcher_FLAG      = CLRBIT; // Avoid Switcher Interrupt
+                G_DisplayUpdate_FLAG    = CLRBIT;
                 if (G_WaveUpdate_FLAG) {
-                    G_WaveUpdate_FLAG = CLRBIT;
+                    G_WaveUpdate_FLAG   = CLRBIT;
                     /* Analyze completed sampling data in buffer */
                     AnalyzeData();
                     G_ClearDisplay_FLAG = SETBIT;
@@ -271,24 +283,25 @@ void runWhenADCInterrupt(void) {
                 } // Update parameters on display only and maintain waveform
 
                 OLED_Display();
+                G_SELSwitcher_FLAG      = SETBIT; // Recover Switcher Interrupt
             }
         }
     } // ADC Sampling Stopped 
 }
 
 void runWhenADCComplete() {
-    // printf("runWhenADCComplete\r\n");
-    if (G_TriggerMode == TriggerSel_Single)
-    {
+    if (G_TriggerMode == TriggerSel_Single) {
+        G_SELSwitcher_FLAG      = CLRBIT; // Avoid Switcher Interrupt
         G_ADC_Interrupt_FLAG    = SETBIT;
         G_DisplayUpdate_FLAG    = CLRBIT;
         G_WaveUpdate_FLAG       = CLRBIT;
-        G_ADC_Running_FLAG      = CLRBIT; //清零ADC运行标志，停止采样
+        G_ADC_Running_FLAG      = CLRBIT; // Clear ADC running flag, stopping waveform sampling.
         AnalyzeData();
         G_ClearDisplay_FLAG     = SETBIT;
         PlotChart();
         PlotWave();
         OLED_Display();
+        G_SELSwitcher_FLAG      = SETBIT; // Recover previous state
     } // ADC Sampling Complete - Single Trigger Mode
     else {
         G_ClearDisplay_FLAG     = SETBIT;   // Reset screen clearance flag
@@ -429,6 +442,7 @@ void TM1_ISR_Handler(void) interrupt(TM1_VECTOR) {
                 G_UpdateVBAT_FLAG       = SETBIT;   // Update VBAT information
                 TCON_TF0                = CLRBIT;   // Clear TM0 overflow flag
                 TCON_TR0                = SETBIT;   // TM0 start, preparing for VBAT information updating.
+                G_SELSwitcher_FLAG      = SETBIT;   
             } // Enter Settings
             else {
                 TCON_TR0                = CLRBIT;   // Clear TM0 overflow flag
@@ -447,7 +461,7 @@ void TM1_ISR_Handler(void) interrupt(TM1_VECTOR) {
     }
 
     if(Trg3) {
-        if (MainInterface_FLAG) {
+        if (MainInterface_FLAG && G_SELSwitcher_FLAG) {
             G_SELOption_FLAG        = CLRBIT;
         }
         else {
@@ -460,7 +474,7 @@ void TM1_ISR_Handler(void) interrupt(TM1_VECTOR) {
     } // Next Option
 
     if (Trg0) {
-        if (MainInterface_FLAG) {
+        if (MainInterface_FLAG && G_SELSwitcher_FLAG) {
             G_SELOption_FLAG        = CLRBIT;
         }
         else {
@@ -474,3 +488,24 @@ void TM1_ISR_Handler(void) interrupt(TM1_VECTOR) {
 }
 
 
+
+/* Need to add a new key */
+void Trg4_STOP_RUN(void) {
+    if (!G_State_Settings_FLAG)
+    {
+        G_SELSwitcher_FLAG = CLRBIT;
+        G_ADC_Running_FLAG = ~G_ADC_Running_FLAG;
+        if (G_ADC_Running_FLAG)
+        {
+            G_WaveUpdate_FLAG   = SETBIT;
+            G_ClearWave_FLAG    = SETBIT;
+        }
+        else
+        {
+            G_DisplayUpdate_FLAG = SETBIT;
+            G_WaveUpdate_FLAG    = SETBIT;
+        }
+        G_ADC_Interrupt_FLAG    = SETBIT;
+        G_SELSwitcher_FLAG      = SETBIT;
+    }
+}
