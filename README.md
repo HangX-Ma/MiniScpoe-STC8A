@@ -1,6 +1,7 @@
 # :rocket: MiniScope on STC8A8K64S4A12
 
 ![GitHub](https://img.shields.io/github/license/HangX-Ma/MiniScpoe-STC8A?color=blue&logo=github&logoColor=black) ![GitHub last commit](https://img.shields.io/github/last-commit/HangX-Ma/MiniScpoe-STC8A?style=flat) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/HangX-Ma/MiniScpoe-STC8A?color=green)
+
 I want to use this **MiniScope** project to learn embedded system. I imitate [Open-ELL/MiniDSO-Pro](https://gitee.com/open-ell/mini-dso-pro) to make a **MiniScope** on my own but the hardware and software seems not suitable for me on account of self-changes. I have written a convenient system library for _STC8x_ easy usage. Currently I only finish the _STC8Ax_ and _STC8Hx_(mainly based on _STC8A8K64D_).
 
 ## Test Recorder
