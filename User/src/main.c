@@ -30,8 +30,6 @@
 #include "STRING.H"
 #include "stc8x_sysclk.h"
 
-bit interrupt_num;
-bit Encoder_Flag;
 /**
  * @brief Rewrite 'putchar' function, remapped to UARTx output
  * 
@@ -45,11 +43,6 @@ char putchar (char c) {
 }
 
 int main (void) {
-    // uint16_t ADC_REFV;
-    // uint8_t Pstate;
-
-    // GPIO_DeInit(); // Set all Px mode to quasi bidirectional mode 
-
     /* Set OLED port P2.3, P2.4, P2.5, P2.6, P2.7 as quasi bidirectional */
     P2M1 &= ~0xF8;
     P2M0 &= ~0xF8;
@@ -59,27 +52,30 @@ int main (void) {
     /* Set indicator port P1.7 as push-pull output */
     P0M1 &= ~0x80;
     P0M0 |= 0x80;
+    /* Set P2.0, P2.1, P2.2, P5.4 as high-impedance */
+    P2M1 |= 0x07;
+    P2M0 &= ~0x07;
+    P5M1 |= 0x10;
+    P5M0 &= ~0x10;
     /* Set Encoder port P3.2, P3.3, P3.4 as quasi bidirectional */
     P3M1 &= ~0x1C;
     P3M0 &= ~0x1C;
-    /* Set P2.1, P2.2, P5.4 as high-impedance */
-    P2M1 |= 0x06;
-    P2M0 &= ~0x06;
-    P5M1 |= 0x10;
-    P5M0 &= ~0x10;
 
-    P0M1 |= 0x03;
-    P0M0 &= ~0x03;
+    P_SW2 |= P_SW2_EAXFR;
+    P3PU  |= 0x1C;
+    P_SW2 &= ~P_SW2_EAXFR;
 
-    Encoder_Init();
+    EC11_A   = CLRBIT;
+    EC11_B   = CLRBIT;
+    EC11_KEY = CLRBIT;
+
     TM0_Init();
-    ET0 = SETBIT; // Enable TM0 interrupt
     UART1_Init();
     TM1_Init();
-    ET1 = SETBIT; // Enable TM1 interrupt
-    // Read_Options();
+    Read_Options();
+
     GlobalVar_Init();
-    delay_nus(20);
+    delay_nus(50);
 
     OLED_Init();
     OLED_SetFontWidth(6);
@@ -89,16 +85,19 @@ int main (void) {
     /* Enable global interrupt */
     EA = SETBIT;
 
-
     while (1) {
-        ADC_Sample_Ready_LED = CLRBIT;
+        /* Update voltage infor of battery */
         if (G_UpdateVBAT_FLAG) {
-            G_UpdateVBAT_FLAG = CLRBIT; // Prepare for next VBAT info interrupt
             VBAT = Get_BATV(ADC_CONTR_ADC_CHS_VAL12, VBAT_RATIO);
-            printf("VBAT value: %d\r\n", VBAT);
+            G_UpdateVBAT_FLAG = CLRBIT;
         }
-        
-        GetWaveData(); // Sample waveform
+
+        // GetWaveData(); // Sample waveform
+
+        if (G_SELOption_FLAG) {
+            SelectInChart(G_SELOption_Next);
+            G_SELOption_FLAG = CLRBIT;
+        }
 
         if (G_State_Settings_FLAG) {
             runWhenInSettings();
@@ -114,7 +113,6 @@ int main (void) {
     return 0;
 }
 
-
 void GlobalVar_Init(void) {
     G_State_Settings_FLAG       = CLRBIT;                   // Not enter setting interface
     G_OptionInSettings          = SettingSel_PlotMode;      // PlotMode
@@ -127,7 +125,7 @@ void GlobalVar_Init(void) {
     G_WaveUpdate_FLAG           = CLRBIT;                   // Reset waveform update flag
     G_ClearWave_FLAG            = CLRBIT;                   // Reset waveform erasing flag
     G_ClearDisplay_FLAG         = SETBIT;                   // Set clearing display flag
-    G_EC11PressWithRotate_FLAG  = CLRBIT;                   // Reset encoder rotation with movement flag
+    G_SEL_CONFIRM_FLAG          = CLRBIT;                   // Reset encoder rotation with movement flag
     G_UpdateVBAT_FLAG           = CLRBIT;                   // Reset battery update flag
     G_WaveFreq                  = 0;                        // Clear waveform frequency
     G_TriggerPos                = 50;                       // Set initial trigger position
@@ -149,208 +147,18 @@ void GlobalVar_Init(void) {
 
     G_MeasureWaySel             = MeasureWay_AC;
 
-    if (G_ADC_Running_FLAG && G_WaveScroll_FLAG) {
-        EX0 = 0;
-    } // Disable external interrupt 0(Encoder rotation) in waveform scroll mode when sampling
     BGV = Get_RAM_REFV();
 }
 
-void Encoder_Init(void) {
-    /* Interrupt for rotating of Encoder */
-    TCON_IT0    = CLRBIT; // External interrupt 0 trigger way, rasing edge or falling edge.
-    /* External interrupt 0 high priority, which can interrupt the key pressing,
-       used to identified a state that encoder is pressed and simultaneously rotated. */
-    PX0         = SETBIT; 
-    EX0         = SETBIT; // Start external interrupt 0
-
-    /* Interrupt for clicking of Encoder */
-    TCON_IT1    = SETBIT; // External interrupt 1 trigger way, falling edge.
-    /* External interrupt 1 low priority */
-    PX1         = CLRBIT;
-    EX1         = SETBIT; // Start external interrupt 1
-}
-
-void TM0_Init(void) {
-    /* Timer 0, for updating voltage of battery */
-    AUXR     &= ~AUXR_T0x12; // Timer clock is 12T mode
-    TMOD     &= ~(TMOD_T0_CT | TMOD_T0_SEL | TMOD_T0_GATE); // Set timer work mode
-    TL0      = 0xB0;         // Initial timer value LOW BYTE
-    TH0      = 0x3C;         // Initial timer value HIGH BYTE
-    TCON_TF0 = CLRBIT;       // Clear TF0 interrupt flag
-    // TCON_TR0 = SETBIT;       // Timer0 start running
-} // 25ms@24.000MHz
-
-void TM1_Init(void) {
-    AUXR    &= ~AUXR_T1x12;  //Timer clock is 12T mode
-    TMOD    &= ~(TMOD_T1_CT | TMOD_T1_SEL | TMOD_T1_GATE);  //Set timer work mode
-    TL1      = 0xC0;         // Initial timer value LOW BYTE
-    TH1      = 0x63;         // Initial timer value HIGH BYTE
-    TCON_TF1 = CLRBIT;       // Clear TF1 flag
-    TCON_TR1 = SETBIT;       // Timer1 start run
-} //20ms@24.000MHz
-
-
-/**
- * @brief Interrupt for Encoder Rotated 
- */
-void INT0_ISR_Handler(void) interrupt(EXTI0_VECTOR) using(2) {
-    /* Whether the Encoder is pressed or not */
-    if (!EC11_KEY) {
-        G_EC11PressWithRotate_FLAG = SETBIT;
-    }
-    else {
-        G_EC11PressWithRotate_FLAG = CLRBIT;
-    }
-
-    if (interrupt_num == 0 && EC11_A == 0) {
-        Encoder_Flag = CLRBIT;
-        if (EC11_B) {
-            Encoder_Flag = SETBIT;
-        }
-        interrupt_num = 1;
-    } // First interrupt, EC11_A is falling edge
-
-    if (interrupt_num == 1 && EC11_A == 1) {
-        if (EC11_B == 0 && Encoder_Flag == 1) {
-            Select_Option(1);
-        }
-
-        if (EC11_B == 1 && Encoder_Flag == 0) {
-             Select_Option(0);
-        }
-        interrupt_num = 0;
-        
-        G_ADC_Interrupt_FLAG = SETBIT;
-        G_DisplayUpdate_FLAG = SETBIT;
-    } // Second interrupt, EC11_A is rising edge
-}
-
-/**
- * @brief Interrupt for Encoder Pressed
- */
-void INT1_ISR_Handler(void) interrupt(EXTI1_VECTOR) {
-    delay_nms(50);
-    if (!EC11_KEY) {
-        G_EC11PressWithRotate_FLAG = CLRBIT;
-        if (G_EC11PressWithRotate_FLAG) {
-            ;/* Operations Performed by Interrupt of Encoder Rotation */
-        } // Rotate Encoder while pressing
-        else if (!G_State_Settings_FLAG) {
-            EX0 = CLRBIT;
-            G_ADC_Running_FLAG = ~G_ADC_Running_FLAG;
-            if (G_ADC_Running_FLAG) {
-                G_WaveUpdate_FLAG       = SETBIT;
-                G_ClearWave_FLAG        = SETBIT;
-            }
-            else {
-                G_DisplayUpdate_FLAG    = SETBIT;
-                G_WaveUpdate_FLAG       = SETBIT;
-            }
-            G_ADC_Interrupt_FLAG = SETBIT;
-            TCON_IE0 = CLRBIT;
-            TCON_IE1 = CLRBIT;
-        } // Single click Encoder - Switch Run/Stop in main interface
-    }
-    TCON_IE1 = CLRBIT;  // Clear external interrupt 1 request flag
-    // printf("INT1 ISR\r\n");
-}
-
-
-/**
- * @brief TM0 interrupt for updating battery voltage infomation on screen.
- */
-void TM0_ISR_Handler(void) interrupt(TM0_VECTOR) {
-    static uint8_t n;
-
-    if (++n >= VBAT_UPDATE_FREQ) {
-        n = 0;
-        G_UpdateVBAT_FLAG    = SETBIT; // Update VBAT info
-        G_DisplayUpdate_FLAG = SETBIT; // Refresh VBAT info display
-    }
-    // printf("TM0 ISR\r\n");
-}
-
-
-void TM1_ISR_Handler(void) interrupt(TM1_VECTOR) {
-    static uint8_t Trg1, read1, cont1;
-    static uint8_t Trg2, read2, cont2;
-    static uint8_t Trg3, read3, cont3;
-
-    /* RST(P5.4) SETTING(P2.2) OptionsSel(P2.1), these pins are pull up high when idle.
-       Therefore, we need to check if these pins are still high, otherwise the keys are pressed. */
-
-    // P2.1
-    read1 = (P2 & 0x02) ^ 0x02;         // Read P2.2 and check if key is pressed. Was key pressed, read1 would be 1.
-    Trg1  = read1 & (read1 ^ cont1);    /* If key is pressed, read1 will be 1. Compared with previous read value, 
-                                           if key is pressed continuously, cont1=read1=1, Trg1 will be 0. Otherwise, if key 
-                                           is pressed differing from previous one, Trg1=1. */
-    cont1 = read1;                      // cont1 stores the previous read1 value
-    
-    // P2.2
-    read2 = (P2 & 0x04) ^ 0x04;
-    Trg2  = read2 & (read2 ^ cont2) ; 
-    cont2 = read2;
-
-    // P5.4
-    read3 = P5 ^ 0xFF;
-    Trg3  = read3 & (read3 ^ cont3); 
-    cont3 = read3;
-
-    if(Trg1) {
-        // printf("Trg1\r\n");
-        /* Main Interface */
-        if (!G_State_Settings_FLAG) {
-            G_WaveScroll_FLAG           = ~G_WaveScroll_FLAG;
-            G_State_OptionChanged_FLAG  = SETBIT;   // Option has been changed
-            G_ADC_Interrupt_FLAG        = SETBIT;   // ADC sampling interrupt
-            G_DisplayUpdate_FLAG        = SETBIT;   // Update Screen
-            G_ClearWave_FLAG            = CLRBIT;   // Clear waveform
-        } // Options changed
-        Trg1 = 0;
-    }
-
-    if(Trg2) {
-            G_State_Settings_FLAG = ~G_State_Settings_FLAG;
-            // Enter setting interface
-            if (G_State_Settings_FLAG) {
-                G_DisplayUpdate_FLAG    = SETBIT;   // Update Screen
-                G_UpdateVBAT_FLAG       = SETBIT;   // Update VBAT information
-                TCON_TF0                = CLRBIT;   // Clear TM0 overflow flag
-                TCON_TR0                = SETBIT;   // TM0 start, preparing for VBAT information updating.
-                TCON_IE0                = CLRBIT;   // Clear external interrupt flag
-                EX0                     = SETBIT;   // Start external interrupt 0 (Encoder rotation)
-            } // Enter Settings
-            else {
-                TCON_TR0                = CLRBIT;   // Clear TM0 overflow flag
-                TCON_TF0                = CLRBIT;   // TM0 is stopped, suspending the VBAT infomation updating.
-                G_WaveFreq              = 0;        // Reset waveform frequency 
-                G_TriggerFail_FLAG      = CLRBIT;   // Clear trigger failure flag
-                G_VMax                  = 0;        // Reset maximum waveform voltage
-                G_VMin                  = 0;        // Reset minimum waveform voltage
-                G_DisplayUpdate_FLAG    = SETBIT;   // Update screen display
-                G_WaveUpdate_FLAG       = SETBIT;   // Update waveform information
-                G_ClearWave_FLAG        = CLRBIT;   // Don't clear waveform on screen
-            } // Return to main interface
-             
-            G_ADC_Interrupt_FLAG = SETBIT; // Stop sampling ADC information and returned sampled value.
-        Trg2 = 0;
-        // printf("Trg2\r\n");
-    }
-
-    if(Trg3) {
-        SP   = 0;
-        Trg3 = 0;
-        // printf("Trg3\r\n");
-    } // RESET
-}
-
-
 void runWhenInSettings(void)
 {
-    // printf("runWhenInSettings\r\n");
     ADC_Sample_Ready_LED = CLRBIT;
     G_ClearDisplay_FLAG  = SETBIT;
     while (G_State_Settings_FLAG) {
+        if (G_SELOption_FLAG) {
+            SelectInSettings (G_SELOption_Next);
+            G_SELOption_FLAG = CLRBIT;
+        }
         /* Update battery voltage information */
         if (G_UpdateVBAT_FLAG) {
             G_UpdateVBAT_FLAG = CLRBIT;
@@ -371,7 +179,7 @@ void runWhenInSettings(void)
     }
 
     /* Save Settings */
-    EA = 0;
+    EA = CLRBIT;
     if (G_State_OptionChanged_FLAG){
         G_State_OptionChanged_FLAG  = CLRBIT;
         G_ClearDisplay_FLAG         = CLRBIT;
@@ -385,18 +193,16 @@ void runWhenInSettings(void)
     G_ClearDisplay_FLAG = SETBIT;
     PlotChart();
     OLED_Display();
-    TCON_IE0 = CLRBIT;
-    TCON_IE1 = CLRBIT;
     EA = SETBIT;
 }
 
 /*
-    ADCRuning=1
+    ADCRunning=1
     |   WaveUpdate=1
     |   |   ClearWave=1
     |   |   ClearWave=0
     |   WaveUpdate=0
-    ADCRuning=0
+    ADCRunning=0
         DisplayUpdate=1
             WaveUpdate=1
             |   ClearWave=1
@@ -404,12 +210,10 @@ void runWhenInSettings(void)
             WaveUpdate=0
 */
 void runWhenADCInterrupt(void) {
-    // printf("runWhenADCInterrupt\r\n");
     G_ADC_Interrupt_FLAG = CLRBIT;
     ADC_Sample_Ready_LED = CLRBIT;
 
     if (G_ADC_Running_FLAG) {
-        EX0 = CLRBIT;
 
         if (G_WaveUpdate_FLAG) {
             G_WaveUpdate_FLAG   = CLRBIT;
@@ -437,16 +241,10 @@ void runWhenADCInterrupt(void) {
         }
         OLED_Display();
 
-        /* Not to enable external interrupt 0(Encoder Rotation) when both of ADCRunning and WaveScroll set. */
-        if (!G_WaveScroll_FLAG) {
-            TCON_IE0    = CLRBIT;
-            EX0         = SETBIT;
-        }
     } // ADC Sampling Running
     else {
         while (!G_ADC_Running_FLAG && !G_State_Settings_FLAG) {
             if (G_DisplayUpdate_FLAG) {
-                EX0 = CLRBIT;
                 G_DisplayUpdate_FLAG = CLRBIT;
                 if (G_WaveUpdate_FLAG) {
                     G_WaveUpdate_FLAG = CLRBIT;
@@ -473,8 +271,6 @@ void runWhenADCInterrupt(void) {
                 } // Update parameters on display only and maintain waveform
 
                 OLED_Display();
-                TCON_IE0    = CLRBIT;
-                EX0         = SETBIT;
             }
         }
     } // ADC Sampling Stopped 
@@ -484,7 +280,6 @@ void runWhenADCComplete() {
     // printf("runWhenADCComplete\r\n");
     if (G_TriggerMode == TriggerSel_Single)
     {
-        EX0                     = CLRBIT;
         G_ADC_Interrupt_FLAG    = SETBIT;
         G_DisplayUpdate_FLAG    = CLRBIT;
         G_WaveUpdate_FLAG       = CLRBIT;
@@ -494,17 +289,188 @@ void runWhenADCComplete() {
         PlotChart();
         PlotWave();
         OLED_Display();
-        TCON_IE0                = CLRBIT;
-        EX0                     = SETBIT;
     } // ADC Sampling Complete - Single Trigger Mode
     else {
-        //EX0 = 0;
         G_ClearDisplay_FLAG     = SETBIT;   // Reset screen clearance flag
         AnalyzeData();                      // Analyze sampled data
         PlotChart();                        // Draw main interface
         PlotWave();                         // Draw waveform
         OLED_Display();
-        //IE0 = 0;
-        //EX0 = 1;
     } // ADC Sampling Complete - Auto or Normal Trigger Mode
 }
+
+
+
+void TM0_Init(void) {
+    /* Timer 0, for updating voltage of battery */
+    AUXR     &= ~AUXR_T0x12; // Timer clock is 12T mode
+    TMOD     &= ~(TMOD_T0_CT | TMOD_T0_SEL | TMOD_T0_GATE); // Set timer work mode
+    TL0      = 0xB0;         // Initial timer value LOW BYTE
+    TH0      = 0x3C;         // Initial timer value HIGH BYTE
+    TCON_TF0 = CLRBIT;       // Clear TF0 interrupt flag
+    // TCON_TR0 = SETBIT;       // Timer0 start running
+    ET0 = SETBIT; // Enable TM0 interrupt
+} // 25ms@24.000MHz
+
+void TM1_Init(void) {
+    AUXR    &= ~AUXR_T1x12;  //Timer clock is 12T mode
+    TMOD    &= ~(TMOD_T1_CT | TMOD_T1_SEL | TMOD_T1_GATE);  //Set timer work mode
+    TL1      = 0xC0;         // Initial timer value LOW BYTE
+    TH1      = 0x63;         // Initial timer value HIGH BYTE
+    TCON_TF1 = CLRBIT;       // Clear TF1 flag
+    TCON_TR1 = SETBIT;       // Timer1 start run
+    ET1      = SETBIT;       // Enable TM1 interrupt
+} //20ms@24.000MHz
+
+
+/**
+ * @brief TM0 interrupt for updating battery voltage infomation on screen.
+ */
+void TM0_ISR_Handler(void) interrupt(TM0_VECTOR) {
+    static uint8_t n;
+
+    if (++n >= VBAT_UPDATE_FREQ) {
+        n = 0;
+        G_UpdateVBAT_FLAG    = SETBIT; // Update VBAT info
+        G_DisplayUpdate_FLAG = SETBIT; // Refresh VBAT info display
+    }
+    // printf("TM0 ISR\r\n");
+}
+
+
+bit MainInterface_FLAG = 0;
+bit WaveScroll_FUNC_SEL_FLAG = 0;
+
+void TM1_ISR_Handler(void) interrupt(TM1_VECTOR) {
+    static uint8_t Trg0, read0, cont0;
+    static uint8_t Trg1, read1, cont1;
+    static uint8_t Trg2, read2, cont2;
+    static uint8_t Trg3, read3, cont3;
+    /* Next Option(P5.4) Last Option(P2.0) SETTING(P2.2) OptionsSel(P2.1), these pins are pull up high when idle.
+       Therefore, we need to check if these pins are still high, otherwise the keys are pressed. */
+
+    // P2.0
+    read0 = (P2 & 0x01) ^ 0x01;
+    Trg0  = read0 & (read0 ^ cont0) ; 
+    cont0 = read0;
+
+    // P2.1
+    read1 = (P2 & 0x02) ^ 0x02;         // Read P2.2 and check if key is pressed. Was key pressed, read1 would be 1.
+    Trg1  = read1 & (read1 ^ cont1);    /* If key is pressed, read1 will be 1. Compared with previous read value, 
+                                           if key is pressed continuously, cont1=read1=1, Trg1 will be 0. Otherwise, if key 
+                                           is pressed differing from previous one, Trg1=1. */
+    cont1 = read1;                      // cont1 stores the previous read1 value
+    
+    // P2.2
+    read2 = (P2 & 0x04) ^ 0x04;
+    Trg2  = read2 & (read2 ^ cont2) ; 
+    cont2 = read2;
+
+    // P5.4
+    read3 = P5 ^ 0xFF;
+    Trg3  = read3 & (read3 ^ cont3); 
+    cont3 = read3;
+
+    if(Trg1) {
+        if (!G_State_Settings_FLAG) {
+            if (G_WaveScroll_FLAG) {
+                G_WaveScroll_FLAG = ~G_WaveScroll_FLAG;
+            } // WaveScroll Mode
+            else {
+                if (!G_SEL_CONFIRM_FLAG && !MainInterface_FLAG) {
+                    G_SEL_CONFIRM_FLAG = SETBIT;
+                } // Enter OPTION SELECTION Mode
+                else if (G_SEL_CONFIRM_FLAG && !MainInterface_FLAG) {
+                    G_SEL_CONFIRM_FLAG = CLRBIT;
+                } // Exit OPTION SELECTION mode and then enter FUNCTION SELECTION mode
+                else if (MainInterface_FLAG) {
+                    G_WaveScroll_FLAG = ~G_WaveScroll_FLAG;
+                    if (WaveScroll_FUNC_SEL_FLAG) {
+                        G_SEL_CONFIRM_FLAG       = SETBIT;
+                        WaveScroll_FUNC_SEL_FLAG = CLRBIT;
+                    } 
+                    else {
+                        G_SEL_CONFIRM_FLAG = CLRBIT;
+                    }
+                    MainInterface_FLAG = CLRBIT;
+                } // Exit FUNCTION SELECTION mode and then enter WaveScroll mode
+            } // Chart Mode
+            G_State_OptionChanged_FLAG  = SETBIT;   // Option has been changed
+            G_ADC_Interrupt_FLAG        = SETBIT;   // ADC sampling interrupt
+            G_DisplayUpdate_FLAG        = SETBIT;   // Update Screen
+            G_ClearWave_FLAG            = CLRBIT;   // Clear waveform
+        }
+
+        if (G_State_Settings_FLAG) {
+            G_SEL_CONFIRM_FLAG = ~G_SEL_CONFIRM_FLAG;
+        }
+
+        Trg1 = 0;
+    } 
+
+    if(Trg2) {
+            if (!G_State_Settings_FLAG && G_WaveScroll_FLAG) {
+                G_State_Settings_FLAG = ~G_State_Settings_FLAG;
+            } // In MAIN interface and 'G_WaveScroll' is set, current state can enter SETTING interface
+            else if (!G_State_Settings_FLAG && !G_WaveScroll_FLAG && !MainInterface_FLAG) {
+                MainInterface_FLAG = SETBIT;
+            } // In MAIN interface and 'G_WaveScroll' is unset, current state can not enter SETTING interface,
+              // but 'Trg2' pressed will lock the LAST/NEXT option selection and tell the MCU to exit FUNCTION
+              // SELECTION mode.
+            else if (!G_State_Settings_FLAG && !G_WaveScroll_FLAG && MainInterface_FLAG) {
+                WaveScroll_FUNC_SEL_FLAG = SETBIT;
+            }
+            else {
+                G_State_Settings_FLAG = ~G_State_Settings_FLAG;
+            }
+            // Enter setting interface
+            if (G_State_Settings_FLAG) {
+                G_DisplayUpdate_FLAG    = SETBIT;   // Update Screen
+                G_UpdateVBAT_FLAG       = SETBIT;   // Update VBAT information
+                TCON_TF0                = CLRBIT;   // Clear TM0 overflow flag
+                TCON_TR0                = SETBIT;   // TM0 start, preparing for VBAT information updating.
+            } // Enter Settings
+            else {
+                TCON_TR0                = CLRBIT;   // Clear TM0 overflow flag
+                TCON_TF0                = CLRBIT;   // TM0 is stopped, suspending the VBAT infomation updating.
+                G_WaveFreq              = 0;        // Reset waveform frequency 
+                G_TriggerFail_FLAG      = CLRBIT;   // Clear trigger failure flag
+                G_VMax                  = 0;        // Reset maximum waveform voltage
+                G_VMin                  = 0;        // Reset minimum waveform voltage
+                G_DisplayUpdate_FLAG    = SETBIT;   // Update screen display
+                G_WaveUpdate_FLAG       = SETBIT;   // Update waveform information
+                G_ClearWave_FLAG        = CLRBIT;   // Don't clear waveform on screen
+            } // Return to main interface
+             
+            G_ADC_Interrupt_FLAG = SETBIT; // Stop sampling ADC information and returned sampled value.
+        Trg2 = 0;
+    }
+
+    if(Trg3) {
+        if (MainInterface_FLAG) {
+            G_SELOption_FLAG        = CLRBIT;
+        }
+        else {
+            G_SELOption_FLAG        = SETBIT;
+            G_SELOption_Next        = CLRBIT;
+            G_ADC_Interrupt_FLAG    = SETBIT;
+            G_DisplayUpdate_FLAG    = SETBIT;
+        }
+        Trg3 = 0;
+    } // Next Option
+
+    if (Trg0) {
+        if (MainInterface_FLAG) {
+            G_SELOption_FLAG        = CLRBIT;
+        }
+        else {
+            G_SELOption_FLAG        = SETBIT;
+            G_SELOption_Next        = SETBIT;
+            G_ADC_Interrupt_FLAG    = SETBIT;
+            G_DisplayUpdate_FLAG    = SETBIT;
+        }
+        Trg0 = 0;
+    } // Last Option
+}
+
+

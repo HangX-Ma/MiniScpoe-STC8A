@@ -133,12 +133,9 @@ void Change_VoltageV_Max(bit ifNext);
 
 void Change_VoltageV(bit ifNext);
 
-/**
- * @brief Select options
- * 
- * @param ifNext Next or last option
- */
-void Select_Option(bit ifNext);
+void SelectInSettings(bit ifNext);
+
+void SelectInChart(bit ifNext);
 
 /**
  * @brief Read options from EEPROM

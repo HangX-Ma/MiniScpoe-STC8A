@@ -67,7 +67,7 @@ extern bit      G_ADC_Complete_FLAG;                //!< ADC sampling complete f
 extern bit      G_ADC_Interrupt_FLAG;               //!< ADC sampling interrupt flag
 extern bit      G_ADC_Running_FLAG;                 //!< ADC running flag
 
-extern bit      G_EC11PressWithRotate_FLAG;         //!< press and rotate EC11 flag
+extern bit      G_SEL_CONFIRM_FLAG;         //!< press and rotate EC11 flag
 
 extern bit      G_PlotModeSel;                      //!< Plot mode selection, 0: vector, 1: dot
 extern bit      G_MeasureWaySel;                    //!< Waveform measurement way selection, 0: DC, 1: AC
@@ -108,6 +108,7 @@ extern int32_t  G_Bias_Voltage;                     //!< Bias voltage
 extern int8_t   G_OptionInSettings;                 //!< setting options interface[ 0:PlotMode, 1:SVin_ratio, 2:OLED_Brightness ]
 extern int8_t   G_OptionInChart;                    //!< main screen options interface[ 0:ScaleH, 1:ScaleV, 2:TriggerLevel, 3:TriggerSlope, 4:TriggerMode 5 MeasureWay ]
 
+extern bit      G_State_Chart_FLAG;
 extern bit      G_State_Settings_FLAG;              //!< Setting interface state flag
 extern bit      G_State_OptionChanged_FLAG;         //!< Options changed state flag
 
@@ -118,7 +119,8 @@ extern const uint8_t code *PlotModeTxt[];           //!< Plot mode characters
 extern const uint8_t code *TriModeTxt[];            //!< Trigger mode characters
 extern const uint8_t code *ScaleHTxt[];             //!< Horizontal scaling characters
 
-
+extern bit G_SELOption_FLAG;
+extern bit G_SELOption_Next;
 /* Time scale: 500ms, 200ms, 100ms, 50ms, 20ms, 10ms, 5ms, 2ms, 1ms, 500us, 200us, 100us */
 typedef enum {
     Scale_500ms = 0x00,

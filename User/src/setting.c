@@ -43,13 +43,13 @@ void CheckMinTimeInterval(void) {
 
 void Change_SVin_ratio(bit ifNext) {
     if (ifNext) {
-        SVin_ratio++;
+        SVin_ratio = SVin_ratio + 10;
         if (SVin_ratio > SVin_ratio_MAX) {
             SVin_ratio = SVin_ratio_MAX;
         }
     }
     else {
-        SVin_ratio--;
+        SVin_ratio = SVin_ratio - 10;
 
         if (SVin_ratio < SVin_ratio_MIN) {
             SVin_ratio = SVin_ratio_MIN;
@@ -236,13 +236,26 @@ void Change_VoltageV(bit ifNext)
     }
 }
 
-void Select_Option(bit ifNext) {
-    /* Rotating Encoder while pressing */
-    if (G_EC11PressWithRotate_FLAG) {
-        if (G_State_Settings_FLAG) {
-            Change_OptionInSetting(ifNext);
-        } // settings interface
-        else if (G_WaveScroll_FLAG) {
+void SelectInSettings(bit ifNext) {
+    if (G_SEL_CONFIRM_FLAG) {
+        Change_OptionInSetting(ifNext);
+    } 
+    else if (G_OptionInSettings == SettingSel_PlotMode) {
+        Change_PlotMode();
+    } // Switch plot mode
+    else if (G_OptionInSettings == SettingSel_SVin_ratio) {
+        Change_SVin_ratio(ifNext);
+    } // Adjust sampling port voltage division ratio
+    else if (G_OptionInSettings == SettingSel_OLED_Brightness) {
+        Change_OLED_Brightness(ifNext);
+    } // Adjust OLED Brightness
+    /* Options need to be saved */
+    G_State_OptionChanged_FLAG = SETBIT;
+}
+
+void SelectInChart(bit ifNext) {
+    if (G_SEL_CONFIRM_FLAG) {
+        if (G_WaveScroll_FLAG) {
             Change_VoltageV(ifNext);
             G_WaveUpdate_FLAG = SETBIT;
         } // waveform scroll mode
@@ -251,24 +264,11 @@ void Select_Option(bit ifNext) {
             /* Not clear waveform when switch options */
             G_ClearWave_FLAG = CLRBIT;
         } // Out of waveform scroll mode
-    }
-    else if (G_State_Settings_FLAG) {
-        if (G_OptionInSettings == SettingSel_PlotMode) {
-            Change_PlotMode();
-        } // Switch plot mode
-        else if (G_OptionInSettings == SettingSel_SVin_ratio) {
-            Change_SVin_ratio(ifNext);
-        } // Adjust sampling port voltage division ratio
-        else if (G_OptionInSettings == SettingSel_OLED_Brightness) {
-            Change_OLED_Brightness(ifNext);
-        } // Adjust OLED Brightness
-        /* Options need to be saved */
-        G_State_OptionChanged_FLAG = SETBIT;
-    } // Rotating Encoder in setting interface
+    } 
     else if (G_WaveScroll_FLAG) {
         Change_TriggerPosOffset(ifNext);
         G_WaveUpdate_FLAG = SETBIT; 
-    } // Rotate Encoder in waveform horizontal scroll mode
+    } 
     else {
         if (G_OptionInChart == ChartSel_ScaleH) {
             Change_ScaleH(ifNext);

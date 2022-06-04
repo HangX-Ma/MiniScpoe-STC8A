@@ -32,11 +32,11 @@
  */
 void IAP_IDLE(void) {
     /* disable IAP/EEPROM */
-    IAP_CONTR &= ~(IAP_CONTR_IAPEN);
+    IAP_CONTR = 0;
     /* clear command */
-    IAP_CMD   &= ~(0xFF);
+    IAP_CMD   = 0;
     /* clear trigger */
-    IAP_TRIG  &= ~(0xFF);
+    IAP_TRIG  = 0;
     /* change value in address regiseter to non-eeprom address area */
     IAP_ADDRH  = 0x80;
     IAP_ADDRL  = 0x00;
@@ -119,7 +119,7 @@ void IAP_WriteByte(uint16_t addr, uint8_t IOdata) {
         IAP_TPS = LIB_CLK_FREQ;
     #endif
     /* set EEPROM read command */
-    IAP_CMD   = IAP_CMD_CMD_READ;
+    IAP_CMD   = IAP_CMD_CMD_WRITE;
     /* set address */
     IAP_ADDRH = addr >> 8;
     IAP_ADDRL = addr;
@@ -140,9 +140,9 @@ void EEPROM_PageErase(uint16_t addr) {
     IAP_CONTR |= IAP_CONTR_IAPEN;
     #if (LIB_MCU_MODULE == STC8Ax)
         /* set waiting time for IAP/EEPROM */
-        IAP_CONTR &= ~(IAP_CONTR_IAP_WT);
+        IAP_CONTR &= ~(IAP_CONTR_IAP_WT); // Clear previous value
         /* select corresponding register value */
-        switch (LIB_CLK_FREQ) {
+        switch (LIB_CLK_FREQ/1000000) {
             case 1:  IAP_CONTR |= IAP_CONTR_IAP_WT_1MHz;  break;
             case 2:  IAP_CONTR |= IAP_CONTR_IAP_WT_2MHz;  break;
             case 3:  IAP_CONTR |= IAP_CONTR_IAP_WT_3MHz;  break;
@@ -179,7 +179,7 @@ void EEPROM_Read_N_Bytes(uint8_t *str, uint8_t N, uint16_t addr) {
 }
 
 ErrorStatus EEPROM_Write_N_Bytes(uint8_t *str, uint8_t N, uint16_t addr) {
-    int16_t i;
+    int8_t i;
     uint16_t start_page_addr = (addr/EEPROM_PAGE_SIZE)*EEPROM_PAGE_SIZE + EEPROM_START_ADDR;
     EEPROM_PageErase(start_page_addr);
 
@@ -190,11 +190,11 @@ ErrorStatus EEPROM_Write_N_Bytes(uint8_t *str, uint8_t N, uint16_t addr) {
     } // check if the erasure operation success
 
     for (i = 0; i < N; i++) {
-        IAP_WriteByte(start_page_addr, *(str + i));
+        IAP_WriteByte(start_page_addr + i, *(str + i));
     } // write value to EEPROM
 
     for (i = 0; i < N; i++) {
-        if (IAP_ReadByte(start_page_addr) != *(str + i)) {
+        if (IAP_ReadByte(start_page_addr + i) != *(str + i)) {
             return ERROR;
         }
     } // check value in EEPROM

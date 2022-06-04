@@ -294,7 +294,7 @@ void OLED_ShowNum(uint32_t digit, uint8_t len) {
         }
 
         // adjust display area: X-axis
-        if (_locX > len - _font_width) {
+        if (_locX > WIDTH - _font_width) {
             _locX = 0;
             _locY += 8;
         }
@@ -303,7 +303,7 @@ void OLED_ShowNum(uint32_t digit, uint8_t len) {
             _locY = 0;
         }
 
-        OLED_ShowChar(_locX + _font_width* (index-i) , _locY, currDigit + '0' );
+        OLED_ShowChar(_locX + (_font_width)* (index-i) , _locY, currDigit + '0' );
     }
     _locX += len;
 }
