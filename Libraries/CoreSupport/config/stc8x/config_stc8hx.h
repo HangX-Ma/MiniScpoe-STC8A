@@ -1089,14 +1089,13 @@ sbit S1RI         =   S1CON^0;
 /* COMP basic address definition */
 #define     CMPCR1_ADDR             0xE6
 #define     CMPCR2_ADDR             0xE7
+#define     CMPEXCFG_ADDR           0xFEAE
 
 /* Bit definition for CMPCR1 register */
 #define     CMPCR1_CMPEN            0x80      /*!< Comparator module enabling bit */
 #define     CMPCR1_CMPIF            0x40      /*!< Comparator interrupt flag bit <*/
 #define     CMPCR1_PIE              0x20      /*!< Comparator rising edge interrupt enabling bit */
 #define     CMPCR1_NIE              0x10      /*!< Comparator falling edge interrupt enabling bit */
-#define     CMPCR1_PIS              0x08      /*!< Comparator positive selection bit: [0], select P3.7 as the positive source; [1], select by ADC_CONTR-ADC_CHS */
-#define     CMPCR1_NIS              0x04      /*!< Comparator negtive selection bit: [0], select REFV; select P3.6 as the negtive source*/
 #define     CMPCR1_CMPOE            0x02      /*!< Comparator output control bit: [0], disable output; [1], P3.4 or P4.1 ouput pin, decided by P_SW2-CMPO_S */
 #define     CMPCR1_CMPRES           0x01      /*!< The result of a comparator comparison: [0], CMP+ lower than CMP-; [1], CMP+ higher than CMP-; */
 
@@ -1177,23 +1176,35 @@ sbit S1RI         =   S1CON^0;
 #define     CMPAR2_LCDTY_VAL62      0x3E      /*!< n=62 */
 #define     CMPAR2_LCDTY_VAL63      0x3F      /*!< n=63 */
 
+/* Bit definition for CMPEXCFG register */
+#define     CMPEXCFG_CHYS           0xC0      /*!< CHYS[1:0] The comparator DC hysteresis input selection */
+#define     CMPEXCFG_CHYS_0         0x40      /*!< Bit 0 */
+#define     CMPEXCFG_CHYS_1         0x80      /*!< Bit 1 */
+
+#define     CMPEXCFG_CHYS_0mV       0x00
+#define     CMPEXCFG_CHYS_10mV      0x40
+#define     CMPEXCFG_CHYS_20mV      0x80
+#define     CMPEXCFG_CHYS_30mV      0xC0
+
+#define     CMPEXCFG_CMPNS          0x04      /*!< Comparator negtive port input control: [0], P3.6, [1], internal REFV */
+
+#define     CMPEXCFG_CMPPS          0x03      /*!< CMPPS[1:0] The comparator positive port selection */
+#define     CMPEXCFG_CMPPS_0        0x01      /*!< Bit 0 */
+#define     CMPEXCFG_CMPPS_1        0x02      /*!< Bit 1 */
+
+#define     CMPEXCFG_CMPPS_P37      0x00
+#define     CMPEXCFG_CMPPS_P50      0x01
+#define     CMPEXCFG_CMPPS_P51      0x02
+#define     CMPEXCFG_CMPPS_ADCIN    0x03
+
+
 sfr CMPCR1      =   CMPCR1_ADDR;    //!< comparator control register 1
 sfr CMPCR2      =   CMPCR2_ADDR;    //!< comparator control register 2
 
-//! EEPROM peripherals
-/**
- * @brief EEPROM generic I/O definition
- */
-struct IAP_EEPROM_struct{
-    __IO uint8_t IAP_DATA;
-    __IO uint8_t IAP_ADDRH;
-    __IO uint8_t IAP_ADDRL;
-    __IO uint8_t IAP_CMD;
-    __IO uint8_t IAP_TRIG;
-    __IO uint8_t IAP_CONTR;
-};
-#define IAP_EEPROM_TypeDef struct IAP_EEPROM_struct
+#define     CMPEXCFG                (*(__IO uint8_t xdata *) CMPEXCFG_ADDR)
 
+
+//! EEPROM peripherals
 /* EEPROM basic address definition */
 #define     IAP_EEPROM_BASE         0xC2
 #define     IAP_DATA_ADDR           0xC2
@@ -1220,8 +1231,6 @@ struct IAP_EEPROM_struct{
 #define     IAP_CMD_CMD_READ        0x01     /*!< read 1 byte at target address */
 #define     IAP_CMD_CMD_WRITE       0x02     /*!< write 1 byte to target address, converting 1 to 0 */
 #define     IAP_CMD_CMD_ERASE       0x03     /*!< Erase EEPROM. Erase the 1 page (1 sector/512 bytes) to FFH where the destination address is located.  */
-
-#define     IAP_EEPROM              (*((IAP_EEPROM_TypeDef idata* xdata*) IAP_EEPROM_BASE))
 
 /* IAP special function registers */
 sfr IAP_DATA    =   IAP_DATA_ADDR;                      //!< IAP data regiseter
@@ -1388,7 +1397,6 @@ struct ADC_struct{
 
 #define     ADCTIM                      (*(__IO uint8_t xdata *) ADCTIM_ADDR)
 #define     ADCEXCFG                    (*(__IO uint8_t xdata *) ADCEXCFG_ADDR)
-#define     ADC                         (*((ADC_TypeDef idata* xdata*) ADC_BASE))
 
 /* ADC special function registers */
 sfr ADC_CONTR   =   ADC_CONTR_ADDR;                 //!< ADC control register
@@ -1397,19 +1405,6 @@ sfr ADC_RESL    =   ADC_RESL_ADDR;                  //!< ADC conversion result l
 sfr ADCCFG      =   ADCCFG_ADDR;                    //!< ADC configuration register
 
 //! PCA peripherals
-/**
- * @brief PCA generic I/O definition
- */
-struct PCAx_struct{
-    __IO uint8_t CCAPMx;
-    uint8_t RESERVED0[4];
-    __IO uint8_t CCAPxL;
-    uint8_t RESERVED1[3];
-    __IO uint8_t PCA_PWMx;
-    uint8_t RESERVED2[4];
-    __IO uint8_t CCAPxH;
-};
-#define PCAx_TypeDef struct PCAx_struct
 
 /* PCA basic address definition */
 #define     PCAx_BASE       0xDA
@@ -1527,12 +1522,6 @@ sfr PCA_PWM1    =   PCA_PWM1_ADDR;              //!< PCA1 PWM mode register
 sfr PCA_PWM2    =   PCA_PWM2_ADDR;              //!< PCA2 PWM mode register
 sfr PCA_PWM3    =   PCA_PWM3_ADDR;              //!< PCA3 PWM mode register
 
-// PCA generic struct type definitions
-#define     PCA0                    (*((PCAx_TypeDef idata* xdata *) PCA0_BASE))
-#define     PCA1                    (*((PCAx_TypeDef idata* xdata *) PCA1_BASE))
-#define     PCA2                    (*((PCAx_TypeDef idata* xdata *) PCA2_BASE))
-#define     PCA3                    (*((PCAx_TypeDef idata* xdata *) PCA3_BASE))
-
 /* Bit definition for CCON register */
 sbit CCON_CF         =   CCON^7;                /*!< PCA counter overflow interrupt flag */
 sbit CCON_CR         =   CCON^6;                /*!< PCA counter enabling control bit */
@@ -1556,28 +1545,28 @@ struct PWMx_struct{
 #define PWMx_TypeDef struct PWMx_struct
 
 /* PWM basic address definition */
-#define     PWMCFG_ADDR     0xF1
-#define     PWMIF_ADDR      0xF6
-#define     PWMFDCR_ADDR    0xF7
-#define     PWMCR_ADDR      0xFE
+#define     PWMSET_ADDR     0xF1
+#define     PWMCFG_ADDR     0xF6
 
 #define     PWMC_BASE       0xFFF0
-#define     PWMCH_ADDR      (PWMC_BASE + 0x0000)
-#define     PWMCL_ADDR      (PWMC_BASE + 0x0001)
-#define     PWMCKS_ADDR     (PWMC_BASE + 0x0002)
+#define     PWMCH_ADDR      0xFF00
+#define     PWMCL_ADDR      0xFF01
+#define     PWMCKS_ADDR     0xFF02
+#define     PWMTADC_BASE    0xFF03
+#define     PWMTADCH_ADDR   0xFF03
+#define     PWMTADCL_ADDR   0xFF04
+#define     PWMIF_ADDR      0xFF05
+#define     PWMFDCR_ADDR    0xFF06
 
-#define     PWM0_BASE       0xFF00
-#define     PWM1_BASE       0xFF10
+#define     PWM0_BASE       0xFF10
+#define     PWM1_BASE       0xFF18
 #define     PWM2_BASE       0xFF20
-#define     PWM3_BASE       0xFF30
-#define     PWM4_BASE       0xFF40
-#define     PWM5_BASE       0xFF50
-#define     PWM6_BASE       0xFF60
-#define     PWM7_BASE       0xFF70
+#define     PWM3_BASE       0xFF28
+#define     PWM4_BASE       0xFF30
+#define     PWM5_BASE       0xFF38
+#define     PWM6_BASE       0xFF40
+#define     PWM7_BASE       0xFF48
 
-#define     TADCP_BASE      0xFFF3
-#define     TADCPH_ADDR     (TADCP_BASE + 0x0000)
-#define     TADCPL_ADDR     (TADCP_BASE + 0x0001)
 
 #define     PWM0T1_ADDR     (PWM0_BASE + 0x00)
 #define     PWM0T1H_ADDR    (PWM0T1_ADDR +  0x00)
@@ -1651,33 +1640,15 @@ struct PWMx_struct{
 #define     PWM7CR_ADDR     (PWM7T2L_ADDR + 0x01)
 #define     PWM7HLD_ADDR    (PWM7CR_ADDR +  0x01)
 
+/* Bit definition for PWMSET register */
+#define     PWMSET_PWMRST   0x20             /*!< PWM software reset */
+#define     PWMSET_ENPWM   0x01              /*!< PWM enable (PWM0~PWM7) */
+
 /* Bit definition for PWMCFG register */
-#define     PWMCFG_CBIF     0x80             /*!< Zero interrupt flag bit for PWM counter overflow happens */
-#define     PWMCFG_ETADC    0x40             /*!< Whether PWM associates with ADC */
-
-/* Bit definition for PWMIF register */
-#define     PWMIF_C7IF      0x80             /*!< Interrupt flag bit for channel 7 PWM */
-#define     PWMIF_C6IF      0x40             /*!< Interrupt flag bit for channel 6 PWM */
-#define     PWMIF_C5IF      0x20             /*!< Interrupt flag bit for channel 5 PWM */
-#define     PWMIF_C4IF      0x10             /*!< Interrupt flag bit for channel 4 PWM */
-#define     PWMIF_C3IF      0x08             /*!< Interrupt flag bit for channel 3 PWM */
-#define     PWMIF_C2IF      0x04             /*!< Interrupt flag bit for channel 2 PWM */
-#define     PWMIF_C1IF      0x02             /*!< Interrupt flag bit for channel 1 PWM */
-#define     PWMIF_C0IF      0x01             /*!< Interrupt flag bit for channel 0 PWM */
-
-/* Bit definition for PWMFDCR register */
-#define     PWMFDCR_INVCMP  0x80             /*!< Abnormal signal processing of comparator result: [0] low to high abnormal signal; [1], high to low abnormal signal */
-#define     PWMFDCR_INVIO   0x40             /*!< external port P3.5 abnormal signal processing: [0] low to high abnormal signal; [1], high to low abnormal signal*/
-#define     PWMFDCR_ENFD    0x20             /*!< PWM external abnormal detection control bit: [0], disable; [1], enable */
-#define     PWMFDCR_FLTFLIO 0x10             /*!< Control bit of PWM output port when external PWM abnormity occurs: [0], no action; [1], high impedance */
-#define     PWMFDCR_EFDI    0x08             /*!< PWM abnormal detection interrupt enabling bit: [0], disable; [1], enable */
-#define     PWMFDCR_FDCMP   0x04             /*!< Comparator output anomaly detection enable bit: [0], comparator is unrelative with PWM; [1], Set the PWM abnormal detection source as the comparator output */
-#define     PWMFDCR_FDIO    0x02             /*!< P3.5 port level anomaly detection enable bit: [0], P3.5 port level is PWM Independent; [1], Set the abnormal detection source of PWM to P3.5 port */
-#define     PWMFDCR_FDIF    0x01             /*!< Abnormal PWM detection interrupt flag bit */
-
-/* Bit definition for PWMCR register */
-#define     PWMCR_ENPWM     0x80             /*!< Enable enhanced PWM waveform generator: [0], disable; [1], enable */
-#define     PWMCR_ECBI      0x40             /*!< PWM counter zeroing interrupt enable bit: [0], disable; [1], enable */
+#define     PWMCFG_CBIF     0x08             /*!< Zero interrupt flag bit for PWM counter overflow happens */
+#define     PWMCFG_EPWMCBI  0x04             /*!< Counter reset interrupt enabling bit */
+#define     PWMCFG_EPWMTA   0x02             /*!< Whether PWM associates with ADC or not */
+#define     PWMCFG_PWMCEN   0x01             /*!< PWM waveform generator starts counting */
 
 /* Bit definition for PWMCKS register */
 #define     PWMCKS_SELT2    0x0F             /*!< PWM clock source selection: [0], PWM clock source is the system clock frequency divider after the clock; [1], The PWM clock source is the overflow pulse of Timer 2 */
@@ -1707,24 +1678,41 @@ struct PWMx_struct{
 #define     PWMCKS_PWM_PS_SCLK_DIV16    0x0F  /*!< pre-frequency = SCLK/16 */
 
 
+/* Bit definition for PWMIF register */
+#define     PWMIF_C7IF      0x80             /*!< Interrupt flag bit for channel 7 PWM */
+#define     PWMIF_C6IF      0x40             /*!< Interrupt flag bit for channel 6 PWM */
+#define     PWMIF_C5IF      0x20             /*!< Interrupt flag bit for channel 5 PWM */
+#define     PWMIF_C4IF      0x10             /*!< Interrupt flag bit for channel 4 PWM */
+#define     PWMIF_C3IF      0x08             /*!< Interrupt flag bit for channel 3 PWM */
+#define     PWMIF_C2IF      0x04             /*!< Interrupt flag bit for channel 2 PWM */
+#define     PWMIF_C1IF      0x02             /*!< Interrupt flag bit for channel 1 PWM */
+#define     PWMIF_C0IF      0x01             /*!< Interrupt flag bit for channel 0 PWM */
+
+/* Bit definition for PWMFDCR register */
+#define     PWMFDCR_INVCMP  0x80             /*!< Abnormal signal processing of comparator result: [0] low to high abnormal signal; [1], high to low abnormal signal */
+#define     PWMFDCR_INVIO   0x40             /*!< external port P3.5 abnormal signal processing: [0] low to high abnormal signal; [1], high to low abnormal signal*/
+#define     PWMFDCR_ENFD    0x20             /*!< PWM external abnormal detection control bit: [0], disable; [1], enable */
+#define     PWMFDCR_FLTFLIO 0x10             /*!< Control bit of PWM output port when external PWM abnormity occurs: [0], no action; [1], high impedance */
+#define     PWMFDCR_EFDI    0x08             /*!< PWM abnormal detection interrupt enabling bit: [0], disable; [1], enable */
+#define     PWMFDCR_FDCMP   0x04             /*!< Comparator output anomaly detection enable bit: [0], comparator is unrelative with PWM; [1], Set the PWM abnormal detection source as the comparator output */
+#define     PWMFDCR_FDIO    0x02             /*!< P3.5 port level anomaly detection enable bit: [0], P3.5 port level is PWM Independent; [1], Set the abnormal detection source of PWM to P3.5 port */
+#define     PWMFDCR_FDIF    0x01             /*!< Abnormal PWM detection interrupt flag bit */
+
 /* PWM special function registers */
+sfr PWMSET      =   PWMSET_ADDR;        //!< Enhanced PWM global configuration register
 sfr PWMCFG      =   PWMCFG_ADDR;        //!< Enhanced PWM configuration register
-sfr PWMIF       =   PWMIF_ADDR;         //!< Enhanced PWM interrupt flag register
-sfr PWMFDCR     =   PWMFDCR_ADDR;       //!< Enhanced PWM Anomaly Detection Control Decision Register
-sfr PWMCR       =   PWMCR_ADDR;         //!< Enhanced PWM configuration register
 
-#define     PWMC            (*(__IO uint16_t xdata *) PWMC_BASE)         //!< [PWMCH,PWMCL]
-#define     PWMCH           (*(__IO uint8_t xdata *)  PWMCH_ADDR)        //!< High Byte PWM counter register
-#define     PWMCL           (*(__IO uint8_t xdata *)  PWMCL_ADDR)        //!< Low Byte PWM counter register
-#define     PWMCKS          (*(__IO uint8_t xdata *)  PWMCKS_ADDR)       //!< PWM clock selection register
-#define     TADCP           (*(__IO uint16_t xdata *) TADCP_BASE)        //!< [TADCPH, TADCPL]
-#define     TADCPH          (*(__IO uint8_t xdata *)  TADCPH_ADDR)       //!< The trigger ADC counts high bytes register
-#define     TADCPL          (*(__IO uint8_t xdata *)  TADCPL_ADDR)       //!< The trigger ADC counts low bytes register
+#define     PWMC            (*(__IO uint16_t xdata *) PWMC_BASE)        //!< [PWMCH,PWMCL]
+#define     PWMCH           (*(__IO uint8_t xdata *)  PWMCH_ADDR)       //!< High Byte PWM counter register
+#define     PWMCL           (*(__IO uint8_t xdata *)  PWMCL_ADDR)       //!< Low Byte PWM counter register
+#define     PWMCKS          (*(__IO uint8_t xdata *)  PWMCKS_ADDR)      //!< PWM clock selection register
 
-#define     PWMxT1(PWMxT1_ADDR)      (*(__IO uint16_t xdata *) PWMxT1_ADDR)  //!< PWMxT1 counter [PWMxT1H, PWMxT1L]
-#define     PWMxT2(PWMxT2_ADDR)      (*(__IO uint16_t xdata *) PWMxT2_ADDR)  //!< PWMxT2 counter [PWMxT2H, PWMxT2L]
-#define     PWMxCR(PWMxCR_ADDR)      (*(__IO uint8_t xdata *) PWMxCR_ADDR)  //!< PWMx control register
-#define     PWMxHLD(PWMxHLD_ADDR)    (*(__IO uint8_t xdata *) PWMxHLD_ADDR) //!< PWMx level holder control register
+#define     PWMTADC         (*(__IO uint16_t xdata *)  PWMTADC_BASE)    //!< [PWMTADCH, PWMTADCL]
+#define     PWMTADCH        (*(__IO uint8_t xdata *)  PWMTADCH_ADDR)    //!< The trigger ADC counts high bytes register
+#define     PWMTADCL        (*(__IO uint8_t xdata *)  PWMTADCL_ADDR)    //!< The trigger ADC counts low bytes register
+
+#define     PWMIF           (*(__IO uint8_t xdata *)  PWMIF_ADDR)       //!< PWM Interrupt flag register
+#define     PWMFDCR         (*(__IO uint8_t xdata *)  PWMFDCR_ADDR)     //!< PWM Exception Detection Control Register
 
 #define     PWM0            ((PWMx_TypeDef xdata *) PWM0_BASE)          //!< PWM0 generic struct type
 #define     PWM1            ((PWMx_TypeDef xdata *) PWM1_BASE)          //!< PWM1 generic struct type
@@ -1855,7 +1843,6 @@ typedef struct {
  * \code{.c} (SPI_TypeDef idata *) var \endcode, in witch the
  * \c var is \b SPI_TypeDef .
  */
-#define     SPI             (*((SPI_TypeDef idata* xdata* ) SPI_BASE))    //!< SPI generic struct type definition
 
 /* SPI special function registers */
 sfr SPSTAT      =   SPSTAT_ADDR;        //!< SPI State Register

@@ -1076,19 +1076,19 @@ sfr ADCCFG      =   ADCCFG_ADDR;                    //!< ADC configuration regis
 #define     CCAPM0_ADDR     0xDA
 #define     CCAPM1_ADDR     0xDB
 #define     CCAPM2_ADDR     0xDC
-#define     CCAPM3_ADDR     0xDD
+#define     CCAPM3_ADDR     0xFD54
 #define     CCAP0L_ADDR     0xEA
 #define     CCAP1L_ADDR     0xEB
 #define     CCAP2L_ADDR     0xEC
-#define     CCAP3L_ADDR     0xED
+#define     CCAP3L_ADDR     0xFD55
 #define     CCAP0H_ADDR     0xFA
 #define     CCAP1H_ADDR     0xFB
 #define     CCAP2H_ADDR     0xFC
-#define     CCAP3H_ADDR     0xFD
+#define     CCAP3H_ADDR     0xFD56
 #define     PCA_PWM0_ADDR   0xF2
 #define     PCA_PWM1_ADDR   0xF3
 #define     PCA_PWM2_ADDR   0xF4
-#define     PCA_PWM3_ADDR   0xF5
+#define     PCA_PWM3_ADDR   0xFD57
 
 /* Bit definition for CMOD register */
 #define     CMOD_CIDL       0x80             /*!< Whether to stop PCA counting in idle mode: [0], continue; [1], stop */
@@ -1298,7 +1298,7 @@ struct PWMx_struct{
 
 /* Bit definition for PWMCFG register */
 #define     PWMCFG_CBIF     0x80             /*!< Zero interrupt flag bit for PWM counter overflow happens */
-#define     PWMCFG_ETADC    0x40             /*!< Whether PWM associates with ADC */
+#define     PWMCFG_ETADC    0x40             /*!< Whether PWM associates with ADC  or not */
 
 /* Bit definition for PWMIF register */
 #define     PWMIF_C7IF      0x80             /*!< Interrupt flag bit for channel 7 PWM */
@@ -1365,11 +1365,6 @@ sfr PWMCR       =   PWMCR_ADDR;         //!< Enhanced PWM configuration register
 #define     TADCP           (*(__IO uint16_t xdata *) TADCP_BASE)        //!< [TADCPH, TADCPL]
 #define     TADCPH          (*(__IO uint8_t xdata *)  TADCPH_ADDR)       //!< The trigger ADC counts high bytes register
 #define     TADCPL          (*(__IO uint8_t xdata *)  TADCPL_ADDR)       //!< The trigger ADC counts low bytes register
-
-#define     PWMxT1(PWMxT1_ADDR)      (*(__IO uint16_t xdata *) PWMxT1_ADDR)  //!< PWMxT1 counter [PWMxT1H, PWMxT1L]
-#define     PWMxT2(PWMxT2_ADDR)      (*(__IO uint16_t xdata *) PWMxT2_ADDR)  //!< PWMxT2 counter [PWMxT2H, PWMxT2L]
-#define     PWMxCR(PWMxCR_ADDR)      (*(__IO uint8_t xdata *) PWMxCR_ADDR)  //!< PWMx control register
-#define     PWMxHLD(PWMxHLD_ADDR)    (*(__IO uint8_t xdata *) PWMxHLD_ADDR) //!< PWMx level holder control register
 
 #define     PWM0            ((PWMx_TypeDef xdata *) PWM0_BASE)          //!< PWM0 generic struct type
 #define     PWM1            ((PWMx_TypeDef xdata *) PWM1_BASE)          //!< PWM1 generic struct type
