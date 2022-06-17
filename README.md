@@ -28,6 +28,6 @@ Current version cannot perform the waveform sampling function. SMD buttons will 
 - [ ] Make MiniScope run
 
 ## Functions Selection Flowchart
-![MiniScopeUI](share/MiniScopeUI.svg)
+<!-- ![MiniScopeUI](share/MiniScopeUI.svg) -->
 
 > Reference: [Open-ELL/MiniDSO-Pro](https://gitee.com/open-ell/mini-dso-pro)
