@@ -70,7 +70,7 @@ uint8_t IAP_ReadByte(uint16_t addr) {
         }
     #elif (LIB_MCU_MODULE == STC8Hx) 
         /* set waiting time for IAP/EEPROM */
-        IAP_TPS = LIB_CLK_FREQ;
+        IAP_TPS = (uint32_t)LIB_CLK_FREQ/1000000;
     #endif
     /* set EEPROM read command */
     IAP_CMD   = IAP_CMD_CMD_READ;
@@ -116,7 +116,7 @@ void IAP_WriteByte(uint16_t addr, uint8_t IOdata) {
         }
     #elif (LIB_MCU_MODULE == STC8Hx)
         /* set waiting time for IAP/EEPROM */
-        IAP_TPS = LIB_CLK_FREQ;
+        IAP_TPS = (uint32_t)LIB_CLK_FREQ/1000000;
     #endif
     /* set EEPROM read command */
     IAP_CMD   = IAP_CMD_CMD_WRITE;
@@ -155,7 +155,7 @@ void EEPROM_PageErase(uint16_t addr) {
         }
     #elif (LIB_MCU_MODULE == STC8Hx)
         /* set waiting time for IAP/EEPROM */
-        IAP_TPS = LIB_CLK_FREQ;
+        IAP_TPS = (uint32_t)LIB_CLK_FREQ/1000000;
     #endif
     /* set EEPROM read command */
     IAP_CMD   = IAP_CMD_CMD_ERASE;

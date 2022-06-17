@@ -239,7 +239,7 @@ void Change_VoltageV(bit ifNext)
 void SelectInSettings(bit ifNext) {
     if (G_SEL_CONFIRM_FLAG) {
         Change_OptionInSetting(ifNext);
-    } 
+    }
     else if (G_OptionInSettings == SettingSel_PlotMode) {
         Change_PlotMode();
     } // Switch plot mode
@@ -249,6 +249,7 @@ void SelectInSettings(bit ifNext) {
     else if (G_OptionInSettings == SettingSel_OLED_Brightness) {
         Change_OLED_Brightness(ifNext);
     } // Adjust OLED Brightness
+
     /* Options need to be saved */
     G_State_OptionChanged_FLAG = SETBIT;
 }
@@ -264,7 +265,7 @@ void SelectInChart(bit ifNext) {
             /* Not clear waveform when switch options */
             G_ClearWave_FLAG = CLRBIT;
         } // Out of waveform scroll mode
-    } 
+    }
     else if (G_WaveScroll_FLAG) {
         Change_TriggerPosOffset(ifNext);
         G_WaveUpdate_FLAG = SETBIT; 
@@ -305,6 +306,7 @@ void SelectInChart(bit ifNext) {
             G_WaveUpdate_FLAG = CLRBIT;
             G_ClearWave_FLAG  = CLRBIT;
         } // Switch measurement way
+        
         /* Options need to be saved */
         G_State_OptionChanged_FLAG = SETBIT;
     } // Rotate Encoder in main interface

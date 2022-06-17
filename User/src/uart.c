@@ -42,7 +42,7 @@ uint8_t xdata UART1_Tx_DMABuffer[UART1_DMA_BUF_LENGTH];
 uint8_t xdata UART1_Rx_DMABuffer[2][UART1_DMA_BUF_LENGTH];
 #endif
 
-void Timer3_Init(void) {
+void TM3_Init(void) {
     T4T3M |= T4T3M_T3R;     // Disable TM3 until it is enabled in UARTx interrupt
     T4T3M &= ~T4T3M_T3_CT;  // Select TM3 as timer
     T4T3M &= ~T4T3M_T3CLKO; // Disable clock ticks output
@@ -74,13 +74,14 @@ void UART1_Init(void) {
     ES     = SETBIT;        // Enable UART1 interrupt
     S1REN  = SETBIT;        // Enable UART1 receiver
     // PS     = SETBIT;     // Interrupt Level 1
-    P_SW1  &= (~P_SW1_S1_S); // P3.0 RxD, P3.1 TxD
-    P_SW1  |= P_SW1_S1_S_GROUP1;
-    isUART1_Tx_IDLE = SETBIT;
-    isUART1_Rx_IDLE = SETBIT;
+    // TM3_Init();
+    P_SW1 &= (~P_SW1_S1_S); // P3.0 RxD, P3.1 TxD
+    P_SW1 |= P_SW1_S1_S_GROUP1;
+    isUART1_Tx_IDLE    = SETBIT;
+    isUART1_Rx_IDLE    = SETBIT;
     FIFO_Init(&UART1_Rx);
     isUARTx_Rx_Timeout = CLRBIT;
-    FIFO_Threshold = FIFO_Threshold_15; // default threshold value
+    FIFO_Threshold     = FIFO_Threshold_15; // default threshold value
 }
 
 void UARTx_Send(uint8_t chr) {

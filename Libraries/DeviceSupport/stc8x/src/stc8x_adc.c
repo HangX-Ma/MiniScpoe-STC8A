@@ -43,13 +43,14 @@ void ADC_CHx_SEL(uint8_t _ADC_CHx) {
 }
 
 void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed) {
+    #if (LIB_MCU_MODULE == STC8Hx) 
     /* enable external special registers */
     P_SW2 |= P_SW2_EAXFR;
-    #if (LIB_MCU_MODULE == STC8Hx) 
         ADCTIM = ADCTIM_CSHOLD_2tk | ADCTIM_SMPDUT_32tk;
-    #endif
     /* disable external special registers */
     P_SW2 &= ~P_SW2_EAXFR;
+    #endif
+
     /* clear ADCCFG register */
     ADCCFG     = 0x00;
     /* set align type and ADC conversion frequency */
@@ -59,7 +60,6 @@ void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed) {
     /* wait for stable power source */
     delay_nms(5);
 }
-
 
 void ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx) {
     /* clear previous result */

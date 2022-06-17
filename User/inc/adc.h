@@ -43,7 +43,7 @@
 //* ------------ developer definitions ------------
 #define BGV_ADDR        0xEF    //!< internal 1.344V(1.19V D64 version) reference voltage high byte
 
-sbit ADC_Sample_Ready_LED = P1^7;
+sbit ADC_Sample_Ready_LED = P3^5;
 
 //* ------------     functions     ------------
 

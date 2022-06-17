@@ -1076,19 +1076,19 @@ sfr ADCCFG      =   ADCCFG_ADDR;                    //!< ADC configuration regis
 #define     CCAPM0_ADDR     0xDA
 #define     CCAPM1_ADDR     0xDB
 #define     CCAPM2_ADDR     0xDC
-#define     CCAPM3_ADDR     0xFD54
+#define     CCAPM3_ADDR     0xDD
 #define     CCAP0L_ADDR     0xEA
 #define     CCAP1L_ADDR     0xEB
 #define     CCAP2L_ADDR     0xEC
-#define     CCAP3L_ADDR     0xFD55
+#define     CCAP3L_ADDR     0xED
 #define     CCAP0H_ADDR     0xFA
 #define     CCAP1H_ADDR     0xFB
 #define     CCAP2H_ADDR     0xFC
-#define     CCAP3H_ADDR     0xFD56
+#define     CCAP3H_ADDR     0xFD
 #define     PCA_PWM0_ADDR   0xF2
 #define     PCA_PWM1_ADDR   0xF3
 #define     PCA_PWM2_ADDR   0xF4
-#define     PCA_PWM3_ADDR   0xFD57
+#define     PCA_PWM3_ADDR   0xF5
 
 /* Bit definition for CMOD register */
 #define     CMOD_CIDL       0x80             /*!< Whether to stop PCA counting in idle mode: [0], continue; [1], stop */

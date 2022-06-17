@@ -1420,19 +1420,19 @@ sfr ADCCFG      =   ADCCFG_ADDR;                    //!< ADC configuration regis
 #define     CCAPM0_ADDR     0xDA
 #define     CCAPM1_ADDR     0xDB
 #define     CCAPM2_ADDR     0xDC
-#define     CCAPM3_ADDR     0xDD
+#define     CCAPM3_ADDR     0xFD54
 #define     CCAP0L_ADDR     0xEA
 #define     CCAP1L_ADDR     0xEB
 #define     CCAP2L_ADDR     0xEC
-#define     CCAP3L_ADDR     0xED
+#define     CCAP3L_ADDR     0xFD55
 #define     CCAP0H_ADDR     0xFA
 #define     CCAP1H_ADDR     0xFB
 #define     CCAP2H_ADDR     0xFC
-#define     CCAP3H_ADDR     0xFD
+#define     CCAP3H_ADDR     0xFD56
 #define     PCA_PWM0_ADDR   0xF2
 #define     PCA_PWM1_ADDR   0xF3
 #define     PCA_PWM2_ADDR   0xF4
-#define     PCA_PWM3_ADDR   0xF5
+#define     PCA_PWM3_ADDR   0xFD57
 
 /* Bit definition for CMOD register */
 #define     CMOD_CIDL       0x80             /*!< Whether to stop PCA counting in idle mode: [0], continue; [1], stop */
@@ -1508,19 +1508,20 @@ sfr CH          =   CH_ADDR;                    //!< PCA counter high bytes
 sfr CCAPM0      =   CCAPM0_ADDR;                //!< PCA module 0 mode control register
 sfr CCAPM1      =   CCAPM1_ADDR;                //!< PCA module 1 mode control register
 sfr CCAPM2      =   CCAPM2_ADDR;                //!< PCA module 2 mode control register
-sfr CCAPM3      =   CCAPM3_ADDR;                //!< PCA module 3 mode control register
 sfr CCAP0L      =   CCAP0L_ADDR;                //!< PCA module 0 low bytes
 sfr CCAP1L      =   CCAP1L_ADDR;                //!< PCA module 1 low bytes
 sfr CCAP2L      =   CCAP2L_ADDR;                //!< PCA module 2 low bytes
-sfr CCAP3L      =   CCAP3L_ADDR;                //!< PCA module 3 low bytes
 sfr CCAP0H      =   CCAP0H_ADDR;                //!< PCA module 0 high bytes
 sfr CCAP1H      =   CCAP1H_ADDR;                //!< PCA module 1 high bytes
 sfr CCAP2H      =   CCAP2H_ADDR;                //!< PCA module 2 high bytes
-sfr CCAP3H      =   CCAP3H_ADDR;                //!< PCA module 3 high bytes
 sfr PCA_PWM0    =   PCA_PWM0_ADDR;              //!< PCA0 PWM mode register
 sfr PCA_PWM1    =   PCA_PWM1_ADDR;              //!< PCA1 PWM mode register
 sfr PCA_PWM2    =   PCA_PWM2_ADDR;              //!< PCA2 PWM mode register
-sfr PCA_PWM3    =   PCA_PWM3_ADDR;              //!< PCA3 PWM mode register
+
+#define     CCAPM3                  (*(__IO uint8_t xdata *)CCAPM3_ADDR)
+#define     CCAP3L                  (*(__IO uint8_t xdata *)CCAP3L_ADDR)
+#define     CCAP3H                  (*(__IO uint8_t xdata *)CCAP3H_ADDR)
+#define     PCA_PWM3                (*(__IO uint8_t xdata *)PCA_PWM3_ADDR)
 
 /* Bit definition for CCON register */
 sbit CCON_CF         =   CCON^7;                /*!< PCA counter overflow interrupt flag */
@@ -1529,6 +1530,12 @@ sbit CCON_CCF3       =   CCON^3;                /*!< CCF3 PCA module interrupt f
 sbit CCON_CCF2       =   CCON^2;                /*!< CCF2 PCA module interrupt flag */
 sbit CCON_CCF1       =   CCON^1;                /*!< CCF1 PCA module interrupt flag */
 sbit CCON_CCF0       =   CCON^0;                /*!< CCF0 PCA module interrupt flag */
+
+#define CCAPMx(x)       (CCAPM##x)
+#define CCAPxL(x)       (CCAP##x##L)
+#define CCAPxH(x)       (CCAP##x##H)
+#define PCA_PWMx(x)     (PCA_PWM##x)
+
 
 //! PWM peripherals
 /**

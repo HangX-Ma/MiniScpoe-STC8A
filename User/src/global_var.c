@@ -28,7 +28,7 @@
 uint16_t VBAT;
 uint16_t SVin_ratio;
 
-uint16_t *BGV;
+uint16_t *BGV_RAM;
 uint16_t ADCbg;
 
 uint8_t  G_WaveLength;

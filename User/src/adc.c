@@ -149,7 +149,7 @@ uint16_t* GetWaveADC(uint8_t chx, uint8_t scale_h) {
     // ADC_RAM_Bandgap     = Get_RAM_REFV(); // Read Bandgap voltage value stored in RAM
     ADCbg           = GetADC_CHx(ADC_CONTR_ADC_CHS_VAL15); // Get sampled Bandgap voltage value from ADC
     /* Convert trigger voltage set by user to ADC value */
-    G_TriggerADCx   = ConvertUnit_mV2ADC(G_TriggerLevel_mV, BGV, ADCbg, SVin_ratio);
+    G_TriggerADCx   = ConvertUnit_mV2ADC(G_TriggerLevel_mV, BGV_RAM, ADCbg, SVin_ratio);
 
     Wave_ADC_Init(scale_h);
 

@@ -428,11 +428,11 @@ void AnalyzeData()
     Min = adcMin;
 
     // The maximum and minimum sampling values of the sampling points are converted into voltage values mV
-    G_VMax = ConvertUnit_ADC2mV(adcMax, BGV, ADCbg, SVin_ratio);
-    G_VMin = ConvertUnit_ADC2mV(adcMin, BGV, ADCbg, SVin_ratio);
+    G_VMax = ConvertUnit_ADC2mV(adcMax, BGV_RAM, ADCbg, SVin_ratio);
+    G_VMin = ConvertUnit_ADC2mV(adcMin, BGV_RAM, ADCbg, SVin_ratio);
 
-    G_VMax_Modified = ConvertUnit_ADC2mV(adcMax - G_Bias_Voltage, BGV, ADCbg, SVin_ratio);
-    G_VMin_Modified = ConvertUnit_ADC2mV(adcMin - G_Bias_Voltage, BGV, ADCbg, SVin_ratio);
+    G_VMax_Modified = ConvertUnit_ADC2mV(adcMax - G_Bias_Voltage, BGV_RAM, ADCbg, SVin_ratio);
+    G_VMin_Modified = ConvertUnit_ADC2mV(adcMin - G_Bias_Voltage, BGV_RAM, ADCbg, SVin_ratio);
 
     if(G_VMax_Modified > 0  && G_VMin_Modified > 0)
     {
@@ -481,8 +481,8 @@ void AnalyzeData()
     GetVoltageVRangeAuto();
 
     // Use the vertical ruler mV range to invert the ADC range as the upper and lower limits of the chart
-    plotADCMax = ConvertUnit_mV2ADC(G_VolV_Max, BGV, ADCbg, SVin_ratio);
-    plotADCMin = ConvertUnit_mV2ADC(G_VolV_Min, BGV, ADCbg, SVin_ratio);
+    plotADCMax = ConvertUnit_mV2ADC(G_VolV_Max, BGV_RAM, ADCbg, SVin_ratio);
+    plotADCMin = ConvertUnit_mV2ADC(G_VolV_Min, BGV_RAM, ADCbg, SVin_ratio);
 
     // Calculate waveform frequency
     //如果当前的时间区间和采样数据的时间间隔一致则进行频率计算
@@ -842,22 +842,50 @@ void PlotSettings()
     OLED_ShowString("V");
 
     OLED_Overlap(0);
-    /* Option indicator, 125 is Left arrow */
-    if (G_OptionInSettings == SettingSel_PlotMode) {
-        OLED_ShowChar(101, 15, 125);
-        OLED_ShowChar(95, 30, ' ');
-        OLED_ShowChar(90, 45, ' ');
-    } // PlotMode
-    else if (G_OptionInSettings == SettingSel_SVin_ratio) {
-        OLED_ShowChar(101, 15, ' ');
-        OLED_ShowChar(95, 25, 125);
-        OLED_ShowChar(90, 35, ' ');
-    } // Sampling port voltage ratio
-    else if (G_OptionInSettings == SettingSel_OLED_Brightness) {
-        OLED_ShowChar(101, 15, ' ');
-        OLED_ShowChar(95, 25, ' ');
-        OLED_ShowChar(90, 35, 125);
-    } // OLED_Brightness 
+
+    /* Clear previous Arrow shape */
+    OLED_ShowChar(101, 15, ' ');
+    OLED_ShowChar(95, 25, ' ');
+    OLED_ShowChar(90, 35, ' ');
+
+    /* Set current Arrow shape */
+    if (G_SEL_CONFIRM_FLAG && G_SELOption_Next) {
+        /* Option indicator, 124 is down arrow */
+        if (G_OptionInSettings == SettingSel_PlotMode) {
+            OLED_ShowChar(101, 15, 124);
+        } // PlotMode
+        else if (G_OptionInSettings == SettingSel_SVin_ratio) {
+            OLED_ShowChar(95, 25, 124);
+        } // Sampling port voltage ratio
+        else if (G_OptionInSettings == SettingSel_OLED_Brightness) {
+            OLED_ShowChar(90, 35, 124);
+        } // OLED_Brightness 
+    }
+    else if (G_SEL_CONFIRM_FLAG && !G_SELOption_Next) {
+        /* Option indicator, 123 is up arrow */
+        if (G_OptionInSettings == SettingSel_PlotMode) {
+            OLED_ShowChar(101, 15, 123);
+        } // PlotMode
+        else if (G_OptionInSettings == SettingSel_SVin_ratio) {
+            OLED_ShowChar(95, 25, 123);
+        } // Sampling port voltage ratio
+        else if (G_OptionInSettings == SettingSel_OLED_Brightness) {
+            OLED_ShowChar(90, 35, 123);
+        } // OLED_Brightness 
+    }
+    else {
+        /* Option indicator, 125 is Left arrow */
+        if (G_OptionInSettings == SettingSel_PlotMode) {
+            OLED_ShowChar(101, 15, 125);
+        } // PlotMode
+        else if (G_OptionInSettings == SettingSel_SVin_ratio) {
+            OLED_ShowChar(95, 25, 125);
+        } // Sampling port voltage ratio
+        else if (G_OptionInSettings == SettingSel_OLED_Brightness) {
+            OLED_ShowChar(90, 35, 125);
+        } // OLED_Brightness 
+    }
+
 	
     OLED_Overlap(1);
 }

@@ -36,7 +36,7 @@
 #include "stc8x_delay.h"
 #include "global_var.h"
 
-void Encoder_Init(void);
+void Switch_Init(void);
 void TM0_Init(void);
 void TM1_Init(void);
 void TM4_Init(void);

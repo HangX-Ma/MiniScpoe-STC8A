@@ -31,8 +31,8 @@
 #define STC8Ax          (0)
 #define STC8Hx          (1)
 
-#define LIB_MCU_MODULE  STC8Ax
-// #define LIB_MCU_MODULE  STC8Hx
+// #define LIB_MCU_MODULE  STC8Ax
+#define LIB_MCU_MODULE  STC8Hx
 
 #ifndef LIB_MCU_MODULE
     #define LIB_MCU_MODULE STC8Ax

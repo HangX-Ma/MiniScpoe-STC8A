@@ -43,7 +43,7 @@
 /* voltage division ratio = [for instance] (2K+8K)/(2K)*100 = 500 
    Algorithm limitation: STC8A8K maximum integer is 2^32, 
    SVin_ratio maximum value is (2^32/2^12/1344 = 780)
-   [12 bits ADC:2^12][BGV:1344mV]  */
+   [12 bits ADC:2^12][BGV_RAM:1344mV]  */
 #define SVin_ratio_MAX          750
 #define SVin_ratio_MIN          10
 
