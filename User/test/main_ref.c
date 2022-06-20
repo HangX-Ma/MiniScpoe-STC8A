@@ -475,8 +475,7 @@ void runWhenADCInterrupt(void) {
                 G_VMin              = 0;
                 PlotChart();
             } // Clear waveform in buffer
-            else
-            {
+            else {
                 AnalyzeData();
                 PlotChart();
                 PlotWave();

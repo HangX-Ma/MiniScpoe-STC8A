@@ -43,6 +43,18 @@
 //* ------------ developer definitions ------------
 #define BGV_ADDR        0xEF    //!< internal 1.344V(1.19V D64 version) reference voltage high byte
 
+
+#define ADC_METHOD_INTERRUPT (0)
+#define ADC_METHOD_ENQUIRY   (1)
+#define ADC_METHOD_DMA       (2)
+
+#define ADC_METHOD  ADC_METHOD_DMA
+
+#ifndef ADC_METHOD  
+    #define ADC_METHOD ADC_METHOD_ENQUIRY
+#endif
+
+
 sbit ADC_Sample_Ready_LED = P3^5;
 
 //* ------------     functions     ------------
@@ -90,10 +102,10 @@ uint16_t *GetWaveADC(uint8_t chx, uint8_t scale_h);
 /**
  * @brief Get the Trigger position
  * 
- * @param d1 
- * @param d2 
- * @param dTrigger 
- * @param _triggerSlope 
+ * @param d1 [i-1]th sampled points value
+ * @param d2 [i]th sampled points value
+ * @param dTrigger trigger level
+ * @param _triggerSlope trigger slope
  * @return bit 
  */
 bit GetTriggerPos(uint16_t d1, uint16_t d2, uint16_t dTrigger, bit _triggerSlope);

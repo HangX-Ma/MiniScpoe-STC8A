@@ -98,37 +98,37 @@ bit GetWaveLength(int32_t triggerLevel, bit ifRightSide)
         for (i = G_TriggerPos + G_TriggerPosOffset; i < ADC_SAMPLE_BUF_SIZE - 2; i++) {
             if (GetTriggerPos(*(ADCbuf + i), *(ADCbuf + i + 1), triggerLevel, (bit)RisingEdgeTrigger)) {
                 triggerPosTmp   = i;
-                triggerSlopeTmp = SETBIT;
+                triggerSlopeTmp = RisingEdgeTrigger;
                 triggerFail     = CLRBIT;
                 break;
             } // Search on rising edge
             else if (GetTriggerPos(*(ADCbuf + i), *(ADCbuf + i + 1), triggerLevel, (bit)FallingEdgeTrigger)) {
                 triggerPosTmp   = i;
-                triggerSlopeTmp = CLRBIT;
+                triggerSlopeTmp = FallingEdgeTrigger;
                 triggerFail     = CLRBIT;
                 break;
             } // Search on falling edge
-        } 
-    } // Search right side
+        } // Reset `TriggerFail` flag and break the loop
+    } // Search temporary trigger point at right side
     else {
         for (i = G_TriggerPos + G_TriggerPosOffset; i > 0; i--) {
             if (GetTriggerPos(*(ADCbuf + i), *(ADCbuf + i + 1), triggerLevel, RisingEdgeTrigger)) {
                 triggerPosTmp   = i;
-                triggerSlopeTmp = SETBIT;
+                triggerSlopeTmp = RisingEdgeTrigger;
                 triggerFail     = CLRBIT;
                 break;
             } // Search on rising edge
             else if (GetTriggerPos(*(ADCbuf + i), *(ADCbuf + i + 1), triggerLevel, FallingEdgeTrigger)) {
                 triggerPosTmp   = i;
-                triggerSlopeTmp = CLRBIT;
+                triggerSlopeTmp = FallingEdgeTrigger;
                 triggerFail     = CLRBIT;
                 break;
             } // Search on falling edge
         }
     } //Search left side
 
-    if (!triggerFail)
-    {
+    /* Find trigger position SUCCESSFULLY */
+    if (!triggerFail) {
         for (i = triggerPosTmp; i >= 0; i--) {
             if (triggerSlopeTmp) {
                 if (*(ADCbuf + i) >= triggerLevel && *(ADCbuf + i + 1) <= triggerLevel) {
@@ -163,10 +163,12 @@ bit GetWaveLength(int32_t triggerLevel, bit ifRightSide)
 
     if (triggerForward == 255 || triggerBackward == 255 || (triggerForward == triggerBackward)) {
         G_WaveLength = 0;
+
         return 0;
     }
     else {
         G_WaveLength = triggerBackward - triggerForward;
+
         return 1;
     }
 }
@@ -175,14 +177,14 @@ bit GetWaveLength(int32_t triggerLevel, bit ifRightSide)
  * @brief Get the Waveform Frequency
  */
 void GetWaveFreq(void) {
-    uint16_t sumNum; // Sum number
-    uint8_t  avgRSNum;   //Average right shift number
+    uint16_t sumNum;    // Sum process times
+    uint8_t  avgRSNum;  // Average value right shift bits
 
     if (!G_ADC_Running_FLAG) {
         G_WaveAvgLengthSumNum = 0;
         G_WaveAvgLengthSum    = 0;
     } // When the ADC stops sampling, the waveform frequency is displayed for each action, so the average value is not calculated
-    else if (G_TriggerMode == 0 && G_ScaleH > Scale_100ms) {
+    else if (G_TriggerMode == TriggerSel_Auto && G_ScaleH > Scale_100ms) {
         switch (G_ScaleH) {
             case Scale_50ms: sumNum = 2; avgRSNum = 1; break;
             case Scale_20ms: sumNum = 4; avgRSNum = 2; break;
@@ -195,10 +197,11 @@ void GetWaveFreq(void) {
             G_WaveLength          = G_WaveAvgLengthSum >> avgRSNum; // Get average waveform length
             G_WaveAvgLengthSumNum = 0;                              // Clear waveform length summation times
             G_WaveAvgLengthSum    = 0;                              // Clear waveform length summation 
-        }  // Reach the threshold of summation number
+        }  // Reach the threshold of summation times
         else {
             return;
         } // If not reach the threshold of summation number, return and keep WaveFreq stable.
+
     } // In automatic mode, in order to keep the frequency from changing frequently, 
       // take the average value, and don't take the average value for the interval 
       // greater than or equal to 100 ms, one reason is that the 100 ms waveform 
@@ -218,7 +221,7 @@ void GetWaveFreq(void) {
         case Scale_500us: G_WaveFreq = (50000.0f / (float)G_WaveLength);  break; // G_WaveFreq=25000000/(500*G_WaveLength);
         case Scale_200us: G_WaveFreq = (125000.0f / (float)G_WaveLength); break; // G_WaveFreq=25000000/(200*G_WaveLength);
         case Scale_100us: G_WaveFreq = (250000.0f / (float)G_WaveLength); break; // G_WaveFreq=25000000/(100*G_WaveLength);
-    }
+    } // Time_Cost = WaveLength(Sampled points number at certain time interval) * Timer_Interval
 
     G_WaveFreq = (float)G_WaveFreq /  (0.0162f * (log10(G_WaveFreq) /log10(2.7) ) + 0.9398f);
 
@@ -283,7 +286,7 @@ uint8_t* Convert_WaveFreq_Str(void) {
         str[2] = '-';
         str[3] = '-';
         str[4] = '\0';
-    }
+    } // Waveform frequency process fails
     else if (G_WaveFreq >= 10000000) {
         str[0] = ' ';
         str[1] = G_WaveFreq / 10000000 + '0';
@@ -378,37 +381,38 @@ void AnalyzeData()
     int32_t adcMin     = 4095;
     int32_t adcMid     = 0;
     int32_t plotADCMid = 0;
+
     static int32_t Avg_Modified_Voltage    = 0;
     static int32_t Modified_Voltage_Buffer = 0;
     static int8_t  Avg_Cnt = 0;
-    // uint16_t ADC_Sampled_Bandgap, ADC_RAM_Bandgap;
-    /* get internal 1.344V REFV average value by ADC */
-
-    /* read internal 1.344V REFV */
 
     if (G_ADC_Complete_FLAG) {
         G_ScaleH_tmp = G_ScaleH; 
-        //record the sampling time interval, because the number of sampling points is small, 
-        // it is not supported to scale the waveform according to the time interval in real time, 
-        // and to clear the waveform when the time interval changes. Copy the sample point to
-        // another array to avoid data clutter caused by sample interruption. 
+        // --------------------------------- [INTRODUCTION] ---------------------------------
+        // Record the sampling time interval. Because the number of sampling points is small, 
+        // it is not supported to scale the waveform according to the time interval in real time.
+        // Clear the waveform when the time interval changes. 
+        // ----------------------------------------------------------------------------------
+
+        // Copy the sample point to another array to avoid data clutter caused by sample interruption. 
         // If the sampling is interrupted, the waveform is displayed using the old 
-        //sampling point in the cache.        
+        //sampling point in the cache.
         for (i = 0; i < ADC_SAMPLE_BUF_SIZE; i++) {
             *(ADCbuf + i) = *(ADCSamplingPtr + i);
-        }
+        } 
 
         /* Calculate the trigger position */
         /* When ADC sampling stops, `G_TriggerPos` remains the same, so the following calculations are not performed */
         G_TriggerPos       = ADC_SAMPLE_BUF_SIZE / 2;
         G_TriggerFail_FLAG = SETBIT;
-        for (i = ((CHART_H_MAX - CHART_H_MIN) >> 1); i < ADC_SAMPLE_BUF_SIZE - ((CHART_H_MAX - CHART_H_MIN) >> 1); i++)
+
+        for (i = ((CHART_H_MAX - CHART_H_MIN) >> 1)/*Screen Center*/; i < ADC_SAMPLE_BUF_SIZE - ((CHART_H_MAX - CHART_H_MIN) >> 1); i++)
         {
             if (GetTriggerPos(*(ADCbuf + i), *(ADCbuf + i + 1), G_TriggerADCx, G_TriggerSlope_FLAG)) {
                 G_TriggerPos       = i;
                 G_TriggerFail_FLAG = CLRBIT;
                 break;
-            }
+            } // Trigger success
         }
         G_TriggerPosOffset = 0;
     }
@@ -418,10 +422,10 @@ void AnalyzeData()
         tmp = *(ADCbuf + G_TriggerPos + G_TriggerPosOffset - 50 + i);
         if (tmp > adcMax) {
             adcMax = tmp;
-        } 
+        } // Maximum voltage clamp
         else if (tmp < adcMin) {
             adcMin = tmp;
-        } 
+        } // Minimum voltage clamp
     }
 
     Max = adcMax;
@@ -450,8 +454,7 @@ void AnalyzeData()
         G_VMin_Modified = G_VMin_Modified * (0.0002f * (0-(double)G_VMin_Modified) + 0.2065f);
     }
 
-    if(G_MeasureWaySel == MeasureWay_DC)
-    {
+    if(G_MeasureWaySel == MeasureWay_DC) {
         Avg_Modified_Voltage += (G_VMax_Modified + G_VMin_Modified) >> 1;
         
         if(++Avg_Cnt >= 8) {
@@ -459,7 +462,7 @@ void AnalyzeData()
             
             G_Voltage_Modified = (float)Avg_Modified_Voltage / 8.0f;
             Avg_Modified_Voltage = 0;
-        }		
+        }
         
     }
     else if(G_MeasureWaySel == MeasureWay_AC) {
@@ -535,6 +538,7 @@ void PlotChart(void)
         for (i = 0; i < 15; i++) {
             OLED_ShowHorizontalLine(CHART_H_MIN + 7 * i, CHART_V_MIN + ((CHART_V_MAX - CHART_V_MIN) >> 1), 3);
         }
+        
         for (i = 0; i < 6; i++) {
             OLED_ShowVerticalLine(CHART_H_MIN + 25, CHART_V_MIN + 1 + i * 8, 3);
             OLED_ShowVerticalLine(CHART_H_MIN + 50, CHART_V_MIN + 1 + i * 8, 3);
@@ -775,11 +779,9 @@ void PlotChart(void)
     OLED_Overlap(1);
 }
 
-void PlotWave(void)
-{
+void PlotWave(void) {
     uint8_t i;
-    if (G_PlotModeSel == PlotMode_Vector)
-    {
+    if (G_PlotModeSel == PlotMode_Vector) {
         for (i = 0; i < (CHART_H_MAX - CHART_H_MIN); i++) {
             OLED_ShowLine(
                 i + CHART_H_MIN,

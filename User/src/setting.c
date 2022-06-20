@@ -332,10 +332,10 @@ void Read_Options(void) {
     G_PlotModeSel = *optionsPtr++;
 
     /* Time scale (horizontal) [int8_t]  */
-    G_ScaleH = *optionsPtr++;        //读取时间区间 char
+    G_ScaleH = *optionsPtr++;        // Read time scale [char]
 
     /* Auto time scale flag [bit] */
-    G_Scale_Auto_FLAG = *optionsPtr++;   //读取自动量程标志 bit
+    G_Scale_Auto_FLAG = *optionsPtr++;   // Auto range flag [bit]
 
     /* G_VolV_Max [int16_t] */
     G_VolV_Max = *optionsPtr++;     // Read vertical axis maximum voltage high 8 bits

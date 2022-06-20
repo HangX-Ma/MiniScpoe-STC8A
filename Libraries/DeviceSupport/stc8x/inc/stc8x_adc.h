@@ -44,13 +44,16 @@
  * @{
  */
 
-
+//* ------------ developer definitions ------------
+#define ADC_CHx_size 16
+#define ADC_Data_size 36    // 6~n, the sum of ADC converted data in each ADC channel, 2*conversion_times+4
 //* ------------   GLOBAL variables   ------------
 extern __IO uint16_t G_ADC_data;
+extern bit ADC_BMM_FLAG;
+extern bit ADC_INTERRUPT_FLAG;
+extern uint8_t xdata ADC_BMM_Buffer[ADC_CHx_size][ADC_Data_size];
+
 extern void delay_nms(uint16_t nms);
-
-//* ------------ developer definitions ------------
-
 //* ------------     functions     ------------
 
 /**
@@ -64,19 +67,30 @@ void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed);
 
 
 /**
+/**
+ * @brief ADC DMA configuration 
+ * 
+ * @param[in] DMA_CHSWx ADC DMA channel x enabling selection
+ * @param[in] DMA_CVTIMESEL ADC DMA conversion times selection
+ */
+void ADC_BMM_config(uint16_t DMA_CHSWx, uint8_t DMA_CVTIMESEL);
+
+/**
  * @brief ADC sampling by enquiring method
  * 
  * @param _ADC_CHx select ADC channel for ADC conversion: 0~15
  */
-void ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx);
+uint16_t ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx);
 
 /**
  * @brief ADC sampling by interrupt method
  * 
  * @param _ADC_CHx select ADC channel for ADC conversion: 0~15
  * @param _ADC_NVIC_Priority ADC interrupt priority
+ * @param _ADC_auto_Conversion_times STC8Hx ADC auto conversion times
  */
-void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority);
+void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority, uint8_t _ADCEXCFG_CVTIMESEL);
+
 
 /**
  * @brief GPIO - ADC channel selection \c MACRO

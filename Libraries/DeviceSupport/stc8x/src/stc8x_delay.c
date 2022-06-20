@@ -36,7 +36,7 @@ void delay_nms(uint16_t nms) {
 void delay_nus(uint16_t nus) {
     uint16_t i;
     for(; nus > 0; nus--) {
-        i = LIB_CLK_FREQ / LIB_DELAY_COUNT * 1000;
+        i = LIB_CLK_FREQ / LIB_DELAY_COUNT / 1000;
         while(--i);
     }
 }

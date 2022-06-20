@@ -28,7 +28,13 @@
 #include "stc8x_delay.h"
 #include "INTRINS.H"
 
+
+uint8_t xdata ADC_BMM_Buffer[ADC_CHx_size][ADC_Data_size];
+bit ADC_BMM_FLAG;
+bit ADC_INTERRUPT_FLAG;
 __IO uint16_t G_ADC_data;  //!< ADC data container
+
+
 
 void ADC_CHx_SEL(uint8_t _ADC_CHx) {
     uint8_t var = (_ADC_CHx&0x08) >> 3;
@@ -46,13 +52,11 @@ void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed) {
     #if (LIB_MCU_MODULE == STC8Hx) 
     /* enable external special registers */
     P_SW2 |= P_SW2_EAXFR;
-        ADCTIM = ADCTIM_CSHOLD_2tk | ADCTIM_SMPDUT_32tk;
+        ADCTIM   = ADCTIM_CSHOLD_2tk | ADCTIM_SMPDUT_32tk;
     /* disable external special registers */
     P_SW2 &= ~P_SW2_EAXFR;
     #endif
 
-    /* clear ADCCFG register */
-    ADCCFG     = 0x00;
     /* set align type and ADC conversion frequency */
     ADCCFG     = _ADC_align | _ADC_speed;
     /* power on ADC */
@@ -61,7 +65,26 @@ void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed) {
     delay_nms(5);
 }
 
-void ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx) {
+// void ADC_BMM_config(uint16_t DMA_CHSWx, uint8_t DMA_CVTIMESEL) {
+//     ADC_BMM_FLAG = CLRBIT;
+
+//     P_SW2 |= P_SW2_EAXFR;
+//     BMM_ADC_STA &= ~BMM_ADC_STA_ADCIF;  // Clear DMA interrupt flag
+//     BMM_ADC_CFG |= BMM_ADC_CFG_ADCIE;   // Enable interrupt
+//     BMM_ADC_RXAH = (uint8_t)((uint16_t)ADC_BMM_Buffer >> 8);    //ADC转换数据存储地址
+//     BMM_ADC_RXAL = (uint8_t)ADC_BMM_Buffer;
+//     BMM_ADC_CFG2 = DMA_CVTIMESEL;   // Each ADC channel conversion times: 16
+
+//     BMM_ADC_CHSW0 = DMA_CHSWx;
+//     BMM_ADC_CHSW1 = DMA_CHSWx >> 8;
+
+//     BMM_ADC_CR = (BMM_ADC_CR_ENADC | BMM_ADC_CR_TRIG); // Enable DMA function.
+
+//     P_SW2 &= ~P_SW2_EAXFR;
+// }
+
+
+uint16_t ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx) {
     /* clear previous result */
     ADC_RESH = 0x00;
     ADC_RESL = 0x00;
@@ -83,38 +106,47 @@ void ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx) {
     ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
 
     G_ADC_data = (ADC_RESH) << 8 | ADC_RESL;
+
+    return G_ADC_data;
 }
 
 
-void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority) {
+void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority, uint8_t _ADCEXCFG_CVTIMESEL) {
+    ADC_INTERRUPT_FLAG = CLRBIT;
     /* clear previous result */
     ADC_RESH = 0x00;
     ADC_RESL = 0x00;
-    /* select GPIO for ADC function */
-    // ADC_CHx_SEL(_ADC_CHx);
+    #if (LIB_MCU_MODULE == STC8Hx) 
+    /* enable external special registers */
+    P_SW2 |= P_SW2_EAXFR;
+        ADCEXCFG = _ADCEXCFG_CVTIMESEL & 0x07;
+    /* disable external special registers */
+    P_SW2 &= ~P_SW2_EAXFR;
+    #endif
+
+    /* set interrupt priority */
+    IP  = (IP & 0xDF) | (((uint8_t)_ADC_NVIC_Priority & 0x01) << 5);
+    IPH = (IPH & 0xDF) | (((uint8_t)_ADC_NVIC_Priority & 0x02) << 4);
+    /* ensure interrupt flag cleared */
+    ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
+    ADC_CONTR |= _ADC_CHx;
     /* enable ADC interrupt */
     EADC = SETBIT;
     /* enable interrupt system */
     EA   = SETBIT;
-    /* set interrupt priority */
-    IP  = (IPH & 0xDF) | (((uint8_t)_ADC_NVIC_Priority & 0x01) << 5);
-    IPH = (IPH & 0xDF) | (((uint8_t)_ADC_NVIC_Priority & 0x02) << 4);
-    /* ensure interrupt flag cleared */
-    ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
     /* start conversion */
     ADC_CONTR |= ADC_CONTR_ADC_START;
-    ADC_CONTR |= _ADC_CHx;
 }
 
-
 void ADC_ISR_Handler(void) interrupt(ADC_VECTOR) {
-    /* disable interrupt system to protect value */
-    EA      = SETBIT;
     G_ADC_data = ((uint16_t)(ADC_RESH) << 8) | (uint16_t)(ADC_RESL);
     /* ensure interrupt flag cleared */
     ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
-    /* enable interrupt system */
-    EA      = CLRBIT;
-    /* start conversion */
-    ADC_CONTR |= ADC_CONTR_ADC_START;
+    ADC_INTERRUPT_FLAG = SETBIT;
 }
+
+
+// void ADC_BMM_Interrupt(void) interrupt(13) {
+//     BMM_ADC_STA  &= ~BMM_ADC_STA_ADCIF; // Clear DMA interrupt flag
+//     ADC_BMM_FLAG = SETBIT;
+// }

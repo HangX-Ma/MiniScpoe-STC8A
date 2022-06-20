@@ -42,7 +42,7 @@ sbit SW_Button   = P3 ^ 2;   // Switch Button connects to External Interrupt 0
 #define VBAT_RATIO                  510             //!< 'battery voltage ratio' * 100,(2K+8K)/(2K)*100=5*100=500
 #define CHX_VBAT_RATIO              510             //!< 'battery voltage ratio'
 #define ADC_SAMPLE_BUF_SIZE         220             //!< ADC sampling point buffer size
-#define ADC_SINGLE_TRIGGER_BUF_SIZE 62              //!< ADC single trigger sampling point buffer size
+#define ADC_STRI_BUF_SIZE           62              //!< ADC single trigger sampling point buffer size
 
 /* Region for waveform on display*/
 #define CHART_H_MAX 127
