@@ -379,7 +379,7 @@ void runWhenADCComplete() {
 void GlobalVar_Init(void) {
     G_State_Settings_FLAG         = CLRBIT;                 // Not enter setting interface
     G_WaveScroll_FLAG             = CLRBIT;                 // Not enable waveform scroll
-
+    
     G_UpdateVBAT_FLAG             = CLRBIT;                 // Reset battery update flag
     G_OLED_BrightnessChanged_FLAG = CLRBIT;                 // Reset OLED brightness update flag
     G_State_OptionChanged_FLAG    = CLRBIT;                 // Reset option changed flag
@@ -434,7 +434,9 @@ void GlobalVar_Init(void) {
         P_SW2 &= ~P_SW2_EAXFR;
     } 
 
-    BGV_RAM                       = Get_RAM_REFV();
+    G_LVD_EVENT_FLAG            = CLRBIT;
+
+    BGV_RAM                     = Get_RAM_REFV();
 }
 
 void RST_Init(void) {
