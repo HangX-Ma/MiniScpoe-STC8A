@@ -1555,7 +1555,7 @@ struct PWMx_struct{
 #define     PWMSET_ADDR     0xF1
 #define     PWMCFG_ADDR     0xF6
 
-#define     PWMC_BASE       0xFFF0
+#define     PWMC_BASE       0xFF00
 #define     PWMCH_ADDR      0xFF00
 #define     PWMCL_ADDR      0xFF01
 #define     PWMCKS_ADDR     0xFF02
@@ -1575,81 +1575,81 @@ struct PWMx_struct{
 #define     PWM7_BASE       0xFF48
 
 
-#define     PWM0T1_ADDR     (PWM0_BASE + 0x00)
-#define     PWM0T1H_ADDR    (PWM0T1_ADDR +  0x00)
-#define     PWM0T1L_ADDR    (PWM0T1H_ADDR + 0x01)
-#define     PWM0T2_ADDR     (PWM0T1L_ADDR + 0x01)
-#define     PWM0T2H_ADDR    (PWM0T2_ADDR +  0x00)
-#define     PWM0T2L_ADDR    (PWM0T2H_ADDR + 0x01)
-#define     PWM0CR_ADDR     (PWM0T2L_ADDR + 0x01)
-#define     PWM0HLD_ADDR    (PWM0CR_ADDR +  0x01)
+#define     PWM0T1_ADDR     (PWM0_BASE + 0x0000)
+#define     PWM0T1H_ADDR    (PWM0_BASE + 0x0000)
+#define     PWM0T1L_ADDR    (PWM0_BASE + 0x0001)
+#define     PWM0T2_ADDR     (PWM0_BASE + 0x0002)
+#define     PWM0T2H_ADDR    (PWM0_BASE + 0x0002)
+#define     PWM0T2L_ADDR    (PWM0_BASE + 0x0003)
+#define     PWM0CR_ADDR     (PWM0_BASE + 0x0004)
+#define     PWM0HLD_ADDR    (PWM0_BASE + 0x0005)
 
-#define     PWM1T1_ADDR     (PWM1_BASE + 0x00)
-#define     PWM1T1H_ADDR    (PWM1T1_ADDR +  0x00)
-#define     PWM1T1L_ADDR    (PWM1T1H_ADDR + 0x01)
-#define     PWM1T2_ADDR     (PWM1T1L_ADDR + 0x01)
-#define     PWM1T2H_ADDR    (PWM1T2_ADDR +  0x00)
-#define     PWM1T2L_ADDR    (PWM1T2H_ADDR + 0x01)
-#define     PWM1CR_ADDR     (PWM1T2L_ADDR + 0x01)
-#define     PWM1HLD_ADDR    (PWM1CR_ADDR +  0x01)
+#define     PWM1T1_ADDR     (PWM1_BASE + 0x0000)
+#define     PWM1T1H_ADDR    (PWM1_BASE + 0x0000)
+#define     PWM1T1L_ADDR    (PWM1_BASE + 0x0001)
+#define     PWM1T2_ADDR     (PWM1_BASE + 0x0002)
+#define     PWM1T2H_ADDR    (PWM1_BASE + 0x0002)
+#define     PWM1T2L_ADDR    (PWM1_BASE + 0x0003)
+#define     PWM1CR_ADDR     (PWM1_BASE + 0x0004)
+#define     PWM1HLD_ADDR    (PWM1_BASE + 0x0005)
 
-#define     PWM2T1_ADDR     (PWM2_BASE + 0x00)
-#define     PWM2T1H_ADDR    (PWM2T1_ADDR +  0x00)
-#define     PWM2T1L_ADDR    (PWM2T1H_ADDR + 0x01)
-#define     PWM2T2_ADDR     (PWM2T1L_ADDR + 0x01)
-#define     PWM2T2H_ADDR    (PWM2T2_ADDR +  0x00)
-#define     PWM2T2L_ADDR    (PWM2T2H_ADDR + 0x01)
-#define     PWM2CR_ADDR     (PWM2T2L_ADDR + 0x01)
-#define     PWM2HLD_ADDR    (PWM2CR_ADDR +  0x01)
+#define     PWM2T1_ADDR     (PWM2_BASE + 0x0000)
+#define     PWM2T1H_ADDR    (PWM2_BASE + 0x0000)
+#define     PWM2T1L_ADDR    (PWM2_BASE + 0x0001)
+#define     PWM2T2_ADDR     (PWM2_BASE + 0x0002)
+#define     PWM2T2H_ADDR    (PWM2_BASE + 0x0002)
+#define     PWM2T2L_ADDR    (PWM2_BASE + 0x0003)
+#define     PWM2CR_ADDR     (PWM2_BASE + 0x0004)
+#define     PWM2HLD_ADDR    (PWM2_BASE + 0x0005)
 
-#define     PWM3T1_ADDR     (PWM3_BASE + 0x00)
-#define     PWM3T1H_ADDR    (PWM3T1_ADDR +  0x00)
-#define     PWM3T1L_ADDR    (PWM3T1H_ADDR + 0x01)
-#define     PWM3T2_ADDR     (PWM3T1L_ADDR + 0x01)
-#define     PWM3T2H_ADDR    (PWM3T2_ADDR +  0x00)
-#define     PWM3T2L_ADDR    (PWM3T2H_ADDR + 0x01)
-#define     PWM3CR_ADDR     (PWM3T2L_ADDR + 0x01)
-#define     PWM3HLD_ADDR    (PWM3CR_ADDR +  0x01)
+#define     PWM3T1_ADDR     (PWM3_BASE + 0x0000)
+#define     PWM3T1H_ADDR    (PWM3_BASE + 0x0000)
+#define     PWM3T1L_ADDR    (PWM3_BASE + 0x0001)
+#define     PWM3T2_ADDR     (PWM3_BASE + 0x0002)
+#define     PWM3T2H_ADDR    (PWM3_BASE + 0x0002)
+#define     PWM3T2L_ADDR    (PWM3_BASE + 0x0003)
+#define     PWM3CR_ADDR     (PWM3_BASE + 0x0004)
+#define     PWM3HLD_ADDR    (PWM3_BASE + 0x0005)
 
-#define     PWM4T1_ADDR     (PWM4_BASE + 0x00)
-#define     PWM4T1H_ADDR    (PWM4T1_ADDR +  0x00)
-#define     PWM4T1L_ADDR    (PWM4T1H_ADDR + 0x01)
-#define     PWM4T2_ADDR     (PWM4T1L_ADDR + 0x01)
-#define     PWM4T2H_ADDR    (PWM4T2_ADDR +  0x00)
-#define     PWM4T2L_ADDR    (PWM4T2H_ADDR + 0x01)
-#define     PWM4CR_ADDR     (PWM4T2L_ADDR + 0x01)
-#define     PWM4HLD_ADDR    (PWM4CR_ADDR +  0x01)
+#define     PWM4T1_ADDR     (PWM4_BASE + 0x0000)
+#define     PWM4T1H_ADDR    (PWM4_BASE + 0x0000)
+#define     PWM4T1L_ADDR    (PWM4_BASE + 0x0001)
+#define     PWM4T2_ADDR     (PWM4_BASE + 0x0002)
+#define     PWM4T2H_ADDR    (PWM4_BASE + 0x0002)
+#define     PWM4T2L_ADDR    (PWM4_BASE + 0x0003)
+#define     PWM4CR_ADDR     (PWM4_BASE + 0x0004)
+#define     PWM4HLD_ADDR    (PWM4_BASE + 0x0005)
 
-#define     PWM5T1_ADDR     (PWM5_BASE + 0x00)
-#define     PWM5T1H_ADDR    (PWM5T1_ADDR +  0x00)
-#define     PWM5T1L_ADDR    (PWM5T1H_ADDR + 0x01)
-#define     PWM5T2_ADDR     (PWM5T1L_ADDR + 0x01)
-#define     PWM5T2H_ADDR    (PWM5T2_ADDR +  0x00)
-#define     PWM5T2L_ADDR    (PWM5T2H_ADDR + 0x01)
-#define     PWM5CR_ADDR     (PWM5T2L_ADDR + 0x01)
-#define     PWM5HLD_ADDR    (PWM5CR_ADDR +  0x01)
+#define     PWM5T1_ADDR     (PWM5_BASE + 0x0000)
+#define     PWM5T1H_ADDR    (PWM5_BASE + 0x0000)
+#define     PWM5T1L_ADDR    (PWM5_BASE + 0x0001)
+#define     PWM5T2_ADDR     (PWM5_BASE + 0x0002)
+#define     PWM5T2H_ADDR    (PWM5_BASE + 0x0002)
+#define     PWM5T2L_ADDR    (PWM5_BASE + 0x0003)
+#define     PWM5CR_ADDR     (PWM5_BASE + 0x0004)
+#define     PWM5HLD_ADDR    (PWM5_BASE + 0x0005)
 
-#define     PWM6T1_ADDR     (PWM6_BASE + 0x00)
-#define     PWM6T1H_ADDR    (PWM6T1_ADDR +  0x00)
-#define     PWM6T1L_ADDR    (PWM6T1H_ADDR + 0x01)
-#define     PWM6T2_ADDR     (PWM6T1L_ADDR + 0x01)
-#define     PWM6T2H_ADDR    (PWM6T2_ADDR +  0x00)
-#define     PWM6T2L_ADDR    (PWM6T2H_ADDR + 0x01)
-#define     PWM6CR_ADDR     (PWM6T2L_ADDR + 0x01)
-#define     PWM6HLD_ADDR    (PWM6CR_ADDR +  0x01)
+#define     PWM6T1_ADDR     (PWM6_BASE + 0x0000)
+#define     PWM6T1H_ADDR    (PWM6_BASE + 0x0000)
+#define     PWM6T1L_ADDR    (PWM6_BASE + 0x0001)
+#define     PWM6T2_ADDR     (PWM6_BASE + 0x0002)
+#define     PWM6T2H_ADDR    (PWM6_BASE + 0x0002)
+#define     PWM6T2L_ADDR    (PWM6_BASE + 0x0003)
+#define     PWM6CR_ADDR     (PWM6_BASE + 0x0004)
+#define     PWM6HLD_ADDR    (PWM6_BASE + 0x0005)
 
-#define     PWM7T1_ADDR     (PWM7_BASE + 0x00)
-#define     PWM7T1H_ADDR    (PWM7T1_ADDR +  0x00)
-#define     PWM7T1L_ADDR    (PWM7T1H_ADDR + 0x01)
-#define     PWM7T2_ADDR     (PWM7T1L_ADDR + 0x01)
-#define     PWM7T2H_ADDR    (PWM7T2_ADDR +  0x00)
-#define     PWM7T2L_ADDR    (PWM7T2H_ADDR + 0x01)
-#define     PWM7CR_ADDR     (PWM7T2L_ADDR + 0x01)
-#define     PWM7HLD_ADDR    (PWM7CR_ADDR +  0x01)
+#define     PWM7T1_ADDR     (PWM7_BASE + 0x0000)
+#define     PWM7T1H_ADDR    (PWM7_BASE + 0x0000)
+#define     PWM7T1L_ADDR    (PWM7_BASE + 0x0001)
+#define     PWM7T2_ADDR     (PWM7_BASE + 0x0002)
+#define     PWM7T2H_ADDR    (PWM7_BASE + 0x0002)
+#define     PWM7T2L_ADDR    (PWM7_BASE + 0x0003)
+#define     PWM7CR_ADDR     (PWM7_BASE + 0x0004)
+#define     PWM7HLD_ADDR    (PWM7_BASE + 0x0005)
 
 /* Bit definition for PWMSET register */
 #define     PWMSET_PWMRST   0x20             /*!< PWM software reset */
-#define     PWMSET_ENPWM   0x01              /*!< PWM enable (PWM0~PWM7) */
+#define     PWMSET_ENPWM    0x01             /*!< PWM enable (PWM0~PWM7) */
 
 /* Bit definition for PWMCFG register */
 #define     PWMCFG_CBIF     0x08             /*!< Zero interrupt flag bit for PWM counter overflow happens */
@@ -1658,7 +1658,7 @@ struct PWMx_struct{
 #define     PWMCFG_PWMCEN   0x01             /*!< PWM waveform generator starts counting */
 
 /* Bit definition for PWMCKS register */
-#define     PWMCKS_SELT2    0x0F             /*!< PWM clock source selection: [0], PWM clock source is the system clock frequency divider after the clock; [1], The PWM clock source is the overflow pulse of Timer 2 */
+#define     PWMCKS_SELT2    0x10             /*!< PWM clock source selection: [0], PWM clock source is the system clock frequency divider after the clock; [1], The PWM clock source is the overflow pulse of Timer 2 */
 
 // If SELT2=1, the following setting will be invalid.
 #define     PWMCKS_PWM_PS    0x0F             /*!< PWM_PS[3:0], System clock pre-frequency parameter */

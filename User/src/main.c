@@ -34,7 +34,7 @@
         Main Interface - Options Selection Mode: 
             SW Button:              Switch Stop/Run
             Short Press SETTING:    Switch to [Waveform Horizontal Scroll Mode]
-            SEL:                    Select or de-select this option.
+            SEL:                    Select or deselect this option.
             NEXT/INC:               Jump to next option or increase value.
             LAST/DEC:               Jump to last option or decrease value.
 
@@ -73,20 +73,22 @@
     ----------------------------------------------------------------------------------------------------
     OPTIONS SETTING SAVING:
         Long press SETTING key to leave the setting interface. If options have been changed, the program will save the setting to EEPROM.
+    LVD EVENT:
+        If LVD event happens, system will not allow user to operate EEPROM to save data.
     ----------------------------------------------------------------------------------------------------
     MAIN INTERFACE STATUS: 
         RUN:        Sampling in progress 
         STOP:       Stop Sampling 
         FAIL:       In AUTO mode, trigger value exceeds waveform range causing trigger failure 
         SUCC:       In automatic mode, the trigger value displays the trigger success in the waveform range.
-        Auto:       Auto range.
+        AUTO:       Auto range.
     ----------------------------------------------------------------------------------------------------
     SETTING INTERFACE STATUS: 
         PMODE (drawing mode) : 
             Vector: waveform display using vector 
             Dots:   waveform display using dots
-            LSB (sampling factor) : 100 times the partial voltage factor, (8.2K+2K)/2K*100 = 510. Adjust this value subtly in accordance with actual register values.
-            BRT:    OLED brightness
+        LSB (sampling factor) : 100 times the partial voltage factor, (8.2K+2K)/2K*100 = 510. Adjust this value subtly in accordance with actual register values.
+        BRT:    OLED brightness
     ----------------------------------------------------------------------------------------------------
  */
 #include "main.h"
@@ -113,6 +115,9 @@ char putchar (char c) {
 
 
 int main (void) {
+    /* Set P1.7 as PWM output pin, quasi bidirectional */
+    P1M1 &= ~0x80;
+    P1M0 &= ~0x80;
     /* Set OLED port P2.3, P2.4, P2.5, P2.6, P2.7 as quasi bidirectional */
     P2M1 &= ~0xF8;
     P2M0 &= ~0xF8;
@@ -145,8 +150,9 @@ int main (void) {
     P2INTE |= 0x07;
     P4INTE |= 0x06;
     P_SW2 &= ~P_SW2_EAXFR;
-
-
+    
+    RST_Init();
+    PWM_config();
     Switch_Init();
     TM0_Init();
     UART1_Init();
@@ -431,6 +437,14 @@ void GlobalVar_Init(void) {
     BGV_RAM                       = Get_RAM_REFV();
 }
 
+void RST_Init(void) {
+    RSTCFG  = RSTCFG_P54RST | RSTCFG_LVDS_3V0; // Select P5.4 as the RST pin. LVD threshold voltage is 3.0V.
+    RSTCFG &= ~RSTCFG_ENLVR; // Disable LVD reset
+    PCON   &= ~PCON_LVDF;    // Clear interrupt flag
+    delay_nus(500);
+    ELVD    = SETBIT;        // Enable LVD interrupt
+}
+
 
 void Switch_Init(void) {
     TCON_IT0 = CLRBIT;   // Enable INT0, rising edge and falling edge interrupt
@@ -668,3 +682,7 @@ void Common_ISR_Handler(void) interrupt(13) {
     P_SW2 &= ~P_SW2_EAXFR;
 }
 
+void RST_ISR_Handler(void) interrupt(LVD_VECTOR) {
+    G_LVD_EVENT_FLAG = SETBIT;      // Set LVD event flag 
+    PCON            &= ~PCON_LVDF;
+}

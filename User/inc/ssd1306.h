@@ -160,7 +160,7 @@ void OLED_ShowPixel(uint8_t x, uint8_t y);
  * 
  * @param x start point coordinate x value
  * @param y start point coordinate y value
- * @param w line height
+ * @param h line height
  */
 void OLED_ShowVerticalLine(uint8_t x, uint8_t y, uint8_t h);
 

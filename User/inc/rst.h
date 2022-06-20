@@ -1,9 +1,9 @@
 /**
- * @file main.h
- * @author MContour (m-contour@qq.com)
- * @brief main program definition
+ * @file rst.h
+ * @author System RST settting
+ * @brief 
  * @version 0.1
- * @date 2022-05-06
+ * @date 2022-06-20
  * 
  * @copyright Apache 2.0 LICENSE
  * 
@@ -24,29 +24,25 @@
  *****************************************************************************
  */
 
-#ifndef __MAIN__H__
-#define __MAIN__H__
+#ifndef __RST__H__
+#define __RST__H__
 
-#include "uart.h"
-#include "adc.h"
-#include "pwmEX.h"
-#include "chart.h"
-#include "ssd1306.h"
-#include "setting.h"
-#include "stc8x_gpio.h"
-#include "stc8x_delay.h"
-#include "global_var.h"
+//* ------------      head files      ------------
+#include "core_stc8x.h"
 
-void Switch_Init(void);
-void RST_Init(void);
-void TM0_Init(void);
-void TM1_Init(void);
-void TM4_Init(void);
-void GlobalVar_Init(void);
+#if (LIB_MCU_MODULE == STC8Ax)
+    #include "config_stc8ax.h"
+#elif (LIB_MCU_MODULE == STC8Hx)
+    #include "config_stc8hx.h"
+#endif
 
 
-void runWhenInSettings(void);
-void runWhenADCInterrupt(void);
-void runWhenADCComplete(void);
+//* ------------   GLOBAL variables   ------------
 
-#endif  //!__MAIN__H__
+//* ------------ developer definitions ------------
+
+//* ------------     functions     ------------
+
+
+#endif  //!__RST__H__
+

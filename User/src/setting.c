@@ -326,7 +326,7 @@ void Read_Options(void) {
     SVin_ratio   |= *optionsPtr++;   // Read sampling port voltage ratio high 8 bits
 
     /* Waveform measurement way selection [bit] */
-	G_MeasureWaySel    = *optionsPtr++;
+	G_MeasureWaySel = *optionsPtr++;
 
     /* Plot mode selection [bit] */
     G_PlotModeSel = *optionsPtr++;
@@ -407,6 +407,12 @@ void Check_Options(void) {
 ErrorStatus Save_Options(void) {
     uint8_t option[16];
     uint8_t *optionPtr;
+
+    if (G_LVD_EVENT_FLAG) {
+        G_LVD_EVENT_FLAG = CLRBIT;
+        return ERROR;
+    }
+
     Check_Options();
     
     optionPtr    = option;

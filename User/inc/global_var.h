@@ -117,10 +117,12 @@ extern const uint8_t code *PlotModeTxt[];           //!< Plot mode characters
 extern const uint8_t code *TriModeTxt[];            //!< Trigger mode characters
 extern const uint8_t code *ScaleHTxt[];             //!< Horizontal scaling characters
 
-extern bit G_SELOption_FLAG;
-extern bit G_SELOption_Next;
+extern bit G_SELOption_Next;                        //!< Select next option or increase value or not
 
-extern bit G_SELSwitcher_FLAG;
+extern bit G_LVD_EVENT_FLAG;                        //!< Low voltage event flag
+
+
+
 /* Time scale: 500ms, 200ms, 100ms, 50ms, 20ms, 10ms, 5ms, 2ms, 1ms, 500us, 200us, 100us */
 typedef enum {
     Scale_500ms = 0x00,
