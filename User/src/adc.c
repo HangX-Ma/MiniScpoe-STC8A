@@ -60,13 +60,22 @@ uint16_t GetADC_CHx(uint8_t chx) {
     ADC_GetSampleVal_Enquiry(chx);
     ADC_GetSampleVal_Enquiry(chx);
 
-    // ADC_GetSampleVal_Interrupt(chx, ISR_PR1, ADCEXCFG_CVTIMESEL_16_CONVERSION_AVG);
+    /* ADC interrupt method is less efficient than enquiry method */
+    // ADC_GetSampleVal_Interrupt(chx, ISR_PR0, ADCEXCFG_CVTIMESEL_16_CONVERSION_AVG);
     // while (!ADC_INTERRUPT_FLAG) {
     //     ;
     // } // Wait for data conversion complete.
     // ADC_res            = G_ADC_data;
     // ADC_INTERRUPT_FLAG = CLRBIT;
+    // ADC_BMM_config(chx, BMM_ADC_CFG2_CVTIMESEL_CONT16);
+    
+    // while (ADC_BMM_FLAG) {
+    //     ;
+    // } // Wait for data conversion complete
+    // ADC_BMM_FLAG = CLRBIT;
+    // ADC_res = (uint16_t)(ADC_BMM_Buffer[chx][ADC_Data_size-2] << 8 + ADC_BMM_Buffer[chx][ADC_Data_size-1]);
 
+    /* ADC enquiry method */
     for (i = 0; i < 16; i++) {
         ADC_GetSampleVal_Enquiry(chx);
         ADC_res += G_ADC_data;

@@ -65,23 +65,30 @@ void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed) {
     delay_nms(5);
 }
 
-// void ADC_BMM_config(uint16_t DMA_CHSWx, uint8_t DMA_CVTIMESEL) {
-//     ADC_BMM_FLAG = CLRBIT;
+void ADC_BMM_config(uint16_t DMA_CHx, uint8_t DMA_CVTIMESEL) {
+    ADC_BMM_FLAG = CLRBIT;
+    /* clear previous ADC_CHS value */
+    ADC_CONTR &= 0xF0;
+    /* Select ADC channel */
+    ADC_CONTR |= DMA_CHx;
+    /* start conversion */
+    ADC_CONTR |= ADC_CONTR_ADC_START;
 
-//     P_SW2 |= P_SW2_EAXFR;
-//     BMM_ADC_STA &= ~BMM_ADC_STA_ADCIF;  // Clear DMA interrupt flag
-//     BMM_ADC_CFG |= BMM_ADC_CFG_ADCIE;   // Enable interrupt
-//     BMM_ADC_RXAH = (uint8_t)((uint16_t)ADC_BMM_Buffer >> 8);    //ADC转换数据存储地址
-//     BMM_ADC_RXAL = (uint8_t)ADC_BMM_Buffer;
-//     BMM_ADC_CFG2 = DMA_CVTIMESEL;   // Each ADC channel conversion times: 16
+    P_SW2 |= P_SW2_EAXFR;
+    BMM_ADC_STA &= ~BMM_ADC_STA_ADCIF;  // Clear DMA interrupt flag
+    BMM_ADC_CFG |= BMM_ADC_CFG_ADCIE;   // Enable interrupt
+    BMM_ADC_RXA  = (uint16_t)ADC_BMM_Buffer;
+    // BMM_ADC_RXAH = (uint8_t)((uint16_t)ADC_BMM_Buffer >> 8); // ADC data address
+    // BMM_ADC_RXAL = (uint8_t)ADC_BMM_Buffer;
+    BMM_ADC_CFG2 = DMA_CVTIMESEL;   // Each ADC channel conversion times: 16
 
-//     BMM_ADC_CHSW0 = DMA_CHSWx;
-//     BMM_ADC_CHSW1 = DMA_CHSWx >> 8;
+    BMM_ADC_CHSW0 = (1 << DMA_CHx) >> 8;
+    BMM_ADC_CHSW1 = (1 << DMA_CHx);
 
-//     BMM_ADC_CR = (BMM_ADC_CR_ENADC | BMM_ADC_CR_TRIG); // Enable DMA function.
+    BMM_ADC_CR = (BMM_ADC_CR_ENADC | BMM_ADC_CR_TRIG); // Enable DMA function and start conversion
 
-//     P_SW2 &= ~P_SW2_EAXFR;
-// }
+    P_SW2 &= ~P_SW2_EAXFR;
+}
 
 
 uint16_t ADC_GetSampleVal_Enquiry(uint8_t _ADC_CHx) {
@@ -132,21 +139,16 @@ void ADC_GetSampleVal_Interrupt(uint8_t _ADC_CHx, ISR_PRx _ADC_NVIC_Priority, ui
     ADC_CONTR |= _ADC_CHx;
     /* enable ADC interrupt */
     EADC = SETBIT;
-    /* enable interrupt system */
-    EA   = SETBIT;
+
     /* start conversion */
     ADC_CONTR |= ADC_CONTR_ADC_START;
 }
 
 void ADC_ISR_Handler(void) interrupt(ADC_VECTOR) {
+    ADC_INTERRUPT_FLAG = SETBIT;
     G_ADC_data = ((uint16_t)(ADC_RESH) << 8) | (uint16_t)(ADC_RESL);
     /* ensure interrupt flag cleared */
     ADC_CONTR &= ~ADC_CONTR_ADC_FLAG;
-    ADC_INTERRUPT_FLAG = SETBIT;
+    /* start conversion */
+    ADC_CONTR |= ADC_CONTR_ADC_START;
 }
-
-
-// void ADC_BMM_Interrupt(void) interrupt(13) {
-//     BMM_ADC_STA  &= ~BMM_ADC_STA_ADCIF; // Clear DMA interrupt flag
-//     ADC_BMM_FLAG = SETBIT;
-// }

@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/HangX-Ma/MiniScpoe-STC8A?color=blue&logo=github&logoColor=black) ![GitHub last commit](https://img.shields.io/github/last-commit/HangX-Ma/MiniScpoe-STC8A?style=flat) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/HangX-Ma/MiniScpoe-STC8A?color=green)
 
-I want to use this **MiniScope** project to learn embedded system. I imitate [Open-ELL/MiniDSO-Pro](https://gitee.com/open-ell/mini-dso-pro) to make a **MiniScope** on my own but the hardware and software seems not suitable for me on account of self-changes. I have written a convenient system library for _STC8x_ easy usage. Currently I only finish the _STC8Ax_ and _STC8Hx_(mainly based on _STC8A8K64D_).
+I want to use this **MiniScope** project to learn embedded system. I imitate [Open-ELL/MiniDSO-Pro](https://gitee.com/open-ell/mini-dso-pro) to make a **MiniScope** on my own but the hardware and software seems not suitable for me on account of self-changes. I have written a convenient system library for _STC8x_ easy usage. Currently I only finish the _STC8Ax_ and _STC8Hx_(mainly based on _STC8A8K64D_). **NEW DESIGN AVAILABLE PUBLISHED at 20220621.**
 
 ## Test Recorder
 - [x] ADC Inquiry Method
@@ -20,6 +20,18 @@ I want to use this **MiniScope** project to learn embedded system. I imitate [Op
 **NOTE: EC11 external Interrupt seems wrong. I think this may cause by hardware design or the EC11 device itself.**
 
 ## New Design
+
+### PCB 3D Perspective
+<center class="half">
+    <img src="share/pcb_front_3D.png" width="300"/> <img src="share/pcb_back_3D.png" width="300"/>
+</center>
+
+### PCB 2D Perspective
+<center class="half">
+    <img src="share/pcb_front.png" width="300"/> <img src="share/pcb_back.png" width="300"/>
+</center>
+
+
 
 ### Timer Source Usage
 - `TM0`: VBAT info updating rate
@@ -92,3 +104,4 @@ If LVD event happens, system will not allow user to operate EEPROM to save data.
 
 
 > Reference: [Open-ELL/MiniDSO-Pro](https://gitee.com/open-ell/mini-dso-pro)
+> Reference: [CreativeLau/Mini-DSO](https://github.com/CreativeLau/Mini-DSO)

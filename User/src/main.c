@@ -645,43 +645,51 @@ void SPK_functions(void) {
  * @brief Keys I/O interrupt, falling edge detection
  */
 void Common_ISR_Handler(void) interrupt(13) {
-    delay_nms(20); // Jitters elimination
-
     P_SW2  |= P_SW2_EAXFR;
 
-    if (!ifKeyPressed) {
-        ifKeyPressed        = SETBIT; // Key has been pressed, change I/O trigger method.
-        keyPressedTimeCount = 0;      // Clear previous value
-        /* Rising edge interrupt */
-        P2IM0   |= 0x07;
-        P2IM1   &= ~0x07;
-        P4IM0   |= 0x06;
-        P4IM1   &= ~0x06;
-        /* Start TM1 to record the pressing time */
-        TCON_TR1 = SETBIT;
-    } // Waiting for rising edge (Key released)
+    if (BMM_ADC_STA & BMM_ADC_STA_ADCIF) {
+        BMM_ADC_STA  &= ~BMM_ADC_STA_ADCIF; // Clear DMA interrupt flag
+        // BMM_ADC_CR    = (BMM_ADC_CR_ENADC | BMM_ADC_CR_TRIG); // Enable DMA function and start conversion
+        ADC_BMM_FLAG  = SETBIT;
+    }
     else {
-        TCON_TR1     = CLRBIT; // Stop TM1
-        ifKeyPressed = CLRBIT; // recover state
-        /* Falling edge interrupt */
-        P2IM0  &= ~0x07;
-        P2IM1  &= ~0x07;
-        P4IM0  &= ~0x06;
-        P4IM1  &= ~0x06;
+        delay_nms(20); // Jitters elimination
 
-        if (keyPressedTimeCount >=50) {
-            LPK_functions();
-        } // Duration time over 500~600ms, long press
+        if (!ifKeyPressed) {
+            ifKeyPressed        = SETBIT; // Key has been pressed, change I/O trigger method.
+            keyPressedTimeCount = 0;      // Clear previous value
+            /* Rising edge interrupt */
+            P2IM0   |= 0x07;
+            P2IM1   &= ~0x07;
+            P4IM0   |= 0x06;
+            P4IM1   &= ~0x06;
+            /* Start TM1 to record the pressing time */
+            TCON_TR1 = SETBIT;
+        } // Waiting for rising edge (Key released)
         else {
-            SPK_functions();
-        } // Duration time within 500~600ms, short press
-        keyPressedTimeCount = 0; // Clear previous value
-    } // Key released, recover state.
-    /* Clear interrupt flag */
-    P2INTF &= ~0x07;
-    P4INTF &= ~0x06;
+            TCON_TR1     = CLRBIT; // Stop TM1
+            ifKeyPressed = CLRBIT; // recover state
+            /* Falling edge interrupt */
+            P2IM0  &= ~0x07;
+            P2IM1  &= ~0x07;
+            P4IM0  &= ~0x06;
+            P4IM1  &= ~0x06;
 
+            if (keyPressedTimeCount >=50) {
+                LPK_functions();
+            } // Duration time over 500~600ms, long press
+            else {
+                SPK_functions();
+            } // Duration time within 500~600ms, short press
+            keyPressedTimeCount = 0; // Clear previous value
+        } // Key released, recover state.
+        /* Clear interrupt flag */
+        P2INTF &= ~0x07;
+        P4INTF &= ~0x06;
+
+    }
     P_SW2 &= ~P_SW2_EAXFR;
+
 }
 
 void RST_ISR_Handler(void) interrupt(LVD_VECTOR) {

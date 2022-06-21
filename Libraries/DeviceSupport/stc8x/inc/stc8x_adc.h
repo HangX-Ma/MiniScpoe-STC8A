@@ -70,10 +70,10 @@ void ADC_Init(uint8_t _ADC_align, uint8_t _ADC_speed);
 /**
  * @brief ADC DMA configuration 
  * 
- * @param[in] DMA_CHSWx ADC DMA channel x enabling selection
+ * @param[in] DMA_CHSWx ADC DMA channel x
  * @param[in] DMA_CVTIMESEL ADC DMA conversion times selection
  */
-void ADC_BMM_config(uint16_t DMA_CHSWx, uint8_t DMA_CVTIMESEL);
+void ADC_BMM_config(uint16_t DMA_CHx, uint8_t DMA_CVTIMESEL);
 
 /**
  * @brief ADC sampling by enquiring method
